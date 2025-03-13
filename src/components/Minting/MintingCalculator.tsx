@@ -568,7 +568,9 @@ export default function MiningCalculator({
         buyMoreFn={buyMoreFn}
         txLoading={txLoading}
       />
-      <p className=" font-bold text-right">Max Input: 750</p>
+      <p className="font-bold text-right">
+        Max Batch Size For Gas Optimization: 750
+      </p>
       <Multiplyer buymoreHighlight={buymoreHighlight} />
       <motion.div
         animate={{
@@ -613,9 +615,9 @@ export default function MiningCalculator({
       <Card
         value={BigInt(Number(value) * multiplyer * bonus)}
         multiplyer={pointsConverterToUSCommaseparated(multiplyer)}
-        pillIconAlt="points"
+        pillIconAlt="Reward points"
         pillIconSrc={IMAGEKIT_ICONS.PILL_POINTS}
-        pillText="Points"
+        pillText="Reward Points"
         buymoreHighlight={buymoreHighlight}
       />
     </div>
