@@ -568,7 +568,7 @@ export default function MiningCalculator({
         buyMoreFn={buyMoreFn}
         txLoading={txLoading}
       />
-      <p className=" font-bold text-right">
+      <p className="font-bold text-right">
         Max Batch Size For Gas Optimization: 750
       </p>
       <Multiplyer buymoreHighlight={buymoreHighlight} />
