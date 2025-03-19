@@ -17,13 +17,19 @@ import { client } from "../../../sanity/lib/client";
 import useTimer from "@/hooks/frontend/useTimer";
 import useHeaderStats from "./useHeaderStats";
 import { checkCorrectNetwork } from "../RainbowKit";
-import { PiRocketLaunchDuotone, PiTreasureChestDuotone } from "react-icons/pi";
+import {
+  PiRocketLaunchDuotone,
+  PiTreasureChestDuotone,
+  PiCopyDuotone,
+} from "react-icons/pi";
 import { useJourneyData } from "@/app/(client)/store";
 import axios from "axios";
 import { API_ENDPOINT } from "@/constants";
 import { useRestPost } from "@/hooks/useRestClient";
 import { warningToastInfinite } from "../../hooks/frontend/toast";
 import toast from "react-hot-toast";
+import Tooltip from "@/hooks/frontend/Tooltip";
+import { zeroAddress } from "viem";
 
 // Use a function to get the latest block number
 async function getLatestBlockNumber(publicClient: PublicClient) {
@@ -33,7 +39,6 @@ async function getLatestBlockNumber(publicClient: PublicClient) {
 
 const Header = () => {
   // about section dropdown
-  const [tooltipOpen, setTooltipOpen] = useState(false);
   const timer = useTimer();
   const [aboutSectionOpen, setAboutSectionOpen] = useState(false);
   const { openConnectModal } = useConnectModal();
@@ -80,8 +85,13 @@ const Header = () => {
     ["era-3-timestamps-multipliers"],
     "/api/era-3-timestamps-multipliers",
   );
-  const { userDark: darkBalance, treasuryDark: treasuryBalance } =
-    useHeaderStats();
+  const {
+    userDark: darkBalance,
+    treasuryDark: treasuryBalance,
+    DarkContract,
+  } = useHeaderStats();
+
+  const DarkContractAdd = DarkContract.address;
 
   useEffect(() => {
     fetchEra3({ walletAddress: account.address }).then((data: any) => {
@@ -575,6 +585,25 @@ const Header = () => {
           </div>
         </div>
       ) : null}
+      <div className="flex items-center justify-center gap-[8px] p-2 mt-[8px] text-agwhite bg-agblack bg-opacity-50 rounded-[8px] w-full">
+        <p className="font-bold break-words max-w-[90%]">
+          $DARK CONTRACT ADDRESS: {DarkContractAdd || "Address not found"}
+        </p>
+        <button
+          className="relative"
+          onClick={() => {
+            navigator.clipboard.writeText(DarkContractAdd || zeroAddress);
+          }}
+        >
+          <Tooltip
+            trigger={<PiCopyDuotone className="text-[24px]" />}
+            positionClassName="absolute !w-max right-[0px]"
+            action="click"
+          >
+            Address Copied!
+          </Tooltip>
+        </button>
+      </div>
     </motion.header>
   );
 };
