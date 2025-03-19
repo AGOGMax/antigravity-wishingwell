@@ -14,9 +14,7 @@ const LoadingPage = dynamic(() => import("@/app/(client)/LoadingPage"), {
 const HeaderEra3 = dynamic(() => import("@/components/header/Header"), {
   ssr: false,
 });
-const HeaderEra2 = dynamic(() => import("@/components/header/HeaderEra2"), {
-  ssr: false,
-});
+
 const Footer = dynamic(() => import("@/components/Footer"), {
   ssr: false,
 });
