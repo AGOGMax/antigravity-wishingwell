@@ -1,5 +1,3 @@
-import GoogleAnalytics from "../analytics";
-
 export default function Layout({
   children,
 }: Readonly<{
@@ -7,10 +5,7 @@ export default function Layout({
 }>) {
   return (
     <html>
-      <body>
-        <GoogleAnalytics />
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

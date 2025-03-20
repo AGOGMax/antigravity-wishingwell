@@ -5,15 +5,10 @@ import "./globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
 import RainbowKitContext from "@/components/RainbowKit";
 import { Toaster } from "react-hot-toast";
-import GoogleAnalytics from "./analytics";
 import IMAGEKIT from "./home/images";
-import Image from "next/image";
-import Header from "@/components/header/Header";
 import StarFieldCanvas from "@/components/background/Starfeild";
 import SaturnCanvasORImage from "./SaturnCanvasORImage";
-import Footer from "@/components/Footer";
 import AnimatedNebulaBG from "@/components/AnimatedNebulaBG";
-import { useEffect } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -63,7 +58,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <GoogleAnalytics />
       <body className={inter.className}>
         <Toaster />
         <RainbowKitContext>

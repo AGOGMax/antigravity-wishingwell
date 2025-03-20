@@ -3,8 +3,8 @@ import { Inter } from "next/font/google";
 import "./(client)/globals.css";
 
 import "@rainbow-me/rainbowkit/styles.css";
-import GoogleAnalytics from "./(client)/analytics";
 import IMAGEKIT from "./(client)/home/images";
+import Metrics from "./metrics";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -54,8 +54,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <GoogleAnalytics />
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        {children}
+        <Metrics />
+      </body>
     </html>
   );
 }
