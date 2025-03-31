@@ -1,11 +1,11 @@
 "use client";
-import { Text, PixelBorder, Progress, Button } from "nes-ui-react";
+import { Text, PixelBorder, Progress, Button, Input } from "nes-ui-react";
 import { useAccount } from "wagmi";
 import Grid from "../Components/Grid";
 import { useEffect, useState } from "react";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import usePinkMistWellContract from "@/abi/PinkMistWell";
-import { useReadContract } from "wagmi";
+import { useReadContracts } from "wagmi";
 import { TEST_NETWORK } from "@/constants";
 import { pulsechain, pulsechainV4 } from "viem/chains";
 
@@ -14,28 +14,36 @@ export default function PMWGame() {
   const [isRegistrationOpen, setIsRegistrationOpen] = useState(true);
   const { openConnectModal } = useConnectModal();
   const PMWContract = usePinkMistWellContract();
+  const [userTickets, setUserTickets] = useState(0);
 
   const {
-    data: currentParticipantsList,
-    error: currentParticipantsError,
-    isFetched: currentParticipantsFetched,
-  } = useReadContract({
-    address: PMWContract.address as `0x${string}`,
-    abi: PMWContract.abi,
-    functionName: "getCurrentRoundEntrants",
-    chainId: TEST_NETWORK ? pulsechainV4.id : pulsechain.id,
+    data: PMWReader,
+    error: PMWError,
+    isFetched: PMWFetched,
+  } = useReadContracts({
+    contracts: ["getCurrentRoundEntrants", "MAX_ENTRIES"].map(
+      (functionName) => ({
+        address: PMWContract.address as `0x${string}`,
+        abi: PMWContract.abi,
+        functionName,
+        chainId: TEST_NETWORK ? pulsechainV4.id : pulsechain.id,
+      }),
+    ),
   });
 
   const totalParticipants = 369;
   const [currentParticipated, setCurrentParticipated] = useState(0);
+  const maxTicketsDefault = Number(PMWReader?.[1].result); //10
+  const maxTickets: number =
+    totalParticipants - currentParticipated < maxTicketsDefault
+      ? totalParticipants - currentParticipated
+      : maxTicketsDefault;
 
   useEffect(() => {
-    if (currentParticipantsFetched) {
-      setCurrentParticipated(
-        (currentParticipantsList as Array<string>)?.length,
-      );
+    if (PMWFetched) {
+      setCurrentParticipated((PMWReader?.[0].result as Array<string>)?.length);
     }
-  }, [currentParticipantsList]);
+  }, [PMWReader?.[0].result]);
 
   useEffect(() => {
     if (currentParticipated < totalParticipants) {
@@ -50,6 +58,10 @@ export default function PMWGame() {
       openConnectModal();
     }
   };
+
+  function handleChange(value: string) {
+    setUserTickets(value === "" ? 0 : Number(value));
+  }
 
   return (
     <div className="m-8 flex flex-col justify-center items-center gap-[1rem] box-border">
@@ -86,13 +98,30 @@ export default function PMWGame() {
           <Grid currentParticipated={currentParticipated} />
 
           {isRegistrationOpen ? (
-            <Button
-              color="primary"
-              onClick={() => console.log("Player Entered")}
-              size="large"
-            >
-              <Text size="large">Enter Game</Text>
-            </Button>
+            <div className="flex items-center justify-center gap-[10px]">
+              <div className="flex flex-col">
+                <Input
+                  type="number"
+                  name="userTickets"
+                  value={userTickets.toString()}
+                  label="Number Of Tickets: "
+                  style={{ height: "32px", fontSize: "16px" }}
+                  onChange={handleChange}
+                  color={userTickets > maxTickets ? "error" : "none"}
+                />
+                <Text size="medium" color="warning">
+                  Max Tickets:{maxTickets}
+                </Text>
+              </div>
+              <Button
+                color="primary"
+                size="large"
+                disabled={userTickets > maxTickets}
+                onClick={() =>
+                  console.log("entered with ", userTickets, " tickets")
+                }
+              ></Button>
+            </div>
           ) : (
             <Button
               color="primary"
