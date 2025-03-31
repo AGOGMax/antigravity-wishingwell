@@ -1,5 +1,5 @@
 import { TEST_NETWORK } from "@/constants";
-import { pulsechain } from "viem/chains";
+import { pulsechain, pulsechainV4 } from "viem/chains";
 
 interface IContract {
   address?: `0x${string}`;
@@ -17,9 +17,13 @@ const contracts: Record<
   { address: `0x${string}` | undefined; abi: any }
 > = {
   [pulsechain.id]: {
-    address: CONTRACTS[pulsechain.id].dark,
+    address: CONTRACTS[pulsechain.id].pinkMistWell,
     abi,
   },
+  [pulsechainV4.id]: {
+    address: CONTRACTS[pulsechainV4.id].pinkMistWell,
+    abi,
+  }
 };
 
 const usePinkMistWellContract = (): IContract => {

@@ -1,15 +1,41 @@
 "use client";
 import { Text, PixelBorder, Progress, Button } from "nes-ui-react";
-// import { useAccount } from "wagmi";
+import { useAccount } from "wagmi";
 import Grid from "../Components/Grid";
-import { useSchema } from "sanity";
 import { useEffect, useState } from "react";
+import { useConnectModal } from "@rainbow-me/rainbowkit";
+import usePinkMistWellContract from "@/abi/PinkMistWell";
+import { useReadContract } from "wagmi";
+import { TEST_NETWORK } from "@/constants";
+import { pulsechain, pulsechainV4 } from "viem/chains";
 
 export default function PMWGame() {
-  // const account = useAccount();
-  const totalParticipants = 369;
-  const currentParticipated = 369;
+  const account = useAccount();
   const [isRegistrationOpen, setIsRegistrationOpen] = useState(true);
+  const { openConnectModal } = useConnectModal();
+  const PMWContract = usePinkMistWellContract();
+
+  const {
+    data: currentParticipantsList,
+    error: currentParticipantsError,
+    isFetched: currentParticipantsFetched,
+  } = useReadContract({
+    address: PMWContract.address as `0x${string}`,
+    abi: PMWContract.abi,
+    functionName: "getCurrentRoundEntrants",
+    chainId: TEST_NETWORK ? pulsechainV4.id : pulsechain.id,
+  });
+
+  const totalParticipants = 369;
+  const [currentParticipated, setCurrentParticipated] = useState(0);
+
+  useEffect(() => {
+    if (currentParticipantsFetched) {
+      setCurrentParticipated(
+        (currentParticipantsList as Array<string>)?.length,
+      );
+    }
+  }, [currentParticipantsList]);
 
   useEffect(() => {
     if (currentParticipated < totalParticipants) {
@@ -18,9 +44,12 @@ export default function PMWGame() {
     return setIsRegistrationOpen(false);
   }, [currentParticipated, totalParticipants]);
 
-  function getRandomNumber(): number {
-    return Math.floor(Math.random() * 369) + 1;
-  }
+  const handleLogin = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (openConnectModal) {
+      openConnectModal();
+    }
+  };
 
   return (
     <div className="m-8 flex flex-col justify-center items-center gap-[1rem] box-border">
@@ -38,41 +67,47 @@ export default function PMWGame() {
           Pink Mist Well
         </Text>
       </PixelBorder>
-      <div className="flex flex-col items-center">
-        <Text>
-          {isRegistrationOpen
-            ? `${currentParticipated} out of 
+      {account.isConnected ? (
+        <>
+          <div className="flex flex-col items-center">
+            <Text>
+              {isRegistrationOpen
+                ? `${currentParticipated} out of 
             ${totalParticipants}...`
-            : "Registration Complete"}
-        </Text>
-        <Progress
-          value={currentParticipated}
-          max={totalParticipants}
-          color="pattern"
-          style={{ width: "40vw" }}
-        />
-      </div>
-      <Grid totalParticipants={totalParticipants} />
+                : "Registration Complete"}
+            </Text>
+            <Progress
+              value={currentParticipated}
+              max={totalParticipants}
+              color="pattern"
+              style={{ width: "40vw" }}
+            />
+          </div>
+          <Grid currentParticipated={currentParticipated} />
 
-      {isRegistrationOpen ? (
-        <div className="flex items-center">
-          <Button color="primary" onClick={() => console.log("Player Entered")}>
-            <Text size="large">Enter Game</Text>
-          </Button>
-          <Button disabled>
-            <Text size="large">Sniper Shot</Text>
-          </Button>
-        </div>
+          {isRegistrationOpen ? (
+            <Button
+              color="primary"
+              onClick={() => console.log("Player Entered")}
+              size="large"
+            >
+              <Text size="large">Enter Game</Text>
+            </Button>
+          ) : (
+            <Button
+              color="primary"
+              onClick={() => console.log("Shot a random player")}
+              size="large"
+            >
+              <Text size="large">Sniper Shot</Text>
+            </Button>
+          )}
+        </>
       ) : (
-        <div className="flex items-center">
-          <Button disabled>
-            <Text size="large">Game Full</Text>
-          </Button>
-          <Button
-            color="primary"
-            onClick={() => console.log("Shot a random player")}
-          >
-            <Text size="large">Sniper Shot</Text>
+        <div className="flex flex-col items-center justify-center h-[100%] mt-[100px]">
+          <Text size="large">Please Connect Your Wallet to Play The Game.</Text>
+          <Button color="primary" size="large" onClick={handleLogin}>
+            Connect Wallet
           </Button>
         </div>
       )}

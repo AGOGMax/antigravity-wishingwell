@@ -35,7 +35,6 @@ import { ToastPosition } from "react-hot-toast";
 import { useUserData } from "@/app/(client)/store";
 import useDarkFaucetContract from "@/abi/DarkFaucet";
 import { useRestPost } from "@/hooks/useRestClient";
-import useFuelCellContract from "@/abi/FuelCell";
 import { condenseAddress } from "@/utils";
 import { useGQLFetch } from "@/hooks/useGraphQLClient";
 import { gql } from "graphql-request";
