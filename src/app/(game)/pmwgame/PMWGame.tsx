@@ -8,6 +8,7 @@ import usePinkMistWellContract from "@/abi/PinkMistWell";
 import { useReadContracts } from "wagmi";
 import { TEST_NETWORK } from "@/constants";
 import { pulsechain, pulsechainV4 } from "viem/chains";
+import useEnterGame from "@/hooks/sc-fns/useEnterGame";
 
 export default function PMWGame() {
   const account = useAccount();
@@ -63,6 +64,8 @@ export default function PMWGame() {
     setUserTickets(value === "" ? 0 : Number(value));
   }
 
+  const { enterGame } = useEnterGame(BigInt(userTickets));
+
   return (
     <div className="m-8 flex flex-col justify-center items-center gap-[1rem] box-border">
       <PixelBorder
@@ -76,7 +79,7 @@ export default function PMWGame() {
       >
         <Text size="large" centered>
           <br />
-          Pink Mist Well
+          Pink Mist Whale
         </Text>
       </PixelBorder>
       {account.isConnected ? (
@@ -117,9 +120,10 @@ export default function PMWGame() {
                 color="primary"
                 size="large"
                 disabled={userTickets > maxTickets || userTickets <= 0}
-                onClick={() =>
-                  console.log("entered with ", userTickets, " tickets")
-                }
+                onClick={() => {
+                  console.log("entered with ", userTickets, " tickets");
+                  enterGame();
+                }}
               >
                 Enter Game
               </Button>
