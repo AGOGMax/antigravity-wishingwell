@@ -116,11 +116,13 @@ export default function PMWGame() {
               <Button
                 color="primary"
                 size="large"
-                disabled={userTickets > maxTickets}
+                disabled={userTickets > maxTickets || userTickets <= 0}
                 onClick={() =>
                   console.log("entered with ", userTickets, " tickets")
                 }
-              ></Button>
+              >
+                Enter Game
+              </Button>
             </div>
           ) : (
             <Button
