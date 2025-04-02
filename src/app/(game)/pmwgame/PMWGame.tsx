@@ -147,10 +147,7 @@ export default function PMWGame() {
                   userTickets <= 0 ||
                   isEnterGameTransactionLoading
                 }
-                onClick={() => {
-                  console.log("entered with ", userTickets, " tickets");
-                  enterGame();
-                }}
+                onClick={enterGame}
               >
                 {renderEnterGameButtonState()}
               </Button>
