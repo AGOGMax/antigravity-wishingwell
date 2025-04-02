@@ -86,14 +86,16 @@ export default function PMWGame() {
               {isRegistrationOpen
                 ? `${currentParticipated} out of 
             ${totalParticipants}...`
-                : "Registration Complete"}
+                : ""}
             </Text>
-            <Progress
-              value={currentParticipated}
-              max={totalParticipants}
-              color="pattern"
-              style={{ width: "40vw" }}
-            />
+            {isRegistrationOpen && (
+              <Progress
+                value={currentParticipated}
+                max={totalParticipants}
+                color="pattern"
+                style={{ width: "40vw" }}
+              />
+            )}
           </div>
           <Grid currentParticipated={currentParticipated} />
 
