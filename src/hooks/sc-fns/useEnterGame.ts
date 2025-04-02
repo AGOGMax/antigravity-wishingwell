@@ -39,7 +39,7 @@ const useEnterGame = (tickets: bigint) => {
     data: enterGameReceipt,
     error: enterGameReceiptError,
     isLoading: isEnterGameReceiptLoading,
-  } = useWaitForTransactionReceipt({ enterGameHash });
+  } = useWaitForTransactionReceipt({ hash: enterGameHash });
 
   /* Read Contract Data */
   const {
@@ -114,7 +114,7 @@ const useEnterGame = (tickets: bigint) => {
         enterGameFn({
           address: PMWContract?.address as `0x${string}`,
           abi: PMWContract?.abi,
-          functionName: "enterGame",
+          functionName: "enterPool",
           args: [tickets],
         });
       }
@@ -132,7 +132,7 @@ const useEnterGame = (tickets: bigint) => {
         enterGameFn({
           address: PMWContract?.address as `0x${string}`,
           abi: PMWContract?.abi,
-          functionName: "enterGame",
+          functionName: "enterPool",
           args: [tickets],
         });
       }
@@ -142,15 +142,8 @@ const useEnterGame = (tickets: bigint) => {
   return {
     enterGame,
     enterGameReceipt,
-    approveReceipt,
-    enterGameReceiptError,
-    enterGameError,
-    isEnterGameReceiptLoading,
-    isEnterGameFunctionPending,
     transactionLoading,
-    isApprovalNeeded,
-    PMWFetched,
-    isAllowanceFetched,
+    approveIsLoading,
   };
 };
 

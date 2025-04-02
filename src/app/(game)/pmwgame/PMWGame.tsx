@@ -21,6 +21,7 @@ export default function PMWGame() {
     data: PMWReader,
     error: PMWError,
     isFetched: PMWFetched,
+    refetch: refetchPMWReader,
   } = useReadContracts({
     contracts: ["getCurrentRoundEntrants", "MAX_ENTRIES"].map(
       (functionName) => ({
@@ -64,7 +65,27 @@ export default function PMWGame() {
     setUserTickets(value === "" ? 0 : Number(value));
   }
 
-  const { enterGame } = useEnterGame(BigInt(userTickets));
+  const {
+    enterGame,
+    transactionLoading: isEnterGameTransactionLoading,
+    approveIsLoading: isEnterGameTokenApprovalLoading,
+    enterGameReceipt,
+  } = useEnterGame(BigInt(userTickets));
+
+  useEffect(() => {
+    if (!isEnterGameTransactionLoading && enterGameReceipt) {
+      refetchPMWReader();
+    }
+  }, [isEnterGameTransactionLoading, enterGameReceipt]);
+
+  const renderEnterGameButtonState = () => {
+    if (isEnterGameTokenApprovalLoading) {
+      return "Approving...";
+    } else if (isEnterGameTransactionLoading) {
+      return "Entering Game...";
+    }
+    return "Enter Game";
+  };
 
   return (
     <div className="m-8 flex flex-col justify-center items-center gap-[1rem] box-border">
@@ -121,13 +142,17 @@ export default function PMWGame() {
               <Button
                 color="primary"
                 size="large"
-                disabled={userTickets > maxTickets || userTickets <= 0}
+                disabled={
+                  userTickets > maxTickets ||
+                  userTickets <= 0 ||
+                  isEnterGameTransactionLoading
+                }
                 onClick={() => {
                   console.log("entered with ", userTickets, " tickets");
                   enterGame();
                 }}
               >
-                Enter Game
+                {renderEnterGameButtonState()}
               </Button>
             </div>
           ) : (
