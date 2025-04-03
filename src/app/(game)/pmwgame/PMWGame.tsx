@@ -9,6 +9,7 @@ import { useReadContracts } from "wagmi";
 import { TEST_NETWORK } from "@/constants";
 import { pulsechain, pulsechainV4 } from "viem/chains";
 import useEnterGame from "@/hooks/sc-fns/useEnterGame";
+import useEliminateUser from "@/hooks/sc-fns/useEliminateUser";
 
 export default function PMWGame() {
   const account = useAccount();
@@ -33,13 +34,8 @@ export default function PMWGame() {
     ),
   });
 
-  const totalParticipants = 369;
+  const totalParticipants = Number(PMWReader?.[1].result);
   const [currentParticipated, setCurrentParticipated] = useState(0);
-  const maxTicketsDefault = Number(PMWReader?.[1].result); //10
-  const maxTickets: number =
-    totalParticipants - currentParticipated < maxTicketsDefault
-      ? totalParticipants - currentParticipated
-      : maxTicketsDefault;
 
   useEffect(() => {
     if (PMWFetched) {
@@ -72,11 +68,20 @@ export default function PMWGame() {
     enterGameReceipt,
   } = useEnterGame(BigInt(userTickets));
 
+  const {
+    eliminateUser,
+    transactionLoading: isEliminateUserTransactionLoading,
+    eliminateUserReceipt,
+  } = useEliminateUser();
+
   useEffect(() => {
-    if (!isEnterGameTransactionLoading && enterGameReceipt) {
+    if (
+      !isEnterGameTransactionLoading &&
+      (enterGameReceipt || eliminateUserReceipt)
+    ) {
       refetchPMWReader();
     }
-  }, [isEnterGameTransactionLoading, enterGameReceipt]);
+  }, [isEnterGameTransactionLoading, enterGameReceipt, eliminateUserReceipt]);
 
   const renderEnterGameButtonState = () => {
     if (isEnterGameTokenApprovalLoading) {
@@ -85,6 +90,13 @@ export default function PMWGame() {
       return "Entering Game...";
     }
     return "Enter Game";
+  };
+
+  const renderEliminateUserButtonState = () => {
+    if (isEliminateUserTransactionLoading) {
+      return "Misting 'em...";
+    }
+    return "Mist 'em";
   };
 
   return (
@@ -133,20 +145,12 @@ export default function PMWGame() {
                   label="Number Of Tickets: "
                   style={{ height: "32px", fontSize: "16px" }}
                   onChange={handleChange}
-                  color={userTickets > maxTickets ? "error" : "none"}
                 />
-                <Text size="medium" color="warning">
-                  Max Tickets:{maxTickets}
-                </Text>
               </div>
               <Button
                 color="primary"
                 size="large"
-                disabled={
-                  userTickets > maxTickets ||
-                  userTickets <= 0 ||
-                  isEnterGameTransactionLoading
-                }
+                disabled={userTickets <= 0 || isEnterGameTransactionLoading}
                 onClick={enterGame}
               >
                 {renderEnterGameButtonState()}
@@ -155,10 +159,11 @@ export default function PMWGame() {
           ) : (
             <Button
               color="primary"
-              onClick={() => console.log("Shot a random player")}
+              onClick={eliminateUser}
+              disabled={isEliminateUserTransactionLoading}
               size="large"
             >
-              <Text size="large">Sniper Shot</Text>
+              <Text size="large">{renderEliminateUserButtonState()}</Text>
             </Button>
           )}
         </>

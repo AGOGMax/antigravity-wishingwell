@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react";
-import { formatUnits, parseUnits } from "viem";
 import erc20ABI from "erc-20-abi";
 import {
   useAccount,
