@@ -17,6 +17,7 @@ export default function PMWGame() {
   const { openConnectModal } = useConnectModal();
   const PMWContract = usePinkMistWellContract();
   const [userTickets, setUserTickets] = useState(0);
+  const [maxTickets, setMaxTickets] = useState(0);
 
   const {
     data: PMWReader,
@@ -24,26 +25,48 @@ export default function PMWGame() {
     isFetched: PMWFetched,
     refetch: refetchPMWReader,
   } = useReadContracts({
-    contracts: ["getCurrentRoundEntrants", "MAX_ENTRIES"].map(
-      (functionName) => ({
-        address: PMWContract.address as `0x${string}`,
-        abi: PMWContract.abi,
-        functionName,
-        chainId: TEST_NETWORK ? pulsechainV4.id : pulsechain.id,
-      }),
-    ),
+    contracts: [
+      "getCurrentRoundActiveTickets",
+      "MAX_ENTRIES",
+      "currentRoundId",
+    ].map((functionName) => ({
+      address: PMWContract.address as `0x${string}`,
+      abi: PMWContract.abi,
+      functionName,
+      chainId: TEST_NETWORK ? pulsechainV4.id : pulsechain.id,
+    })),
   });
 
-  const totalParticipants = Number(PMWReader?.[1].result);
   const [currentParticipated, setCurrentParticipated] = useState(0);
+  const totalParticipants = Number(PMWReader?.[1].result);
+  const currentRoundId = PMWReader?.[2].result;
 
   useEffect(() => {
     if (PMWFetched) {
-      setCurrentParticipated((PMWReader?.[0].result as Array<string>)?.length);
+      setCurrentParticipated(
+        (PMWReader?.[0].result as Array<Array<number>>)[0]?.length,
+      );
     }
   }, [PMWReader?.[0].result]);
 
+  const { data: getUserTicketsReader, isFetched: isUserTicketsFetched } =
+    useReadContracts({
+      contracts: ["getUserTickets"].map((functionName) => ({
+        address: PMWContract.address as `0x${string}`,
+        abi: PMWContract.abi,
+        functionName,
+        args: [currentRoundId, account.address as string],
+      })),
+    });
+
+  // const getUserTickets = getUserTicketsReader?.[0].result as Array<
+  //   Array<string>
+  // >;
+
+  // const totalUserTicketsCount = Array(getUserTickets[0]);
+  // console.log("totalUserTicketsCount", getUserTickets, totalUserTicketsCount);
   useEffect(() => {
+    setMaxTickets(totalParticipants - currentParticipated);
     if (currentParticipated < totalParticipants) {
       return setIsRegistrationOpen(true);
     }
@@ -145,12 +168,24 @@ export default function PMWGame() {
                   label="Number Of Tickets: "
                   style={{ height: "32px", fontSize: "16px" }}
                   onChange={handleChange}
+                  color={
+                    userTickets < 0 || userTickets > maxTickets
+                      ? "error"
+                      : "none"
+                  }
                 />
+                <Text size="medium" color="warning">
+                  Max Tickets: {maxTickets}
+                </Text>
               </div>
               <Button
                 color="primary"
                 size="large"
-                disabled={userTickets <= 0 || isEnterGameTransactionLoading}
+                disabled={
+                  userTickets <= 0 ||
+                  userTickets > maxTickets ||
+                  isEnterGameTransactionLoading
+                }
                 onClick={enterGame}
               >
                 {renderEnterGameButtonState()}

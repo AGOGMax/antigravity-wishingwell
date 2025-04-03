@@ -26,7 +26,7 @@ const useEnterGame = (tickets: bigint) => {
   const { data: approveReceipt, isLoading: approveIsLoading } =
     useWaitForTransactionReceipt({ hash: approveHash, confirmations: 2 });
 
-  /* Mine Contract Function Declaration */
+  /* EnterGame Contract Function Declaration */
   const {
     writeContract: enterGameFn,
     data: enterGameHash,
