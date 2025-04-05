@@ -49,7 +49,9 @@ const useEliminateUser = () => {
   }, [eliminateUserError]);
 
   useEffect(() => {
-    setTransactionLoading(false);
+    if (eliminateUserReceipt) {
+      setTransactionLoading(false);
+    }
   }, [eliminateUserReceipt]);
 
   const eliminateUser = () => {

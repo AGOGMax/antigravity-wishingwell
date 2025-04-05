@@ -21,12 +21,22 @@ import useEliminateUser from "@/hooks/sc-fns/useEliminateUser";
 
 export default function PMWGame() {
   const account = useAccount();
-  const userAddress = account?.address as `0x${string}`;
-  const [isRegistrationOpen, setIsRegistrationOpen] = useState(true);
   const { openConnectModal } = useConnectModal();
   const PMWContract = usePinkMistWellContract();
+
+  const [isRegistrationOpen, setIsRegistrationOpen] = useState(true);
   const [userTickets, setUserTickets] = useState(0);
   const [maxTickets, setMaxTickets] = useState(0);
+  const [currentParticipatedCount, setcurrentParticipatedCount] = useState(0);
+  const [currentParticipatedList, setcurrentParticipatedList] = useState(
+    [] as Array<Array<string>>,
+  );
+  const [userAllTickets, setUserAllTickets] = useState(
+    [] as Array<Array<number>>,
+  );
+  const [userActiveTicketCount, setUserActiveTicketCount] = useState(0);
+
+  const userAddress = account?.address as `0x${string}`;
 
   const {
     data: PMWReader,
@@ -46,11 +56,7 @@ export default function PMWGame() {
     })),
   });
 
-  const [currentParticipatedCount, setcurrentParticipatedCount] = useState(0);
-  const [currentParticipatedList, setcurrentParticipatedList] = useState(
-    [] as Array<Array<string>>,
-  );
-  const totalParticipants = Number(PMWReader?.[1].result);
+  const totalParticipants = Number(PMWReader?.[1].result) || 0;
   const currentRoundId = PMWReader?.[2].result;
 
   useEffect(() => {
@@ -88,18 +94,16 @@ export default function PMWGame() {
     args: [currentRoundId],
   });
 
-  const [isRoundClosed, setIsRoundClosed] = useState(true);
   useEffect(() => {
     if (isRoundsFetched) {
-      setIsRoundClosed((roundsDataReader as Array<boolean>)?.[3]);
+      const isRoundClosed = (roundsDataReader as Array<boolean>)?.[3];
+      if (isRoundClosed) {
+        setIsRegistrationOpen(false);
+      } else {
+        setIsRegistrationOpen(true);
+      }
     }
   }, [roundsDataReader]);
-
-  const [userAllTickets, setUserAllTickets] = useState(
-    [] as Array<Array<number>>,
-  );
-
-  const [userActiveTicketCount, setUserActiveTicketCount] = useState(0);
 
   useEffect(() => {
     if (isUserTicketsFetched) {
@@ -114,13 +118,6 @@ export default function PMWGame() {
   useEffect(() => {
     setMaxTickets(totalParticipants - currentParticipatedCount);
   }, [currentParticipatedCount, totalParticipants]);
-
-  useEffect(() => {
-    if (isRoundClosed) {
-      return setIsRegistrationOpen(false);
-    }
-    return setIsRegistrationOpen(true);
-  }, [roundsDataReader]);
 
   const handleLogin = (e: React.MouseEvent) => {
     e.preventDefault();

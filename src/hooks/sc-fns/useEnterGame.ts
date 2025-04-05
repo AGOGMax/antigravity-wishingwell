@@ -95,7 +95,9 @@ const useEnterGame = (tickets: bigint) => {
   }, [allowance, ticketPrice, investAmount]);
 
   useEffect(() => {
-    setTransactionLoading(false);
+    if (enterGameReceipt) {
+      setTransactionLoading(false);
+    }
   }, [enterGameReceipt]);
 
   const enterGame = () => {
