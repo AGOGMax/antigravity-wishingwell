@@ -1,11 +1,19 @@
 "use client";
-import { Text, PixelBorder, Progress, Button, Input } from "nes-ui-react";
+import {
+  Text,
+  PixelBorder,
+  Progress,
+  Button,
+  Input,
+  Toolbar,
+  Separator,
+} from "nes-ui-react";
 import { useAccount } from "wagmi";
 import Grid from "../Components/Grid";
 import { useEffect, useState } from "react";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import usePinkMistWellContract from "@/abi/PinkMistWell";
-import { useReadContracts } from "wagmi";
+import { useReadContracts, useReadContract } from "wagmi";
 import { TEST_NETWORK } from "@/constants";
 import { pulsechain, pulsechainV4 } from "viem/chains";
 import useEnterGame from "@/hooks/sc-fns/useEnterGame";
@@ -13,6 +21,7 @@ import useEliminateUser from "@/hooks/sc-fns/useEliminateUser";
 
 export default function PMWGame() {
   const account = useAccount();
+  const userAddress = account?.address as `0x${string}`;
   const [isRegistrationOpen, setIsRegistrationOpen] = useState(true);
   const { openConnectModal } = useConnectModal();
   const PMWContract = usePinkMistWellContract();
@@ -37,41 +46,81 @@ export default function PMWGame() {
     })),
   });
 
-  const [currentParticipated, setCurrentParticipated] = useState(0);
+  const [currentParticipatedCount, setcurrentParticipatedCount] = useState(0);
+  const [currentParticipatedList, setcurrentParticipatedList] = useState(
+    [] as Array<Array<string>>,
+  );
   const totalParticipants = Number(PMWReader?.[1].result);
   const currentRoundId = PMWReader?.[2].result;
 
   useEffect(() => {
     if (PMWFetched) {
-      setCurrentParticipated(
-        (PMWReader?.[0].result as Array<Array<number>>)[0]?.length,
+      setcurrentParticipatedList(PMWReader?.[0].result as Array<Array<string>>);
+      setcurrentParticipatedCount(
+        (PMWReader?.[0].result as Array<Array<string>>)[0]?.length,
       );
     }
   }, [PMWReader?.[0].result]);
 
-  const { data: getUserTicketsReader, isFetched: isUserTicketsFetched } =
-    useReadContracts({
-      contracts: ["getUserTickets"].map((functionName) => ({
+  const {
+    data: getUserTicketsReader,
+    isFetched: isUserTicketsFetched,
+    refetch: refetchUserTickets,
+  } = useReadContracts({
+    contracts: ["getUserTickets", "getUserActiveTicketCount"].map(
+      (functionName) => ({
         address: PMWContract.address as `0x${string}`,
         abi: PMWContract.abi,
         functionName,
-        args: [currentRoundId, account.address as string],
-      })),
-    });
+        args: [currentRoundId, userAddress],
+      }),
+    ),
+  });
 
-  // const getUserTickets = getUserTicketsReader?.[0].result as Array<
-  //   Array<string>
-  // >;
+  const {
+    data: roundsDataReader,
+    isFetched: isRoundsFetched,
+    refetch: refetchRounds,
+  } = useReadContract({
+    address: PMWContract.address as `0x${string}`,
+    abi: PMWContract.abi,
+    functionName: "rounds",
+    args: [currentRoundId],
+  });
 
-  // const totalUserTicketsCount = Array(getUserTickets[0]);
-  // console.log("totalUserTicketsCount", getUserTickets, totalUserTicketsCount);
+  const [isRoundClosed, setIsRoundClosed] = useState(true);
   useEffect(() => {
-    setMaxTickets(totalParticipants - currentParticipated);
-    if (currentParticipated < totalParticipants) {
-      return setIsRegistrationOpen(true);
+    if (isRoundsFetched) {
+      setIsRoundClosed((roundsDataReader as Array<boolean>)?.[3]);
     }
-    return setIsRegistrationOpen(false);
-  }, [currentParticipated, totalParticipants]);
+  }, [roundsDataReader]);
+
+  const [userAllTickets, setUserAllTickets] = useState(
+    [] as Array<Array<number>>,
+  );
+
+  const [userActiveTicketCount, setUserActiveTicketCount] = useState(0);
+
+  useEffect(() => {
+    if (isUserTicketsFetched) {
+      setUserAllTickets(
+        getUserTicketsReader?.[0].result as Array<Array<number>>,
+      );
+      setUserActiveTicketCount(Number(getUserTicketsReader?.[1].result));
+    }
+  }, [getUserTicketsReader]);
+  console.log("user active ticket count", userActiveTicketCount);
+
+  useEffect(() => {
+    setMaxTickets(totalParticipants - currentParticipatedCount);
+  }, [currentParticipatedCount, totalParticipants]);
+
+  useEffect(() => {
+    if (isRoundClosed) {
+      return setIsRegistrationOpen(false);
+    }
+    return setIsRegistrationOpen(true);
+  }, [roundsDataReader]);
 
   const handleLogin = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -103,6 +152,8 @@ export default function PMWGame() {
       (enterGameReceipt || eliminateUserReceipt)
     ) {
       refetchPMWReader();
+      refetchUserTickets();
+      refetchRounds();
     }
   }, [isEnterGameTransactionLoading, enterGameReceipt, eliminateUserReceipt]);
 
@@ -138,25 +189,53 @@ export default function PMWGame() {
           Pink Mist Whale
         </Text>
       </PixelBorder>
+      <Toolbar
+        style={{
+          padding: "10px 15px",
+          width: "80vw",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <div className="w-[33%]">
+          <Text size="large">
+            Your Active Tickets: {userActiveTicketCount || 0}
+          </Text>
+        </div>
+        <Separator />
+        <div className="w-[33%]">
+          <Text size="large">ROUND-{Number(currentRoundId)}</Text>
+        </div>
+        {account.isConnected && (
+          <div className="w-[33%]">
+            <Separator />
+            <Text size="large">0x...{String(userAddress)?.slice(-3)}</Text>
+          </div>
+        )}
+      </Toolbar>
       {account.isConnected ? (
         <>
           <div className="flex flex-col items-center">
             <Text>
               {isRegistrationOpen
-                ? `${currentParticipated} out of 
+                ? `${currentParticipatedCount} out of 
             ${totalParticipants}...`
                 : ""}
             </Text>
             {isRegistrationOpen && (
               <Progress
-                value={currentParticipated}
+                value={currentParticipatedCount}
                 max={totalParticipants}
                 color="pattern"
                 style={{ width: "40vw" }}
               />
             )}
           </div>
-          <Grid currentParticipated={currentParticipated} />
+          <Grid
+            currentParticipatedList={currentParticipatedList}
+            userAddress={userAddress}
+          />
 
           {isRegistrationOpen ? (
             <div className="flex items-center justify-center gap-[10px]">

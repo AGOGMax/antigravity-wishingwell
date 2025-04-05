@@ -59,7 +59,7 @@ const useEliminateUser = () => {
       eliminateUserFn({
         address: PMWContract?.address as `0x${string}`,
         abi: PMWContract?.abi,
-        functionName: "eliminateEntrant",
+        functionName: "eliminateTicket",
         args: [],
         value: eliminationFee as bigint,
       });
