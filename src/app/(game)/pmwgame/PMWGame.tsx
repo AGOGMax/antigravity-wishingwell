@@ -59,12 +59,66 @@ export default function PMWGame() {
   const totalParticipants = Number(PMWReader?.[1].result) || 0;
   const currentRoundId = PMWReader?.[2].result;
 
+  const generateTicketMapping = (participants) => {
+    const participantsTickets = participants?.[0] ?? [];
+    const participantsAddress = participants?.[1] ?? [];
+    return participantsTickets.map((participant, index) => {
+      return {
+        ticketNumber: Number(participant) + 1,
+        isUserCell: participantsAddress?.[index] === userAddress,
+        isBurst: false,
+      };
+    });
+  };
+
   useEffect(() => {
     if (PMWFetched) {
-      setcurrentParticipatedList(PMWReader?.[0].result as Array<Array<string>>);
-      setcurrentParticipatedCount(
-        (PMWReader?.[0].result as Array<Array<string>>)[0]?.length,
-      );
+      if (eliminateUserReceipt) {
+        const newParticipantsList = generateTicketMapping(
+          PMWReader?.[0].result as Array<Array<string>>,
+        );
+
+        const eliminatedParticipants = currentParticipatedList
+          .filter(
+            (participant) =>
+              !newParticipantsList.some(
+                (newParticipant) =>
+                  newParticipant.ticketNumber === participant.ticketNumber,
+              ),
+          )
+          .map((eliminatedParticipant) => eliminatedParticipant.ticketNumber);
+
+        const participantsListWithEliminatedTickets =
+          currentParticipatedList.map((participant) => {
+            if (eliminatedParticipants.includes(participant.ticketNumber)) {
+              return { ...participant, isBurst: true };
+            }
+            return participant;
+          });
+
+        setcurrentParticipatedList(participantsListWithEliminatedTickets);
+
+        setTimeout(() => {
+          setcurrentParticipatedList(newParticipantsList);
+          setcurrentParticipatedCount(newParticipantsList?.length);
+        }, 8000);
+
+        console.log(
+          "debug, gg",
+          eliminateUserReceipt,
+          currentParticipatedList,
+          newParticipantsList,
+          eliminatedParticipants,
+          participantsListWithEliminatedTickets,
+        );
+      } else {
+        setcurrentParticipatedList(
+          generateTicketMapping(PMWReader?.[0].result),
+        );
+        setcurrentParticipatedCount(
+          (PMWReader?.[0].result as Array<Array<string>>)[0]?.length,
+        );
+      }
     }
   }, [PMWReader?.[0].result]);
 
@@ -229,10 +283,7 @@ export default function PMWGame() {
               />
             )}
           </div>
-          <Grid
-            currentParticipatedList={currentParticipatedList}
-            userAddress={userAddress}
-          />
+          <Grid currentParticipatedList={currentParticipatedList} />
 
           {isRegistrationOpen ? (
             <div className="flex items-center justify-center gap-[10px]">

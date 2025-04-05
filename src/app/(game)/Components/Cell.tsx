@@ -6,20 +6,15 @@ import { PiSkullFill } from "react-icons/pi";
 interface CellProps {
   cellNumber: number;
   isUserCell: boolean;
+  isBurst: boolean;
 }
 
-export default function Cell({ cellNumber, isUserCell }: CellProps) {
-  const [isBurst, setIsBurst] = useState(false);
-  const [isCellVisible, setIsCellVisible] = useState(true);
+export default function Cell({ cellNumber, isUserCell, isBurst }: CellProps) {
   const [showSkull, setShowSkull] = useState(false);
 
-  return isCellVisible ? (
+  return (
     <div
       className={`sm:w-[40px] sm:h-[40px] sm:!text-[8px] md:w-[56px] md:h-[56px] md:!text-[10px] lg:w-[64px] lg:h-[64px] lg:!text-[16px] border-[1px] p-2 bg-transparent flex items-center justify-center border-${isUserCell ? "agyellow" : "aggray"}`}
-      onClick={() => {
-        setIsBurst(true);
-        setTimeout(() => setIsCellVisible(false), 8000);
-      }}
     >
       {!isBurst ? (
         cellNumber
@@ -43,5 +38,5 @@ export default function Cell({ cellNumber, isUserCell }: CellProps) {
         </>
       )}
     </div>
-  ) : null;
+  );
 }
