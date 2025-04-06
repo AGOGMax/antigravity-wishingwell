@@ -53,6 +53,7 @@
     "three": "^0.165.0",
     "three-stdlib": "^2.30.3",
     "uniqid": "^5.4.0",
+    "use-sound": "^5.0.0",
     "viem": "2.x",
     "wagmi": "2.5.16",
     "zustand": "^4.5.4"
