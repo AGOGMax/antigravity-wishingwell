@@ -7,6 +7,7 @@ import {
   Input,
   Toolbar,
   Separator,
+  Container,
 } from "nes-ui-react";
 import { useAccount } from "wagmi";
 import Grid from "../Components/Grid";
@@ -28,11 +29,16 @@ export default function PMWGame() {
   const [userTickets, setUserTickets] = useState(0);
   const [maxTickets, setMaxTickets] = useState(0);
   const [currentParticipatedCount, setcurrentParticipatedCount] = useState(0);
-  const [currentParticipatedList, setcurrentParticipatedList] = useState(
-    [] as Array<Array<string>>,
-  );
+  const [currentParticipatedList, setcurrentParticipatedList] = useState([
+    {
+      ticketNumber: 0,
+      walletAddress: "",
+      isUserCell: false,
+      isBurst: false,
+    },
+  ]);
   const [userAllTickets, setUserAllTickets] = useState(
-    [] as Array<Array<number>>,
+    [] as Array<boolean[] | number[]>,
   );
   const [userActiveTicketCount, setUserActiveTicketCount] = useState(0);
 
@@ -59,12 +65,13 @@ export default function PMWGame() {
   const totalParticipants = Number(PMWReader?.[1].result) || 0;
   const currentRoundId = PMWReader?.[2].result;
 
-  const generateTicketMapping = (participants) => {
+  const generateTicketMapping = (participants: [number[], string[]]) => {
     const participantsTickets = participants?.[0] ?? [];
     const participantsAddress = participants?.[1] ?? [];
     return participantsTickets.map((participant, index) => {
       return {
         ticketNumber: Number(participant) + 1,
+        walletAddress: participantsAddress?.[index],
         isUserCell: participantsAddress?.[index] === userAddress,
         isBurst: false,
       };
@@ -73,52 +80,56 @@ export default function PMWGame() {
 
   useEffect(() => {
     if (PMWFetched) {
-      if (eliminateUserReceipt) {
-        const newParticipantsList = generateTicketMapping(
-          PMWReader?.[0].result as Array<Array<string>>,
-        );
+      const [tickets, addresses] = (PMWReader?.[0].result ?? [[], []]) as [
+        number[],
+        string[],
+      ];
+      const newParticipantsList = generateTicketMapping([tickets, addresses]);
 
-        const eliminatedParticipants = currentParticipatedList
-          .filter(
-            (participant) =>
-              !newParticipantsList.some(
-                (newParticipant) =>
-                  newParticipant.ticketNumber === participant.ticketNumber,
-              ),
-          )
-          .map((eliminatedParticipant) => eliminatedParticipant.ticketNumber);
+      const eliminatedParticipants = currentParticipatedList
+        ?.filter(
+          (participant) =>
+            !newParticipantsList.some(
+              (newParticipant) =>
+                newParticipant.ticketNumber === participant.ticketNumber,
+            ),
+        )
+        .map((eliminatedParticipant) => eliminatedParticipant.ticketNumber);
 
-        const participantsListWithEliminatedTickets =
-          currentParticipatedList.map((participant) => {
-            if (eliminatedParticipants.includes(participant.ticketNumber)) {
-              return { ...participant, isBurst: true };
-            }
-            return participant;
-          });
-
-        setcurrentParticipatedList(participantsListWithEliminatedTickets);
-
-        setTimeout(() => {
-          setcurrentParticipatedList(newParticipantsList);
-          setcurrentParticipatedCount(newParticipantsList?.length);
-        }, 8000);
-
-        console.log(
-          "debug, gg",
-          eliminateUserReceipt,
-          currentParticipatedList,
-          newParticipantsList,
-          eliminatedParticipants,
-          participantsListWithEliminatedTickets,
-        );
-      } else {
-        setcurrentParticipatedList(
-          generateTicketMapping(PMWReader?.[0].result),
-        );
-        setcurrentParticipatedCount(
-          (PMWReader?.[0].result as Array<Array<string>>)[0]?.length,
+      if (eliminatedParticipants.length === 0) {
+        return (
+          setcurrentParticipatedList(newParticipantsList),
+          setcurrentParticipatedCount(newParticipantsList?.length)
         );
       }
+
+      const participantsListWithEliminatedTickets: {
+        ticketNumber: number;
+        walletAddress: string;
+        isUserCell: boolean;
+        isBurst: boolean;
+      }[] = currentParticipatedList.map((participant) => {
+        if (eliminatedParticipants.includes(participant.ticketNumber)) {
+          return { ...participant, isBurst: true };
+        }
+        return participant;
+      });
+
+      setcurrentParticipatedList(participantsListWithEliminatedTickets);
+
+      setTimeout(() => {
+        setcurrentParticipatedList(newParticipantsList);
+        setcurrentParticipatedCount(newParticipantsList?.length);
+      }, 8000);
+    } else {
+      const [tickets, addresses] = (PMWReader?.[0].result ?? [[], []]) as [
+        number[],
+        string[],
+      ];
+      setcurrentParticipatedList(generateTicketMapping([tickets, addresses]));
+      setcurrentParticipatedCount(
+        (PMWReader?.[0].result as Array<Array<string>>)?.[0]?.length,
+      );
     }
   }, [PMWReader?.[0].result]);
 
@@ -167,11 +178,13 @@ export default function PMWGame() {
       setUserActiveTicketCount(Number(getUserTicketsReader?.[1].result));
     }
   }, [getUserTicketsReader]);
-  console.log("user active ticket count", userActiveTicketCount);
 
   useEffect(() => {
     setMaxTickets(totalParticipants - currentParticipatedCount);
   }, [currentParticipatedCount, totalParticipants]);
+
+  const userAllTicketsCount = (userAllTickets as [number[], boolean[]])?.[0]
+    ?.length;
 
   const handleLogin = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -249,20 +262,26 @@ export default function PMWGame() {
           alignItems: "center",
         }}
       >
-        <div className="w-[33%]">
-          <Text size="large">
+        <div className="w-[33%] flex justify-center items-center">
+          <Text size="large" style={{ marginBottom: "0" }}>
             Your Active Tickets: {userActiveTicketCount || 0}
           </Text>
         </div>
         <Separator />
-        <div className="w-[33%]">
-          <Text size="large">ROUND-{Number(currentRoundId)}</Text>
+        <div className="w-[33%] flex justify-center items-center">
+          <Text size="large" style={{ marginBottom: "0" }}>
+            ROUND-{Number(currentRoundId)}
+          </Text>
         </div>
         {account.isConnected && (
-          <div className="w-[33%]">
+          <>
             <Separator />
-            <Text size="large">0x...{String(userAddress)?.slice(-3)}</Text>
-          </div>
+            <div className="w-[33%] flex justify-center items-center">
+              <Text size="large" style={{ marginBottom: "0" }}>
+                0x...{String(userAddress)?.slice(-3)}
+              </Text>
+            </div>
+          </>
         )}
       </Toolbar>
       {account.isConnected ? (
@@ -283,51 +302,94 @@ export default function PMWGame() {
               />
             )}
           </div>
-          <Grid currentParticipatedList={currentParticipatedList} />
 
-          {isRegistrationOpen ? (
-            <div className="flex items-center justify-center gap-[10px]">
-              <div className="flex flex-col">
-                <Input
-                  type="number"
-                  name="userTickets"
-                  value={userTickets.toString()}
-                  label="Number Of Tickets: "
-                  style={{ height: "32px", fontSize: "16px" }}
-                  onChange={handleChange}
-                  color={
-                    userTickets < 0 || userTickets > maxTickets
-                      ? "error"
-                      : "none"
+          <div className="flex items-center justify-center">
+            {isRegistrationOpen ? (
+              <>
+                <div className="flex flex-col">
+                  <Input
+                    type="number"
+                    name="userTickets"
+                    value={userTickets.toString()}
+                    label="Number Of Tickets: "
+                    style={{ height: "32px", fontSize: "16px" }}
+                    onChange={handleChange}
+                    color={
+                      userTickets < 0 || userTickets > maxTickets
+                        ? "error"
+                        : "none"
+                    }
+                  />
+                  <Text size="medium" color="warning">
+                    Max Tickets: {maxTickets}
+                  </Text>
+                </div>
+                <Button
+                  color="primary"
+                  size="large"
+                  disabled={
+                    userTickets <= 0 ||
+                    userTickets > maxTickets ||
+                    isEnterGameTransactionLoading
                   }
-                />
-                <Text size="medium" color="warning">
-                  Max Tickets: {maxTickets}
-                </Text>
-              </div>
+                  onClick={enterGame}
+                >
+                  {renderEnterGameButtonState()}
+                </Button>
+              </>
+            ) : (
               <Button
                 color="primary"
+                onClick={eliminateUser}
+                disabled={isEliminateUserTransactionLoading}
                 size="large"
-                disabled={
-                  userTickets <= 0 ||
-                  userTickets > maxTickets ||
-                  isEnterGameTransactionLoading
-                }
-                onClick={enterGame}
               >
-                {renderEnterGameButtonState()}
+                <Text size="large">{renderEliminateUserButtonState()}</Text>
               </Button>
+            )}
+          </div>
+          <div className="flex w-full max-w-full box-border gap-[8px]">
+            <div className="w-[65%] min-w-max flex justify-center">
+              <Grid currentParticipatedList={currentParticipatedList} />
             </div>
-          ) : (
-            <Button
-              color="primary"
-              onClick={eliminateUser}
-              disabled={isEliminateUserTransactionLoading}
-              size="large"
-            >
-              <Text size="large">{renderEliminateUserButtonState()}</Text>
-            </Button>
-          )}
+            <div className="w-[20%] max-w-[20%]">
+              <Container
+                align="left"
+                title="&lt;Your Tickets&gt;"
+                roundedCorners
+                alignTitle="center"
+                style={{ width: "fit-content" }}
+              >
+                <div className="flex gap-[10px] mt-5 items-center justify-start">
+                  {userAllTicketsCount === 0 ? (
+                    <span className="!text-[16px] !text-pretty">
+                      {isRegistrationOpen
+                        ? "Hit 'Enter Game' to buy Tickets! "
+                        : "Wait for the next round to start to buy Tickets!"}
+                    </span>
+                  ) : (
+                    (userAllTickets as [number[], boolean[]])?.[0]?.map(
+                      (ticket, index) => {
+                        return (
+                          <span
+                            className={`${
+                              (userAllTickets as [number[], boolean[]])?.[1]?.[
+                                index
+                              ]
+                                ? "text-successgreen"
+                                : "text-brred"
+                            } !text-[16px]`}
+                          >
+                            {Number(ticket) + 1}
+                          </span>
+                        );
+                      },
+                    )
+                  )}
+                </div>
+              </Container>
+            </div>
+          </div>
         </>
       ) : (
         <div className="flex flex-col items-center justify-center h-[100%] mt-[100px]">

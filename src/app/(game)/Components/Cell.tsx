@@ -1,7 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { PiSkullFill } from "react-icons/pi";
+import useSound from "use-sound";
 
 interface CellProps {
   cellNumber: number;
@@ -10,11 +11,21 @@ interface CellProps {
 }
 
 export default function Cell({ cellNumber, isUserCell, isBurst }: CellProps) {
+  const burstSound = "/burstSound.mp3";
+  const [playBurst] = useSound(burstSound);
   const [showSkull, setShowSkull] = useState(false);
+
+  useEffect(() => {
+    if (isBurst) {
+      playBurst();
+    }
+  }, [isBurst]);
+
+  console.log("cellnumber, isBurst ", cellNumber, isBurst);
 
   return (
     <div
-      className={`sm:w-[40px] sm:h-[40px] sm:!text-[8px] md:w-[56px] md:h-[56px] md:!text-[10px] lg:w-[64px] lg:h-[64px] lg:!text-[16px] border-[1px] p-2 bg-transparent flex items-center justify-center border-${isUserCell ? "agyellow" : "aggray"}`}
+      className={`w-[32px] h-[32px] !text-[8px] border-[1px] p-2 bg-transparent flex items-center justify-center border-${isUserCell ? "agyellow" : "aggray"}`}
     >
       {!isBurst ? (
         cellNumber
