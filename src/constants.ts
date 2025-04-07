@@ -39,7 +39,3 @@ export const POLL_TIME = parseInt(`${process.env.NEXT_PUBLIC_POLL_TIME}`);
 export const IMAGEKIT = "https://ik.imagekit.io/agogmax/Antigravity";
 
 export const BUY_DARK_URL = `${process.env.NEXT_PUBLIC_BUY_DARK_URL}`;
-
-export const NEXT_PUBLC_PMW_GAME_POLLING_INTERVAL = parseInt(
-  `${process.env.NEXT_PUBLC_PMW_GAME_POLLING_INTERVAL}`,
-);

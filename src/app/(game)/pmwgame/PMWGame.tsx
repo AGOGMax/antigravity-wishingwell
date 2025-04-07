@@ -19,7 +19,6 @@ import { TEST_NETWORK } from "@/constants";
 import { pulsechain, pulsechainV4 } from "viem/chains";
 import useEnterGame from "@/hooks/sc-fns/useEnterGame";
 import useEliminateUser from "@/hooks/sc-fns/useEliminateUser";
-import { NEXT_PUBLC_PMW_GAME_POLLING_INTERVAL } from "@/constants";
 
 export default function PMWGame() {
   const account = useAccount();
@@ -81,7 +80,7 @@ export default function PMWGame() {
         refetchUserTickets();
         refetchRounds();
       }
-    }, NEXT_PUBLC_PMW_GAME_POLLING_INTERVAL ?? 30000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, [refetchPMWReader]);
