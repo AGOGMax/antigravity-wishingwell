@@ -21,8 +21,6 @@ export default function Cell({ cellNumber, isUserCell, isBurst }: CellProps) {
     }
   }, [isBurst]);
 
-  console.log("cellnumber, isBurst ", cellNumber, isBurst);
-
   return (
     <div
       className={`w-[32px] h-[32px] !text-[8px] border-[1px] p-2 bg-transparent flex items-center justify-center border-${isUserCell ? "agyellow" : "aggray"}`}

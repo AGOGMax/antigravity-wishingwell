@@ -46,7 +46,12 @@ const useEliminateUser = () => {
       console.log({ eliminateUserError });
       setTransactionLoading(false);
     }
-  }, [eliminateUserError]);
+
+    if (eliminateUserReceiptError) {
+      console.log({ eliminateUserReceiptError });
+      setTransactionLoading(false);
+    }
+  }, [eliminateUserError, eliminateUserReceiptError]);
 
   useEffect(() => {
     if (eliminateUserReceipt) {

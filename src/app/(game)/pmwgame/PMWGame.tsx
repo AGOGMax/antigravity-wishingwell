@@ -11,7 +11,7 @@ import {
 } from "nes-ui-react";
 import { useAccount } from "wagmi";
 import Grid from "../Components/Grid";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import usePinkMistWellContract from "@/abi/PinkMistWell";
 import { useReadContracts, useReadContract } from "wagmi";
@@ -19,6 +19,7 @@ import { TEST_NETWORK } from "@/constants";
 import { pulsechain, pulsechainV4 } from "viem/chains";
 import useEnterGame from "@/hooks/sc-fns/useEnterGame";
 import useEliminateUser from "@/hooks/sc-fns/useEliminateUser";
+import { NEXT_PUBLC_PMW_GAME_POLLING_INTERVAL } from "@/constants";
 
 export default function PMWGame() {
   const account = useAccount();
@@ -41,6 +42,10 @@ export default function PMWGame() {
     [] as Array<boolean[] | number[]>,
   );
   const [userActiveTicketCount, setUserActiveTicketCount] = useState(0);
+  const loadingRef = useRef({
+    isEnterGameTransactionLoading: false,
+    isEliminateUserTransactionLoading: false,
+  });
 
   const userAddress = account?.address as `0x${string}`;
 
@@ -61,6 +66,25 @@ export default function PMWGame() {
       chainId: TEST_NETWORK ? pulsechainV4.id : pulsechain.id,
     })),
   });
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const {
+        isEnterGameTransactionLoading,
+        isEliminateUserTransactionLoading,
+      } = loadingRef.current;
+
+      if (
+        !(isEnterGameTransactionLoading || isEliminateUserTransactionLoading)
+      ) {
+        refetchPMWReader();
+        refetchUserTickets();
+        refetchRounds();
+      }
+    }, NEXT_PUBLC_PMW_GAME_POLLING_INTERVAL ?? 30000);
+
+    return () => clearInterval(interval);
+  }, [refetchPMWReader]);
 
   const totalParticipants = Number(PMWReader?.[1].result) || 0;
   const currentRoundId = PMWReader?.[2].result;
@@ -209,6 +233,13 @@ export default function PMWGame() {
     transactionLoading: isEliminateUserTransactionLoading,
     eliminateUserReceipt,
   } = useEliminateUser();
+
+  useEffect(() => {
+    loadingRef.current = {
+      isEnterGameTransactionLoading,
+      isEliminateUserTransactionLoading,
+    };
+  }, [isEnterGameTransactionLoading, isEliminateUserTransactionLoading]);
 
   useEffect(() => {
     if (
@@ -372,6 +403,7 @@ export default function PMWGame() {
                       (ticket, index) => {
                         return (
                           <span
+                            key={index}
                             className={`${
                               (userAllTickets as [number[], boolean[]])?.[1]?.[
                                 index

@@ -71,11 +71,16 @@ const useEnterGame = (tickets: bigint) => {
       setTransactionLoading(false);
     }
 
+    if (enterGameReceiptError) {
+      console.log({ enterGameReceiptError });
+      setTransactionLoading(false);
+    }
+
     if (approveError) {
       console.log({ approveError });
       setTransactionLoading(false);
     }
-  }, [enterGameError, approveError]);
+  }, [enterGameError, approveError, enterGameReceiptError]);
 
   const investAmount = useMemo(() => {
     if (ticketPrice) {
@@ -128,8 +133,6 @@ const useEnterGame = (tickets: bigint) => {
         console.log({ approveReceipt, approveIsLoading, isApprovalNeeded });
       }
       if (isApprovalNeeded && !approveIsLoading && approveReceipt) {
-        console.log("entering game");
-
         enterGameFn({
           address: PMWContract?.address as `0x${string}`,
           abi: PMWContract?.abi,
