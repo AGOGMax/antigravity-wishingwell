@@ -8,9 +8,13 @@ interface GridProps {
     isUserCell: boolean;
     isBurst: boolean;
   }[];
+  activeTicketCount: number;
 }
 
-export default function Grid({ currentParticipatedList }: GridProps) {
+export default function Grid({
+  currentParticipatedList,
+  activeTicketCount,
+}: GridProps) {
   return (
     <div className="grid grid-cols-[repeat(9,minmax(0,1fr))] md:grid-cols-[repeat(15,minmax(0,1fr))] lg:grid-cols-[repeat(19,minmax(0,1fr))] w-fit">
       {currentParticipatedList?.map((participant, index) => (
@@ -19,6 +23,7 @@ export default function Grid({ currentParticipatedList }: GridProps) {
           cellNumber={participant?.ticketNumber}
           isUserCell={participant?.isUserCell}
           isBurst={participant?.isBurst}
+          activeTicketCount={activeTicketCount}
         />
       ))}
     </div>

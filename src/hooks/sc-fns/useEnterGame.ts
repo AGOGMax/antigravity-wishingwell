@@ -123,6 +123,7 @@ const useEnterGame = (tickets: bigint) => {
           functionName: "enterPool",
           args: [tickets],
         });
+
       }
     }
   };
@@ -139,6 +140,7 @@ const useEnterGame = (tickets: bigint) => {
           functionName: "enterPool",
           args: [tickets],
         });
+        
       }
     }
   }, [isApprovalNeeded, approveIsLoading, approveReceipt]);
