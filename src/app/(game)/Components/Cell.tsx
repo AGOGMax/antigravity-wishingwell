@@ -8,9 +8,15 @@ interface CellProps {
   cellNumber: number;
   isUserCell: boolean;
   isBurst: boolean;
+  activeTicketCount: number;
 }
 
-export default function Cell({ cellNumber, isUserCell, isBurst }: CellProps) {
+export default function Cell({
+  cellNumber,
+  isUserCell,
+  isBurst,
+  activeTicketCount,
+}: CellProps) {
   const burstSound = "/burstSound.mp3";
   const [playBurst] = useSound(burstSound);
   const [showSkull, setShowSkull] = useState(false);
@@ -25,9 +31,7 @@ export default function Cell({ cellNumber, isUserCell, isBurst }: CellProps) {
     <div
       className={`w-[32px] h-[32px] !text-[8px] border-[1px] p-2 bg-transparent flex items-center justify-center border-${isUserCell ? "agyellow" : "aggray"}`}
     >
-      {!isBurst ? (
-        cellNumber
-      ) : (
+      {isBurst && activeTicketCount > 1 ? (
         <>
           <motion.img
             src="https://i.ibb.co/Mkv8HsBB/pink-mist-cloud-removebg-preview.png"
@@ -45,6 +49,8 @@ export default function Cell({ cellNumber, isUserCell, isBurst }: CellProps) {
           />
           {showSkull && <PiSkullFill className="!text-[36px] text-aggray" />}
         </>
+      ) : (
+        cellNumber
       )}
     </div>
   );
