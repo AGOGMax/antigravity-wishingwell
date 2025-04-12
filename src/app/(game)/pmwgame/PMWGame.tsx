@@ -8,27 +8,28 @@ import {
   Toolbar,
   Separator,
   Container,
+  Table,
 } from "nes-ui-react";
 import { useAccount } from "wagmi";
 import Grid from "../Components/Grid";
 import { useEffect, useRef, useState } from "react";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
-import usePinkMistWellContract from "@/abi/PinkMistWell";
-import { useReadContracts, useReadContract } from "wagmi";
-import { TEST_NETWORK } from "@/constants";
-import { pulsechain, pulsechainV4 } from "viem/chains";
 import useEnterGame from "@/hooks/sc-fns/useEnterGame";
 import useEliminateUser from "@/hooks/sc-fns/useEliminateUser";
+import usePMWReader from "@/hooks/sc-fns/usePMWReader";
+import useUserTickets from "@/hooks/sc-fns/useUserTickets";
+import useCurrentRound from "@/hooks/sc-fns/useCurrentRound";
+import usePrevRounds from "@/hooks/sc-fns/usePrevRounds";
 
 export default function PMWGame() {
   const account = useAccount();
   const { openConnectModal } = useConnectModal();
-  const PMWContract = usePinkMistWellContract();
+  const { PMWReader, PMWError, PMWFetched, refetchPMWReader } = usePMWReader();
 
   const [isRegistrationOpen, setIsRegistrationOpen] = useState(true);
   const [userTickets, setUserTickets] = useState(0);
   const [maxTickets, setMaxTickets] = useState(0);
-  const [currentParticipatedCount, setcurrentParticipatedCount] = useState(0);
+  const [currentActiveTicketsCount, setcurrentActiveTicketsCount] = useState(0);
   const [currentParticipatedList, setcurrentParticipatedList] = useState([
     {
       ticketNumber: 0,
@@ -47,24 +48,6 @@ export default function PMWGame() {
   });
 
   const userAddress = account?.address as `0x${string}`;
-
-  const {
-    data: PMWReader,
-    error: PMWError,
-    isFetched: PMWFetched,
-    refetch: refetchPMWReader,
-  } = useReadContracts({
-    contracts: [
-      "getCurrentRoundActiveTickets",
-      "MAX_ENTRIES",
-      "currentRoundId",
-    ].map((functionName) => ({
-      address: PMWContract.address as `0x${string}`,
-      abi: PMWContract.abi,
-      functionName,
-      chainId: TEST_NETWORK ? pulsechainV4.id : pulsechain.id,
-    })),
-  });
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -86,7 +69,10 @@ export default function PMWGame() {
   }, [refetchPMWReader]);
 
   const totalParticipants = Number(PMWReader?.[1].result) || 0;
-  const currentRoundId = PMWReader?.[2].result;
+  const currentRoundId = (PMWReader?.[2].result as bigint) ?? 0;
+
+  const { getUserTicketsReader, isUserTicketsFetched, refetchUserTickets } =
+    useUserTickets(currentRoundId, userAddress);
 
   const generateTicketMapping = (participants: [number[], string[]]) => {
     const participantsTickets = participants?.[0] ?? [];
@@ -120,10 +106,7 @@ export default function PMWGame() {
         .map((eliminatedParticipant) => eliminatedParticipant.ticketNumber);
 
       if (eliminatedParticipants.length === 0) {
-        return (
-          setcurrentParticipatedList(newParticipantsList),
-          setcurrentParticipatedCount(newParticipantsList?.length)
-        );
+        return setcurrentParticipatedList(newParticipantsList);
       }
 
       const participantsListWithEliminatedTickets: {
@@ -142,7 +125,6 @@ export default function PMWGame() {
 
       setTimeout(() => {
         setcurrentParticipatedList(newParticipantsList);
-        setcurrentParticipatedCount(newParticipantsList?.length);
       }, 8000);
     } else {
       const [tickets, addresses] = (PMWReader?.[0].result ?? [[], []]) as [
@@ -150,48 +132,33 @@ export default function PMWGame() {
         string[],
       ];
       setcurrentParticipatedList(generateTicketMapping([tickets, addresses]));
-      setcurrentParticipatedCount(
-        (PMWReader?.[0].result as Array<Array<string>>)?.[0]?.length,
-      );
     }
   }, [PMWReader?.[0].result]);
 
-  const {
-    data: getUserTicketsReader,
-    isFetched: isUserTicketsFetched,
-    refetch: refetchUserTickets,
-  } = useReadContracts({
-    contracts: ["getUserTickets", "getUserActiveTicketCount"].map(
-      (functionName) => ({
-        address: PMWContract.address as `0x${string}`,
-        abi: PMWContract.abi,
-        functionName,
-        args: [currentRoundId, userAddress],
-      }),
-    ),
-  });
-
-  const {
-    data: roundsDataReader,
-    isFetched: isRoundsFetched,
-    refetch: refetchRounds,
-  } = useReadContract({
-    address: PMWContract.address as `0x${string}`,
-    abi: PMWContract.abi,
-    functionName: "rounds",
-    args: [currentRoundId],
-  });
+  const { roundsDataReader, isRoundsFetched, refetchRounds } =
+    useCurrentRound(currentRoundId);
 
   useEffect(() => {
     if (isRoundsFetched) {
       const isRoundClosed = (roundsDataReader as Array<boolean>)?.[3];
       if (isRoundClosed) {
         setIsRegistrationOpen(false);
+        setUserTickets(0);
       } else {
         setIsRegistrationOpen(true);
       }
+      setcurrentActiveTicketsCount(
+        Number((roundsDataReader as Array<number>)?.[2]),
+      );
     }
   }, [roundsDataReader]);
+
+  const { prevRoundsDataReader, isPrevRoundsFetched, refetchPrevRounds } =
+    usePrevRounds(currentRoundId);
+
+  const winnerHistoryArray = prevRoundsDataReader?.map((round, i) => {
+    return round.result as Array<number[]>;
+  });
 
   useEffect(() => {
     if (isUserTicketsFetched) {
@@ -203,8 +170,8 @@ export default function PMWGame() {
   }, [getUserTicketsReader]);
 
   useEffect(() => {
-    setMaxTickets(totalParticipants - currentParticipatedCount);
-  }, [currentParticipatedCount, totalParticipants]);
+    setMaxTickets(totalParticipants - currentActiveTicketsCount);
+  }, [currentActiveTicketsCount, totalParticipants]);
 
   const userAllTicketsCount = (userAllTickets as [number[], boolean[]])?.[0]
     ?.length;
@@ -248,6 +215,7 @@ export default function PMWGame() {
       refetchPMWReader();
       refetchUserTickets();
       refetchRounds();
+      refetchPrevRounds();
     }
   }, [isEnterGameTransactionLoading, enterGameReceipt, eliminateUserReceipt]);
 
@@ -266,7 +234,6 @@ export default function PMWGame() {
     }
     return "Mist 'em";
   };
-
   return (
     <div className="m-8 flex flex-col justify-center items-center gap-[1rem] box-border">
       <PixelBorder
@@ -319,13 +286,13 @@ export default function PMWGame() {
           <div className="flex flex-col items-center">
             <Text>
               {isRegistrationOpen
-                ? `${currentParticipatedCount} out of 
+                ? `${currentActiveTicketsCount} out of 
             ${totalParticipants}...`
                 : ""}
             </Text>
             {isRegistrationOpen && (
               <Progress
-                value={currentParticipatedCount}
+                value={currentActiveTicketsCount}
                 max={totalParticipants}
                 color="pattern"
                 style={{ width: "40vw" }}
@@ -378,11 +345,22 @@ export default function PMWGame() {
               </Button>
             )}
           </div>
+
           <div className="flex w-full max-w-full box-border gap-[8px]">
-            <div className="w-[65%] min-w-max flex justify-center">
-              <Grid currentParticipatedList={currentParticipatedList} />
-            </div>
-            <div className="w-[20%] max-w-[20%]">
+            {!isRegistrationOpen ? (
+              <div className="w-[65%] min-w-max flex justify-center">
+                <Grid
+                  currentParticipatedList={currentParticipatedList}
+                  activeTicketCount={currentActiveTicketsCount}
+                />
+              </div>
+            ) : (
+              <div>
+                Congratulations {winnerHistoryArray?.[0]?.[5]} for winning
+                Round-{Number(currentRoundId) - 1}
+              </div>
+            )}
+            <div className="w-[25%] max-w-[25%] flex flex-col gap-[20px]">
               <Container
                 align="left"
                 title="&lt;Your Tickets&gt;"
@@ -395,7 +373,7 @@ export default function PMWGame() {
                     <span className="!text-[16px] !text-pretty">
                       {isRegistrationOpen
                         ? "Hit 'Enter Game' to buy Tickets! "
-                        : "Wait for the next round to start to buy Tickets!"}
+                        : "Mist 'em all to participate in the next round!"}
                     </span>
                   ) : (
                     (userAllTickets as [number[], boolean[]])?.[0]?.map(
@@ -419,6 +397,29 @@ export default function PMWGame() {
                   )}
                 </div>
               </Container>
+              <Table>
+                <thead>
+                  <tr>
+                    <th>ROUND ID</th>
+                    <th>WINNER</th>
+                    <th>AMOUNT WON</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {winnerHistoryArray?.map((winner) => {
+                    return (
+                      <tr key={Number(winner?.[0])}>
+                        <td>{Number(winner?.[0])}</td>
+                        <td>
+                          0x...
+                          {String(winner?.[5])?.slice(-3)}
+                        </td>
+                        <td>{`${Number(winner?.[6])} $DAI + ${Number(winner?.[7])} $DARK`}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </Table>
             </div>
           </div>
         </>
