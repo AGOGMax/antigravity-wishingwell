@@ -19,6 +19,7 @@ import { TEST_NETWORK } from "@/constants";
 import { pulsechain, pulsechainV4 } from "viem/chains";
 import useEnterGame from "@/hooks/sc-fns/useEnterGame";
 import useEliminateUser from "@/hooks/sc-fns/useEliminateUser";
+import { UserWalletAddress } from "./UserWalletAddress";
 
 export default function PMWGame() {
   const account = useAccount();
@@ -307,9 +308,7 @@ export default function PMWGame() {
           <>
             <Separator />
             <div className="w-[33%] flex justify-center items-center">
-              <Text size="large" style={{ marginBottom: "0" }}>
-                0x...{String(userAddress)?.slice(-3)}
-              </Text>
+              <UserWalletAddress />
             </div>
           </>
         )}

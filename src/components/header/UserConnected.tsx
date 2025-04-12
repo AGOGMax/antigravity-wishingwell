@@ -2,14 +2,12 @@ import { condenseAddress } from "@/utils";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
 import { PiWarningCircle } from "react-icons/pi";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRestPost } from "@/hooks/useRestClient";
 import { useJourneyData, useUserData } from "@/app/(client)/store";
 import { hydrateUserAndNFT } from "./utils";
 import { Badge } from "@/components/HTML/Badge";
-import axios from "axios";
-import { API_ENDPOINT } from "@/constants";
-import { pulsechain, pulsechainV4 } from "viem/chains";
+import { pulsechainV4 } from "viem/chains";
 export interface UserData {
   rank: string;
   walletAddress: string; // Add the 'walletAddress' property
@@ -26,7 +24,7 @@ export interface UserData {
 export const UserConnected: React.FC = () => {
   const account = useAccount();
   const { mutation: storeUserData, rank } = useUserData();
-  const { mutation: storeJourneyData, journey, phase } = useJourneyData();
+  const { journey, phase } = useJourneyData();
 
   const { mutateAsync: mutateUserData } = useRestPost<UserData>(
     ["user"],
@@ -42,8 +40,6 @@ export const UserConnected: React.FC = () => {
     ["generate-nft"],
     "/api/generate-nft",
   );
-
-  const { nftURLera1, nftURLera2 } = useUserData();
 
   useEffect(() => {
     if (account.address) {
@@ -61,7 +57,6 @@ export const UserConnected: React.FC = () => {
     }
   }, [account.address, account.chainId, journey, phase]);
 
-  
   return (
     <div className="flex text-lg">
       <ConnectButton.Custom>
@@ -91,12 +86,18 @@ export const UserConnected: React.FC = () => {
               <>
                 {/* desktop */}
                 <div className="hidden lg:flex w-full h-full bg-agblack gap-2 items-center rounded-lg cursor-pointer focus:outline-none">
-                    <img
-                      src={chain.id === pulsechainV4.id ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCuUifRyi_k3LEVGmTLdl5keon5NALvBHHqITJYAtBGw&s" : chain.iconUrl ? chain.iconUrl : ""}
-                      alt={chain.name ?? ""}
-                      className="w-[40px] h-[40px] rounded-full aspect-square"
-                      onClick={openChainModal}
-                    />
+                  <img
+                    src={
+                      chain.id === pulsechainV4.id
+                        ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCuUifRyi_k3LEVGmTLdl5keon5NALvBHHqITJYAtBGw&s"
+                        : chain.iconUrl
+                          ? chain.iconUrl
+                          : ""
+                    }
+                    alt={chain.name ?? ""}
+                    className="w-[40px] h-[40px] rounded-full aspect-square"
+                    onClick={openChainModal}
+                  />
                   <p
                     className="flex flex-col justify-start items-start gap-0 text-[16px] leading-[16px] uppercase bg-gradient-to-b font-extrabold from-[#B4EBF8] to-[#789DFA] text-transparent bg-clip-text"
                     onClick={openAccountModal}
