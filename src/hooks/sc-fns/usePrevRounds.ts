@@ -5,7 +5,7 @@ import { pulsechain, pulsechainV4 } from "viem/chains";
 
 const usePrevRounds = (currentRoundId: bigint)=>{
 const PMWContract = usePinkMistWellContract();
-    const prevRecordsCount = 5;
+    const prevRecordsCount = Math.min(5, Number(currentRoundId));
     const prevRoundIds =
       Number(currentRoundId) > 0
         ? Array.from({ length: prevRecordsCount }).map((_, i) => {

@@ -74,6 +74,14 @@ const useEnterGame = (tickets: bigint) => {
     query: { enabled: !transactionLoading },
   });
 
+  const { data: balanceOf, isFetched: isBalanceOfFetched } = useReadContract({
+    address: investTokenAddress as `0x${string}`,
+    abi: erc20ABI,
+    functionName: "balanceOf",
+    args: [account.address],
+    query: { enabled: !transactionLoading },
+  });
+
   useEffect(() => {
     if (enterGameError) {
       console.log({ enterGameError });
@@ -83,6 +91,8 @@ const useEnterGame = (tickets: bigint) => {
           "You cancelled the entering process. Please Try Again if you wish to enter.",
           TOAST_SETTINGS,
         );
+      } else if ((balanceOf as bigint) < investAmount) {
+        toast.error("Insufficient Funds!", TOAST_SETTINGS);
       } else {
         toast.error(
           "Couldn't enter you in the game. Please Try Again.",

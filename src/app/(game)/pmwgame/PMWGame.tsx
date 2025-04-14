@@ -355,8 +355,10 @@ export default function PMWGame() {
               </div>
             ) : (
               <div>
-                Congratulations {winnerHistoryArray?.[0]?.[5]} for winning
-                Round-{Number(currentRoundId) - 1}
+                {currentRoundId !== BigInt(1)
+                  ? `Congratulations ${winnerHistoryArray?.[0]?.[5]} for winning
+              Round-${Number(currentRoundId) - 1}`
+                  : null}
               </div>
             )}
             <div className="w-[25%] max-w-[25%] flex flex-col gap-[20px]">
