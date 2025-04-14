@@ -8,6 +8,15 @@ import {
   useWriteContract,
 } from "wagmi";
 import usePinkMistWellContract from "@/abi/PinkMistWell";
+import toast, { ToastOptions } from "react-hot-toast";
+
+const TOAST_SETTINGS: ToastOptions = {
+  duration: 3000,
+  position: "bottom-right",
+  style: {
+    width: "400px",
+  },
+};
 
 const useEnterGame = (tickets: bigint) => {
   const [isApprovalNeeded, setIsApprovalNeeded] = useState(false);
@@ -69,16 +78,42 @@ const useEnterGame = (tickets: bigint) => {
     if (enterGameError) {
       console.log({ enterGameError });
       setTransactionLoading(false);
+      if ((enterGameError.cause as any).code === 4001) {
+        toast.error(
+          "You cancelled the entering process. Please Try Again if you wish to enter.",
+          TOAST_SETTINGS,
+        );
+      } else {
+        toast.error(
+          "Couldn't enter you in the game. Please Try Again.",
+          TOAST_SETTINGS,
+        );
+      }
     }
 
     if (enterGameReceiptError) {
       console.log({ enterGameReceiptError });
       setTransactionLoading(false);
+      toast.error(
+        "Couldn't enter you in the game. Please Try Again.",
+        TOAST_SETTINGS,
+      );
     }
 
     if (approveError) {
       console.log({ approveError });
       setTransactionLoading(false);
+      if ((approveError.cause as any).code === 4001) {
+        toast.error(
+          "You did not approve sending us your tokens. Please Try Again if you wish to mine.",
+          TOAST_SETTINGS,
+        );
+      } else {
+        toast.error(
+          "Couldn't approve your tokens to enter the game. Please Try Again.",
+          TOAST_SETTINGS,
+        );
+      }
     }
   }, [enterGameError, approveError, enterGameReceiptError]);
 
@@ -123,7 +158,6 @@ const useEnterGame = (tickets: bigint) => {
           functionName: "enterPool",
           args: [tickets],
         });
-
       }
     }
   };
@@ -140,7 +174,6 @@ const useEnterGame = (tickets: bigint) => {
           functionName: "enterPool",
           args: [tickets],
         });
-        
       }
     }
   }, [isApprovalNeeded, approveIsLoading, approveReceipt]);

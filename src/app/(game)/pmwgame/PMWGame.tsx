@@ -22,7 +22,6 @@ import useUserTickets from "@/hooks/sc-fns/useUserTickets";
 import useCurrentRound from "@/hooks/sc-fns/useCurrentRound";
 import usePrevRounds from "@/hooks/sc-fns/usePrevRounds";
 
-
 export default function PMWGame() {
   const account = useAccount();
   const { openConnectModal } = useConnectModal();

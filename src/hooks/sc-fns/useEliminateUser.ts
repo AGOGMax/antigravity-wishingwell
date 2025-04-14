@@ -1,13 +1,26 @@
 import { useEffect, useState } from "react";
 import {
+  useAccount,
+  useReadContract,
   useReadContracts,
   useWaitForTransactionReceipt,
   useWriteContract,
 } from "wagmi";
 import usePinkMistWellContract from "@/abi/PinkMistWell";
+import { erc20Abi } from "viem";
+import { ToastOptions, toast } from "react-hot-toast";
+
+const TOAST_SETTINGS: ToastOptions = {
+  duration: 3000,
+  position: "bottom-right",
+  style: {
+    width: "400px",
+  },
+};
 
 const useEliminateUser = () => {
   const [transactionLoading, setTransactionLoading] = useState<boolean>(false);
+  const account = useAccount();
 
   const PMWContract = usePinkMistWellContract();
 
@@ -45,11 +58,24 @@ const useEliminateUser = () => {
     if (eliminateUserError) {
       console.log({ eliminateUserError });
       setTransactionLoading(false);
+      if ((eliminateUserError.cause as any).code === 4001) {
+        toast.error(
+          "You cancelled the misting process. Please Try Again if you wish to mist'em.",
+          TOAST_SETTINGS,
+        );
+      } else if (
+        (eliminateUserError.cause as any).details.includes("insufficient funds")
+      ) {
+        toast.error("Insufficient Funds!", TOAST_SETTINGS);
+      } else {
+        toast.error("Couldn't mist'em. Please Try Again.", TOAST_SETTINGS);
+      }
     }
 
     if (eliminateUserReceiptError) {
       console.log({ eliminateUserReceiptError });
       setTransactionLoading(false);
+      toast.error("Couldn't mist'em. Please Try Again.", TOAST_SETTINGS);
     }
   }, [eliminateUserError, eliminateUserReceiptError]);
 
