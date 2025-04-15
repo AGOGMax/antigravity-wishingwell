@@ -24,7 +24,7 @@ function extractRoundsPrizes(prizes: PrizeArrays) {
         daiAmount: daiAmounts[i],
         darkAmount: darkAmounts[i],
         _winner: _winners[i],
-        winningTicket: winningTickets[i],
+        winningTicket: Number(winningTickets[i]) + 1,
       });
     }
   }
