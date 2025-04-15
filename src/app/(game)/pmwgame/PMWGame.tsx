@@ -20,7 +20,10 @@ import { UserWalletAddress } from "./UserWalletAddress";
 import usePMWReader from "@/hooks/sc-fns/usePMWReader";
 import useUserTickets from "@/hooks/sc-fns/useUserTickets";
 import useCurrentRound from "@/hooks/sc-fns/useCurrentRound";
-import usePrevRounds from "@/hooks/sc-fns/usePrevRounds";
+import usePrizes from "@/hooks/sc-fns/usePrizes";
+import { extractRoundsPrizes } from "../utils";
+
+type PrizeArrays = [number[], number[], boolean[], string[], number[]];
 
 export default function PMWGame() {
   const account = useAccount();
@@ -154,12 +157,11 @@ export default function PMWGame() {
     }
   }, [roundsDataReader]);
 
-  const { prevRoundsDataReader, isPrevRoundsFetched, refetchPrevRounds } =
-    usePrevRounds(currentRoundId);
+  const { prizesReader, isPrizesFetched, refetchPrizes } = usePrizes();
 
-  const winnerHistoryArray = prevRoundsDataReader?.map((round, i) => {
-    return round.result as Array<number[]>;
-  });
+  const { currentRoundPrize, lastRoundsPrizes } = extractRoundsPrizes(
+    prizesReader as PrizeArrays,
+  );
 
   useEffect(() => {
     if (isUserTicketsFetched) {
@@ -216,7 +218,7 @@ export default function PMWGame() {
       refetchPMWReader();
       refetchUserTickets();
       refetchRounds();
-      refetchPrevRounds();
+      refetchPrizes();
     }
   }, [isEnterGameTransactionLoading, enterGameReceipt, eliminateUserReceipt]);
 
@@ -355,8 +357,8 @@ export default function PMWGame() {
               </div>
             ) : (
               <div>
-                {currentRoundId !== BigInt(1)
-                  ? `Congratulations ${winnerHistoryArray?.[0]?.[5]} for winning
+                {lastRoundsPrizes.length !== 0
+                  ? `Congratulations ${lastRoundsPrizes?.[0]?._winner} for winning
               Round-${Number(currentRoundId) - 1}`
                   : null}
               </div>
@@ -398,29 +400,33 @@ export default function PMWGame() {
                   )}
                 </div>
               </Container>
-              <Table>
-                <thead>
-                  <tr>
-                    <th>ROUND ID</th>
-                    <th>WINNER</th>
-                    <th>AMOUNT WON</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {winnerHistoryArray?.map((winner) => {
-                    return (
-                      <tr key={Number(winner?.[0])}>
-                        <td>{Number(winner?.[0])}</td>
-                        <td>
-                          0x...
-                          {String(winner?.[5])?.slice(-3)}
-                        </td>
-                        <td>{`${Number(winner?.[6])} $DAI + ${Number(winner?.[7])} $DARK`}</td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </Table>
+              {lastRoundsPrizes.length !== 0 ? (
+                <Table>
+                  <thead>
+                    <tr>
+                      <th>ROUND ID</th>
+                      <th>WINNER</th>
+                      <th>AMOUNT WON</th>
+                      <th>TICKET NUMBER</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {lastRoundsPrizes?.map((roundPrize) => {
+                      return (
+                        <tr key={roundPrize?.roundId}>
+                          <td>{roundPrize?.roundId}</td>
+                          <td>
+                            0x...
+                            {String(roundPrize?._winner)?.slice(-3)}
+                          </td>
+                          <td>{`${Number(roundPrize?.daiAmount)} $DAI + ${Number(roundPrize?.darkAmount)} $DARK`}</td>
+                          <td>{Number(roundPrize?.winningTicket)}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </Table>
+              ) : null}
             </div>
           </div>
         </>
