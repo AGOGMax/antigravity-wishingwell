@@ -22,8 +22,9 @@ import useUserTickets from "@/hooks/sc-fns/useUserTickets";
 import useCurrentRound from "@/hooks/sc-fns/useCurrentRound";
 import usePrizes from "@/hooks/sc-fns/usePrizes";
 import { extractRoundsPrizes } from "../utils";
+import JackpotDisplay from "./JackpotDisplay";
 
-type PrizeArrays = [number[], number[], boolean[], string[], number[]];
+type PrizeArrays = [bigint[], bigint[], boolean[], string[], bigint[]];
 
 export default function PMWGame() {
   const account = useAccount();
@@ -282,6 +283,10 @@ export default function PMWGame() {
           </>
         )}
       </Toolbar>
+      <JackpotDisplay
+        daiAmount={Number((currentRoundPrize as any).daiAmount || 0)}
+        darkAmount={Number((currentRoundPrize as any).darkAmount || 0)}
+      />
       {account.isConnected ? (
         <>
           <div className="flex flex-col items-center">

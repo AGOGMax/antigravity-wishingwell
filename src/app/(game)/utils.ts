@@ -1,4 +1,4 @@
-type PrizeArrays = [number[], number[], boolean[], string[], number[]];
+type PrizeArrays = [bigint[], bigint[], boolean[], string[], bigint[]];
 
 function extractRoundsPrizes(prizes: PrizeArrays) {
   if (!prizes) {
