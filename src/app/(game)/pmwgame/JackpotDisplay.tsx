@@ -10,7 +10,7 @@ export default function JackpotDisplay({
   darkAmount,
 }: JackpotDisplayProps) {
   return (
-    <div className="flex items-center justify-center w-full mx-auto p-4">
+    <div className="flex items-center justify-center w-full p-4 my-8">
       <div className="w-[6rem] h-[6rem] relative mr-2">
         <Image
           src="https://i.ibb.co/yvm1Jdk/dai-coin-icon-isolated-on-white-background-vector-40276186-Photoroom.png"

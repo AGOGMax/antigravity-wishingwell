@@ -14,10 +14,10 @@ export const UserWalletAddress: React.FC = () => {
             return (
               <div>
                 <div
-                  className="flex text-red-400 w-full h-full p-3 bg-agblack gap-2 items-center rounded-lg cursor-pointer focus:outline-none peer"
+                  className="flex text-red-400 w-full h-full p-1 bg-agblack gap-2 items-center rounded-lg cursor-pointer focus:outline-none peer"
                   onClick={openChainModal}
                 >
-                  <PiWarningCircle className="text-brred w-8 h-8" />
+                  <PiWarningCircle className="text-brred w-6 h-6" />
                   <p className="uppercase font-extrabold mb-0 text-brred bg-clip-text z-[100]">
                     {condenseAddress(`${account.address}`)}
                   </p>
@@ -30,7 +30,7 @@ export const UserWalletAddress: React.FC = () => {
           } else if (chain) {
             return (
               <>
-                <div className="lg:flex w-full h-full bg-agblack p-3 gap-2 items-center rounded-lg cursor-pointer focus:outline-none">
+                <div className="lg:flex w-full h-full bg-agblack p-1 gap-2 items-center rounded-lg cursor-pointer focus:outline-none">
                   <p
                     className="flex flex-col justify-start mb-0 items-start gap-0 text-[16px] leading-[16px] uppercase bg-gradient-to-b font-extrabold from-[#B4EBF8] to-[#789DFA] text-transparent bg-clip-text"
                     onClick={openAccountModal}
