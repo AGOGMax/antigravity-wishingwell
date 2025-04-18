@@ -46,21 +46,14 @@ export default function Hero() {
           />
         ) : (
           <HeroItemCard
-            title="WishWell"
-            description={
-              timer.era !== "wishwell"
-                ? "Currently you can access wishwell by invitation only."
-                : "Contribute to our WishWell to get the WishWell NFT + points."
+            title="Pink Mist Whale Game"
+            description={"Play the Pink Mist Well Game and steal the jackpot!"}
+            // backgroundImage={IMAGEKIT_IMAGES.WISHWELL}
+            backgroundImage={
+              "https://i.ibb.co/MDxDS0Rt/pink-mist-whale-image.jpg"
             }
-            backgroundImage={IMAGEKIT_IMAGES.WISHWELL}
             animateFrom="left"
-            cardExternalLink={
-              timer.era !== "wishwell"
-                ? "#"
-                : location.pathname === "/wishwell"
-                  ? "/wishwell#"
-                  : "/wishwell"
-            }
+            cardExternalLink={"/pmwgame"}
             defaultImageOpacity={0.5}
             hoverImageOpacity={0.35}
           />
