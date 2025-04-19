@@ -1,7 +1,5 @@
 "use client";
-import { Text, Button } from "nes-ui-react";
 import { useAccount } from "wagmi";
-import Grid from "../Components/Grid";
 import { useEffect, useRef, useState } from "react";
 import useEnterGame from "@/hooks/sc-fns/useEnterGame";
 import useEliminateUser from "@/hooks/sc-fns/useEliminateUser";
@@ -14,8 +12,7 @@ import Header from "../Components/Header";
 import PMWTitle from "../Components/PMWTitle";
 import ConnectWallet from "../Components/ConnectWallet";
 import EnterGameScreen from "../Components/EnterGameScreen";
-import WinnerHistoryTable from "../Components/WinnerHistoryTable";
-import YourTicketsContainer from "../Components/YourTicketsContainer";
+import EliminateScreen from "../Components/EliminateScreen";
 
 type PrizeArrays = [bigint[], bigint[], boolean[], string[], bigint[]];
 
@@ -229,50 +226,41 @@ export default function PMWGame() {
         currentRoundId={Number(currentRoundId)}
         isAccountConnected={isAccountConnected}
       />
-      <div className="flex items-start justify-between w-full">
-        <YourTicketsContainer
-          userAllTickets={userAllTickets}
-          userAllTicketsCount={userActiveTicketCount}
-        />
-        {isAccountConnected ? (
-          isRegistrationOpen ? (
-            <EnterGameScreen
-              currentRoundPrize={currentRoundPrize}
-              activeTicketsCount={currentActiveTicketsCount}
-              totalParticipants={totalParticipants}
-              userTickets={userTickets}
-              setUserTickets={setUserTickets}
-              renderEnterGameButtonState={renderEnterGameButtonState}
-              maxTickets={maxTickets}
-              isEnterGameTransactionLoading={isEnterGameTransactionLoading}
-              enterGame={enterGame}
-              userAllTicketsCount={userAllTicketsCount}
-              userAllTickets={userAllTickets}
-              lastRoundsPrizes={lastRoundsPrizes}
-              currentRoundId={currentRoundId}
-              isRegistrationOpen={isRegistrationOpen}
-            />
-          ) : (
-            <div className="flex flex-col items-center justify-center mt-[16px] gap-[16px] w-full">
-              <Button
-                color="primary"
-                onClick={eliminateUser}
-                disabled={isEliminateUserTransactionLoading}
-                size="large"
-              >
-                <Text size="large">{renderEliminateUserButtonState()}</Text>
-              </Button>
-              <Grid
-                currentParticipatedList={currentParticipatedList}
-                activeTicketCount={currentActiveTicketsCount}
-              />
-            </div>
-          )
+      {isAccountConnected ? (
+        isRegistrationOpen ? (
+          <EnterGameScreen
+            currentRoundPrize={currentRoundPrize}
+            activeTicketsCount={currentActiveTicketsCount}
+            totalParticipants={totalParticipants}
+            userTickets={userTickets}
+            setUserTickets={setUserTickets}
+            renderEnterGameButtonState={renderEnterGameButtonState}
+            maxTickets={maxTickets}
+            isEnterGameTransactionLoading={isEnterGameTransactionLoading}
+            enterGame={enterGame}
+            userAllTicketsCount={userAllTicketsCount}
+            userAllTickets={userAllTickets}
+            lastRoundsPrizes={lastRoundsPrizes}
+            currentRoundId={currentRoundId}
+            isRegistrationOpen={isRegistrationOpen}
+          />
         ) : (
-          <ConnectWallet />
-        )}
-        <WinnerHistoryTable lastRoundsPrizes={lastRoundsPrizes} />
-      </div>
+          <EliminateScreen
+            eliminateUser={eliminateUser}
+            isEliminateUserTransactionLoading={
+              isEliminateUserTransactionLoading
+            }
+            renderEliminateUserButtonState={renderEliminateUserButtonState}
+            currentParticipatedList={currentParticipatedList}
+            currentActiveTicketsCount={currentActiveTicketsCount}
+            userAllTickets={userAllTickets}
+            userAllTicketsCount={userAllTicketsCount}
+            lastRoundsPrizes={lastRoundsPrizes}
+          />
+        )
+      ) : (
+        <ConnectWallet />
+      )}
     </div>
   );
 }

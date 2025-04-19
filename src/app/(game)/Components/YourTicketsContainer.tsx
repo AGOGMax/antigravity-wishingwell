@@ -10,12 +10,13 @@ export default function YourTicketsContainer({
   userAllTickets,
 }: YourTicketsProps) {
   return (
-    <div className="mb-8 mt-[16px] w-min">
+    <div className="w-min">
       <Container
         align="center"
         title="Your Tickets"
         roundedCorners
         alignTitle="center"
+        className="your-tickets-container"
         style={{ width: "fit-content" }}
       >
         <div className="flex flex-col items-center justify-start">

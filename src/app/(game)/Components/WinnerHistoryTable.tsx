@@ -16,7 +16,7 @@ export default function WinnerHistoryTable({
   lastRoundsPrizes,
 }: historyTableProps) {
   return lastRoundsPrizes.length !== 0 ? (
-    <div className="mt-16 w-fit">
+    <div className="w-fit">
       <Table>
         <thead>
           <tr>

@@ -1,8 +1,10 @@
-@import 'nes-ui-react';
+@import "nes-ui-react";
 @import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-
+.your-tickets-container {
+  margin: 0 !important;
+}
