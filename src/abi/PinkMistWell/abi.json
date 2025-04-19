@@ -164,6 +164,25 @@
     "type": "event"
   },
   {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "roundId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "usersLength",
+        "type": "uint256"
+      }
+    ],
+    "name": "randomise",
+    "type": "event"
+  },
+  {
     "inputs": [],
     "name": "DAI",
     "outputs": [
@@ -483,6 +502,19 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_random",
+        "type": "uint256"
+      }
+    ],
+    "name": "randomCallBack",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
