@@ -17,7 +17,7 @@ export default function Cell({
   isBurst,
   activeTicketCount,
 }: CellProps) {
-  const burstSound = "/burstSound.mp3";
+  const burstSound = "/burstSound.wav";
   const [playBurst] = useSound(burstSound);
   const [showSkull, setShowSkull] = useState(false);
 

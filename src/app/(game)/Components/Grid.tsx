@@ -16,7 +16,7 @@ export default function Grid({
   activeTicketCount,
 }: GridProps) {
   return (
-    <div className="grid grid-cols-[repeat(9,minmax(0,1fr))] md:grid-cols-[repeat(15,minmax(0,1fr))] lg:grid-cols-[repeat(19,minmax(0,1fr))] w-fit">
+    <div className="grid grid-cols-10  gap-0">
       {currentParticipatedList?.map((participant, index) => (
         <Cell
           key={index}
