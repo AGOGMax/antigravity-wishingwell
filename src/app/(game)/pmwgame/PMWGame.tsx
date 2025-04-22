@@ -229,7 +229,6 @@ export default function PMWGame() {
       {isAccountConnected ? (
         isRegistrationOpen ? (
           <EnterGameScreen
-            currentRoundPrize={currentRoundPrize}
             activeTicketsCount={currentActiveTicketsCount}
             totalParticipants={totalParticipants}
             userTickets={userTickets}
@@ -241,8 +240,7 @@ export default function PMWGame() {
             userAllTicketsCount={userAllTicketsCount}
             userAllTickets={userAllTickets}
             lastRoundsPrizes={lastRoundsPrizes}
-            currentRoundId={currentRoundId}
-            isRegistrationOpen={isRegistrationOpen}
+            currentParticipatedList={currentParticipatedList}
           />
         ) : (
           <EliminateScreen
@@ -253,9 +251,7 @@ export default function PMWGame() {
             renderEliminateUserButtonState={renderEliminateUserButtonState}
             currentParticipatedList={currentParticipatedList}
             currentActiveTicketsCount={currentActiveTicketsCount}
-            userAllTickets={userAllTickets}
-            userAllTicketsCount={userAllTicketsCount}
-            lastRoundsPrizes={lastRoundsPrizes}
+            totalParticipants={totalParticipants}
           />
         )
       ) : (

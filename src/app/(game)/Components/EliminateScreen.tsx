@@ -1,5 +1,7 @@
 import { Button, Text } from "nes-ui-react";
 import Grid from "./Grid";
+import GlobeRoulette from "./GlobeDisplay";
+import { useMemo } from "react";
 
 interface EliminateScreenProps {
   eliminateUser: () => void;
@@ -12,17 +14,7 @@ interface EliminateScreenProps {
     isBurst: boolean;
   }[];
   currentActiveTicketsCount: number;
-  userAllTickets: (number[] | boolean[])[];
-  userAllTicketsCount: number;
-  lastRoundsPrizes:
-    | {
-        roundId: number;
-        daiAmount: string;
-        darkAmount: string;
-        _winner: string;
-        winningTicket: number;
-      }[]
-    | [];
+  totalParticipants: number;
 }
 
 export default function EliminateScreen({
@@ -31,10 +23,18 @@ export default function EliminateScreen({
   renderEliminateUserButtonState,
   currentParticipatedList,
   currentActiveTicketsCount,
-  userAllTickets,
-  userAllTicketsCount,
-  lastRoundsPrizes,
+  totalParticipants,
 }: EliminateScreenProps) {
+  const [globeNumbers, eliminatedNumbers] = useMemo(() => {
+    const currentActiveTickets = currentParticipatedList
+      .filter((ticket) => !ticket.isBurst)
+      .map((ticket) => ticket.ticketNumber);
+    const eliminatedNumbers = currentParticipatedList
+      .filter((ticket) => ticket.isBurst)
+      .map((ticket) => ticket.ticketNumber);
+    return [currentActiveTickets, eliminatedNumbers];
+  }, [currentParticipatedList]);
+
   return (
     <div className="flex flex-col items-center justify-center mt-[16px] gap-[16px] w-full">
       <Button
@@ -45,6 +45,12 @@ export default function EliminateScreen({
       >
         <Text size="large">{renderEliminateUserButtonState()}</Text>
       </Button>
+      <GlobeRoulette
+        numbers={globeNumbers}
+        isSpinning={isEliminateUserTransactionLoading}
+        eliminations={eliminatedNumbers}
+        totalParticipants={totalParticipants}
+      />
       <Grid
         currentParticipatedList={currentParticipatedList}
         activeTicketCount={currentActiveTicketsCount}
