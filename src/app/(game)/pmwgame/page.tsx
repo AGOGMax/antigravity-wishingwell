@@ -7,5 +7,16 @@ const PMWGame = dynamic(() => import("./PMWGame"), {
 });
 
 export default function PinkMistGame() {
-  return <PMWGame />;
+  return (
+    <div
+      style={{
+        background: `url(https://i.ibb.co/wZyxgPyb/background-pmwgame.png)`,
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+      }}
+      className="min-h-screen"
+    >
+      <PMWGame />
+    </div>
+  );
 }

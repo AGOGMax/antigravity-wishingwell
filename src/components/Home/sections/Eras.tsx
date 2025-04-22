@@ -11,7 +11,9 @@ export default function Eras() {
     <div className="relative grid grid-cols-1 grid-rows-3 w-full h-[180vh] md:h-[100vh] z-0 my-32">
       <HeroItemCard
         title="Pink Mist Whale Game"
-        description={"Play the Pink Mist Well Game and steal the jackpot!"}
+        description={
+          "Will You Be The Last Degen Standing? Win A Bag Of $Dark and $eDai!!!"
+        }
         // backgroundImage={IMAGEKIT_IMAGES.WISHWELL}
         backgroundImage={"https://i.ibb.co/MDxDS0Rt/pink-mist-whale-image.jpg"}
         className="object-[50%_55%]"

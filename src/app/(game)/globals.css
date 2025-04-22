@@ -5,6 +5,3 @@
 @tailwind components;
 @tailwind utilities;
 
-.your-tickets-container {
-  margin: 0 !important;
-}

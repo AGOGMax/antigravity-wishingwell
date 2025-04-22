@@ -20,9 +20,9 @@ export default function WinnerHistoryTable({
       <Table>
         <thead>
           <tr>
-            <th className="text-center">ROUND ID</th>
+            <th className="text-center">ROUND</th>
             <th className="text-center">WINNER</th>
-            <th className="text-center">TICKET NUMBER</th>
+            <th className="text-center">TICKET#</th>
             <th className="text-center">AMOUNT WON</th>
           </tr>
         </thead>
@@ -32,7 +32,7 @@ export default function WinnerHistoryTable({
               <tr key={roundPrize?.roundId}>
                 <td className="text-center">{roundPrize?.roundId}</td>
                 <td className="text-center">
-                  ...{String(roundPrize?._winner)?.slice(-4)}
+                  .{String(roundPrize?._winner)?.slice(-4)}
                 </td>
                 {/* <td>{`${Number(roundPrize?.daiAmount)} $DAI + ${Number(roundPrize?.darkAmount)} $DARK`}</td> */}
                 <td

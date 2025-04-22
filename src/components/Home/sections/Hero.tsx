@@ -47,7 +47,9 @@ export default function Hero() {
         ) : (
           <HeroItemCard
             title="Pink Mist Whale Game"
-            description={"Play the Pink Mist Well Game and steal the jackpot!"}
+            description={
+              "Will You Be The Last Degen Standing? Win A Bag Of $Dark and $eDai!!!"
+            }
             // backgroundImage={IMAGEKIT_IMAGES.WISHWELL}
             backgroundImage={
               "https://i.ibb.co/MDxDS0Rt/pink-mist-whale-image.jpg"
