@@ -1,16 +1,10 @@
 import { Button, Input, Progress, Text } from "nes-ui-react";
-import JackpotDisplay from "../pmwgame/JackpotDisplay";
 import YourTicketsContainer from "./YourTicketsContainer";
 import WinnerHistoryTable from "./WinnerHistoryTable";
-
-type PrizeType = {
-  roundId: Number;
-  daiAmount: bigint;
-  darkAmount: bigint;
-};
+import GlobeRoulette from "./GlobeDisplay";
+import { useMemo } from "react";
 
 interface EnterGameScreenProps {
-  currentRoundPrize: PrizeType | {};
   activeTicketsCount: number;
   totalParticipants: number;
   userTickets: number;
@@ -30,12 +24,15 @@ interface EnterGameScreenProps {
         winningTicket: number;
       }[]
     | [];
-  currentRoundId: bigint;
-  isRegistrationOpen: boolean;
+  currentParticipatedList: {
+    ticketNumber: number;
+    walletAddress: string;
+    isUserCell: boolean;
+    isBurst: boolean;
+  }[];
 }
 
 export default function EnterGameScreen({
-  currentRoundPrize,
   activeTicketsCount,
   totalParticipants,
   userTickets,
@@ -47,12 +44,17 @@ export default function EnterGameScreen({
   userAllTickets,
   userAllTicketsCount,
   lastRoundsPrizes,
-  currentRoundId,
-  isRegistrationOpen,
+  currentParticipatedList,
 }: EnterGameScreenProps) {
   function handleChange(value: string) {
     setUserTickets(value === "" ? 0 : Number(value));
   }
+
+  const globeNumbers = useMemo(() => {
+    return currentParticipatedList
+      .filter((ticket) => !ticket.isBurst)
+      .map((ticket) => ticket.ticketNumber);
+  }, [currentParticipatedList]);
 
   return (
     <div className="flex flex-row items-start gap-x-8 mt-8">
@@ -73,6 +75,12 @@ export default function EnterGameScreen({
             style={{ width: "40vw" }}
           />
         </div>
+
+        <GlobeRoulette
+          numbers={globeNumbers}
+          isSpinning={false}
+          totalParticipants={totalParticipants}
+        />
 
         <div className="flex flex-row items-center gap-8 my-8">
           <div className="flex flex-col">
