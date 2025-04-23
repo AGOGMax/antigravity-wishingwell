@@ -219,7 +219,7 @@ export default function PMWGame() {
 
   const isAccountConnected = account.isConnected;
   return (
-    <div className="min-h-screen p-8 flex flex-col box-border items-center bg-agblack opacity-80">
+    <div className="min-h-screen p-8 flex flex-col box-border items-center bg-agblack bg-opacity-80">
       <PMWTitle />
       <Header
         activeTicketsCount={userActiveTicketCount || 0}
@@ -252,6 +252,10 @@ export default function PMWGame() {
             currentParticipatedList={currentParticipatedList}
             currentActiveTicketsCount={currentActiveTicketsCount}
             totalParticipants={totalParticipants}
+            userAllTicketsCount={userAllTicketsCount}
+            userAllTickets={userAllTickets}
+            lastRoundsPrizes={lastRoundsPrizes}
+            currentRoundPrize={currentRoundPrize}
           />
         )
       ) : (

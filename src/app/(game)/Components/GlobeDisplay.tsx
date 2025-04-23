@@ -2,28 +2,42 @@
 
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
+// @ts-ignore
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { Tween, Easing, Group } from "@tweenjs/tween.js";
+
+type GlobeRouletteProps = {
+  numbers: number[];
+  isSpinning: boolean;
+  eliminations: number[];
+  totalParticipants: number;
+};
+
+type Spot = {
+  number: number | "";
+  sprite: THREE.Sprite;
+  originalPosition: THREE.Vector3;
+};
 
 export default function GlobeRoulette({
   numbers,
   isSpinning,
   eliminations,
   totalParticipants,
-}) {
-  const containerRef = useRef(null);
+}: GlobeRouletteProps) {
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
-  const sceneRef = useRef(null);
-  const cameraRef = useRef(null);
-  const rendererRef = useRef(null);
-  const controlsRef = useRef(null);
-  const globeGroupRef = useRef(null);
-  const activeSpotsRef = useRef([]);
-  const animationFrameRef = useRef(null);
-  const tweenGroupRef = useRef(new Group());
-  const isSpinningRef = useRef(false);
+  const sceneRef = useRef<THREE.Scene | null>(null);
+  const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
+  const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
+  const controlsRef = useRef<OrbitControls | null>(null);
+  const globeGroupRef = useRef<THREE.Group | null>(null);
+  const activeSpotsRef = useRef<Spot[]>([]);
+  const animationFrameRef = useRef<number | null>(null);
+  const tweenGroupRef = useRef<Group>(new Group());
+  const isSpinningRef = useRef<boolean>(false);
 
-  const [globeNumbers, setGlobeNumbers] = useState([]);
+  const [globeNumbers, setGlobeNumbers] = useState<(number | "")[]>([]);
 
   useEffect(() => {
     setGlobeNumbers(
@@ -38,7 +52,7 @@ export default function GlobeRoulette({
     if (!container) return;
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x111827);
+    scene.background = null;
     sceneRef.current = scene;
 
     const camera = new THREE.PerspectiveCamera(
@@ -50,7 +64,8 @@ export default function GlobeRoulette({
     camera.position.set(0, 5, 28);
     cameraRef.current = camera;
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setClearColor(0x000000, 0);
     renderer.setSize(container.clientWidth, container.clientHeight);
     container.appendChild(renderer.domElement);
     rendererRef.current = renderer;
@@ -91,7 +106,7 @@ export default function GlobeRoulette({
     const glowGeometry = new THREE.SphereGeometry(globeRadius + 0.8, 64, 64);
     const glowMaterial = new THREE.MeshBasicMaterial({
       color: 0xec4899,
-      transparent: true,
+      transparent: false,
       opacity: 0.3,
       side: THREE.BackSide,
       blending: THREE.AdditiveBlending,
@@ -99,18 +114,22 @@ export default function GlobeRoulette({
     const glowMesh = new THREE.Mesh(glowGeometry, glowMaterial);
     globeGroup.add(glowMesh);
 
-    const createNumberSprite = (number) => {
+    const createNumberSprite = (number: number | "") => {
       const canvas = document.createElement("canvas");
       const context = canvas.getContext("2d");
       const size = 128;
       canvas.width = size;
       canvas.height = size;
 
-      context.font = `Bold ${size / 2.5}px Arial`;
-      context.fillStyle = "rgba(255, 255, 255, 0.95)";
-      context.textAlign = "center";
-      context.textBaseline = "middle";
-      context.fillText(number.toString(), size / 2, size / 2);
+      if (context) {
+        context.font = `Bold ${size / 2.5}px Arial`;
+        context.fillStyle = "rgba(255, 255, 255, 0.95)";
+        context.textAlign = "center";
+        context.textBaseline = "middle";
+        context.fillText(number.toString(), size / 2, size / 2);
+      } else {
+        console.warn("Canvas context could not be obtained.");
+      }
 
       const texture = new THREE.CanvasTexture(canvas);
       const spriteMaterial = new THREE.SpriteMaterial({
@@ -157,7 +176,7 @@ export default function GlobeRoulette({
           globeGroup.add(sprite);
 
           activeSpotsRef.current.push({
-            number: number,
+            number: number as number | "",
             sprite: sprite,
             originalPosition: position.clone(),
           });
@@ -192,14 +211,14 @@ export default function GlobeRoulette({
 
     updateNumbers();
 
-    const animate = (time) => {
+    const animate = (time: number) => {
       animationFrameRef.current = requestAnimationFrame(animate);
       tweenGroupRef.current.update(time);
       controls.update();
       renderer.render(scene, camera);
     };
 
-    animate();
+    requestAnimationFrame(animate);
 
     const handleResize = () => {
       if (!container) return;
@@ -247,7 +266,9 @@ export default function GlobeRoulette({
 
     const updateNumbers = () => {
       activeSpotsRef.current.forEach((spot) => {
-        globeGroupRef.current.remove(spot.sprite);
+        if (globeGroupRef.current) {
+          globeGroupRef.current.remove(spot.sprite);
+        }
         if (spot.sprite.material.map) spot.sprite.material.map.dispose();
         spot.sprite.material.dispose();
       });
@@ -260,18 +281,22 @@ export default function GlobeRoulette({
       const longitudeSpacing = (Math.PI * 2) / numLongitudePoints;
       let spotCounter = 0;
 
-      const createNumberSprite = (number) => {
+      const createNumberSprite = (number: number | "") => {
         const canvas = document.createElement("canvas");
         const context = canvas.getContext("2d");
         const size = 128;
         canvas.width = size;
         canvas.height = size;
 
-        context.font = `Bold ${size / 2.5}px Arial`;
-        context.fillStyle = "rgba(255, 255, 255, 0.95)";
-        context.textAlign = "center";
-        context.textBaseline = "middle";
-        context.fillText(number.toString(), size / 2, size / 2);
+        if (context) {
+          context.font = `Bold ${size / 2.5}px Arial`;
+          context.fillStyle = "rgba(255, 255, 255, 0.95)";
+          context.textAlign = "center";
+          context.textBaseline = "middle";
+          context.fillText(number.toString(), size / 2, size / 2);
+        } else {
+          console.warn("Canvas context could not be obtained.");
+        }
 
         const texture = new THREE.CanvasTexture(canvas);
         const spriteMaterial = new THREE.SpriteMaterial({
@@ -299,7 +324,9 @@ export default function GlobeRoulette({
           sprite.userData.number = number;
           sprite.scale.set(0.8, 0.8, 1);
 
-          globeGroupRef.current.add(sprite);
+          if (globeGroupRef.current) {
+            globeGroupRef.current.add(sprite);
+          }
 
           activeSpotsRef.current.push({
             number: number,
@@ -323,7 +350,9 @@ export default function GlobeRoulette({
         sprite.userData.number = number;
         sprite.scale.set(0.8, 0.8, 1);
 
-        globeGroupRef.current.add(sprite);
+        if (globeGroupRef.current) {
+          globeGroupRef.current.add(sprite);
+        }
 
         activeSpotsRef.current.push({
           number: number,
@@ -363,6 +392,7 @@ export default function GlobeRoulette({
 
       const segmentDuration = 1000; // 1-second segments
       const spinSpeed = 2 + Math.random() * 2; // Radians per second
+      if (!globeGroupRef.current) return;
       const targetRotationY = globeGroupRef.current.rotation.y + spinSpeed;
 
       new Tween(globeGroupRef.current.rotation, tweenGroupRef.current)
@@ -375,7 +405,11 @@ export default function GlobeRoulette({
     spinSegment();
   };
 
-  const animateShootOut = (sprite, originalPos, onCompleteCallback) => {
+  const animateShootOut = (
+    sprite: THREE.Sprite,
+    originalPos: THREE.Vector3,
+    onCompleteCallback: () => void,
+  ) => {
     const scene = sceneRef.current;
     const globeGroup = globeGroupRef.current;
     if (!scene || !globeGroup) return;
@@ -454,28 +488,22 @@ export default function GlobeRoulette({
 
       if (spotIndex !== -1) {
         const spot = activeSpots[spotIndex];
-        const delay = index * 800;
 
-        animateShootOut(
-          spot.sprite,
-          spot.originalPosition,
-          () => {
-            activeSpotsRef.current = activeSpotsRef.current.filter(
-              (s) => s.number !== numberToEliminate,
-            );
+        animateShootOut(spot.sprite, spot.originalPosition, () => {
+          activeSpotsRef.current = activeSpotsRef.current.filter(
+            (s) => s.number !== numberToEliminate,
+          );
 
-            if (index === eliminations.length - 1 && controlsRef.current) {
-              controlsRef.current.enabled = true;
-            }
-          },
-          delay,
-        );
+          if (index === eliminations.length - 1 && controlsRef.current) {
+            controlsRef.current.enabled = true;
+          }
+        });
       }
     });
   }, [eliminations]);
 
   return (
-    <div className="relative w-full h-screen bg-gray-900 text-gray-100 overflow-hidden">
+    <div className="relative w-full h-screen bg-transparent text-gray-100 overflow-hidden">
       <div ref={containerRef} className="w-full h-full" />
     </div>
   );

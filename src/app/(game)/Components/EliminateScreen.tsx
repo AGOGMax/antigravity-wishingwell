@@ -2,6 +2,9 @@ import { Button, Text } from "nes-ui-react";
 import Grid from "./Grid";
 import GlobeRoulette from "./GlobeDisplay";
 import { useMemo } from "react";
+import YourTicketsContainer from "./YourTicketsContainer";
+import WinnerHistoryTable from "./WinnerHistoryTable";
+import JackpotDisplay from "../pmwgame/JackpotDisplay";
 
 interface EliminateScreenProps {
   eliminateUser: () => void;
@@ -15,6 +18,23 @@ interface EliminateScreenProps {
   }[];
   currentActiveTicketsCount: number;
   totalParticipants: number;
+  userAllTicketsCount: number;
+  userAllTickets: (boolean[] | number[])[];
+  lastRoundsPrizes:
+    | {
+        roundId: number;
+        daiAmount: string;
+        darkAmount: string;
+        _winner: string;
+        winningTicket: number;
+      }[]
+    | [];
+  currentRoundPrize:
+    | {
+        daiAmount: string;
+        darkAmount: string;
+      }
+    | {};
 }
 
 export default function EliminateScreen({
@@ -24,6 +44,10 @@ export default function EliminateScreen({
   currentParticipatedList,
   currentActiveTicketsCount,
   totalParticipants,
+  userAllTickets,
+  userAllTicketsCount,
+  lastRoundsPrizes,
+  currentRoundPrize,
 }: EliminateScreenProps) {
   const [globeNumbers, eliminatedNumbers] = useMemo(() => {
     const currentActiveTickets = currentParticipatedList
@@ -36,25 +60,42 @@ export default function EliminateScreen({
   }, [currentParticipatedList]);
 
   return (
-    <div className="flex flex-col items-center justify-center mt-[16px] gap-[16px] w-full">
-      <Button
-        color="primary"
-        onClick={eliminateUser}
-        disabled={isEliminateUserTransactionLoading}
-        size="large"
-      >
-        <Text size="large">{renderEliminateUserButtonState()}</Text>
-      </Button>
-      <GlobeRoulette
-        numbers={globeNumbers}
-        isSpinning={isEliminateUserTransactionLoading}
-        eliminations={eliminatedNumbers}
-        totalParticipants={totalParticipants}
+    <div className="flex flex-row items-start gap-x-8 mt-8">
+      <YourTicketsContainer
+        userAllTickets={userAllTickets}
+        userAllTicketsCount={userAllTicketsCount}
       />
-      <Grid
-        currentParticipatedList={currentParticipatedList}
-        activeTicketCount={currentActiveTicketsCount}
-      />
+      <div className="flex flex-col items-center justify-center mt-[16px] gap-[16px] w-full">
+        <JackpotDisplay
+          daiAmount={
+            "daiAmount" in currentRoundPrize ? currentRoundPrize.daiAmount : "0"
+          }
+          darkAmount={
+            "darkAmount" in currentRoundPrize
+              ? currentRoundPrize.darkAmount
+              : "0"
+          }
+        />
+        <Button
+          color="primary"
+          onClick={eliminateUser}
+          disabled={isEliminateUserTransactionLoading}
+          size="large"
+        >
+          <Text size="large">{renderEliminateUserButtonState()}</Text>
+        </Button>
+        <GlobeRoulette
+          numbers={globeNumbers}
+          isSpinning={isEliminateUserTransactionLoading}
+          eliminations={eliminatedNumbers}
+          totalParticipants={totalParticipants}
+        />
+        <Grid
+          currentParticipatedList={currentParticipatedList}
+          activeTicketCount={currentActiveTicketsCount}
+        />
+      </div>
+      <WinnerHistoryTable lastRoundsPrizes={lastRoundsPrizes} />
     </div>
   );
 }

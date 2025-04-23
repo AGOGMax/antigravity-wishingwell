@@ -1,8 +1,8 @@
 import Image from "next/image";
 
 interface JackpotDisplayProps {
-  daiAmount: Number;
-  darkAmount: Number;
+  daiAmount: string;
+  darkAmount: string;
 }
 
 export default function JackpotDisplay({
