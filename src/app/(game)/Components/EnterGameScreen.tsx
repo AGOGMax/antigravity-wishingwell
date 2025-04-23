@@ -80,6 +80,7 @@ export default function EnterGameScreen({
           numbers={globeNumbers}
           isSpinning={false}
           totalParticipants={totalParticipants}
+          eliminations={[]}
         />
 
         <div className="flex flex-row items-center gap-8 my-8">
