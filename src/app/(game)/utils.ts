@@ -14,17 +14,21 @@ function extractRoundsPrizes(prizes: PrizeArrays) {
 
   const currentRoundPrize = {
     roundId: currentIndex + 1,
-    daiAmount: formatUnits(daiAmounts[currentIndex],18),
+    daiAmount: formatUnits(daiAmounts[currentIndex], 18),
     darkAmount: formatUnits(darkAmounts[currentIndex], 18),
   };
 
   const lastRoundsPrizes = [];
-  for (let i = currentIndex - 1; i >= 0 && lastRoundsPrizes.length < numberOfRecords; i--) {
+  for (
+    let i = currentIndex - 1;
+    i >= 0 && lastRoundsPrizes.length < numberOfRecords;
+    i--
+  ) {
     if (isCompleted[i]) {
       lastRoundsPrizes.push({
         roundId: i + 1,
-        daiAmount: formatUnits(daiAmounts[i],18),
-        darkAmount: formatUnits(darkAmounts[i],18),
+        daiAmount: formatUnits(daiAmounts[i], 18),
+        darkAmount: formatUnits(darkAmounts[i], 18),
         _winner: _winners[i],
         winningTicket: Number(winningTickets[i]) + 1,
       });
@@ -34,4 +38,20 @@ function extractRoundsPrizes(prizes: PrizeArrays) {
   return { currentRoundPrize, lastRoundsPrizes };
 }
 
-export { extractRoundsPrizes };
+const generateTicketMapping = (
+  participants: [number[], string[]],
+  userAddress: `0x${string}`,
+) => {
+  const participantsTickets = participants?.[0] ?? [];
+  const participantsAddress = participants?.[1] ?? [];
+  return participantsTickets.map((participant, index) => {
+    return {
+      ticketNumber: Number(participant) + 1,
+      walletAddress: participantsAddress?.[index],
+      isUserCell: participantsAddress?.[index] === userAddress,
+      isBurst: false,
+    };
+  });
+};
+
+export { extractRoundsPrizes, generateTicketMapping };

@@ -7,7 +7,7 @@ import usePMWReader from "@/hooks/sc-fns/usePMWReader";
 import useUserTickets from "@/hooks/sc-fns/useUserTickets";
 import useCurrentRound from "@/hooks/sc-fns/useCurrentRound";
 import usePrizes from "@/hooks/sc-fns/usePrizes";
-import { extractRoundsPrizes } from "../utils";
+import { extractRoundsPrizes, generateTicketMapping } from "../utils";
 import Header from "../Components/Header";
 import PMWTitle from "../Components/PMWTitle";
 import ConnectWallet from "../Components/ConnectWallet";
@@ -68,26 +68,16 @@ export default function PMWGame() {
   const { getUserTicketsReader, isUserTicketsFetched, refetchUserTickets } =
     useUserTickets(currentRoundId, userAddress);
 
-  const generateTicketMapping = (participants: [number[], string[]]) => {
-    const participantsTickets = participants?.[0] ?? [];
-    const participantsAddress = participants?.[1] ?? [];
-    return participantsTickets.map((participant, index) => {
-      return {
-        ticketNumber: Number(participant) + 1,
-        walletAddress: participantsAddress?.[index],
-        isUserCell: participantsAddress?.[index] === userAddress,
-        isBurst: false,
-      };
-    });
-  };
-
   useEffect(() => {
     if (PMWFetched) {
       const [tickets, addresses] = (PMWReader?.[0].result ?? [[], []]) as [
         number[],
         string[],
       ];
-      const newParticipantsList = generateTicketMapping([tickets, addresses]);
+      const newParticipantsList = generateTicketMapping(
+        [tickets, addresses],
+        userAddress,
+      );
 
       const eliminatedParticipants = currentParticipatedList
         ?.filter(
@@ -119,13 +109,15 @@ export default function PMWGame() {
 
       setTimeout(() => {
         setcurrentParticipatedList(newParticipantsList);
-      }, 8000);
+      }, 5500);
     } else {
       const [tickets, addresses] = (PMWReader?.[0].result ?? [[], []]) as [
         number[],
         string[],
       ];
-      setcurrentParticipatedList(generateTicketMapping([tickets, addresses]));
+      setcurrentParticipatedList(
+        generateTicketMapping([tickets, addresses], userAddress),
+      );
     }
   }, [PMWReader?.[0].result]);
 

@@ -64,7 +64,9 @@ const useEliminateUser = () => {
           TOAST_SETTINGS,
         );
       } else if (
-        (eliminateUserError.cause as any).details.includes("insufficient funds")
+        (eliminateUserError.cause as any).details?.includes(
+          "insufficient funds",
+        )
       ) {
         toast.error("Insufficient Funds!", TOAST_SETTINGS);
       } else {
