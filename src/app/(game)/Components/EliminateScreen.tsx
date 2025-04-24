@@ -17,9 +17,7 @@ interface EliminateScreenProps {
     isUserCell: boolean;
     isBurst: boolean;
   }[];
-  currentActiveTicketsCount: number;
   totalParticipants: number;
-  userAllTicketsCount: number;
   userAllTickets: (boolean[] | number[])[];
   lastRoundsPrizes:
     | {
@@ -43,10 +41,8 @@ export default function EliminateScreen({
   isEliminateUserTransactionLoading,
   renderEliminateUserButtonState,
   currentParticipatedList,
-  currentActiveTicketsCount,
   totalParticipants,
   userAllTickets,
-  userAllTicketsCount,
   lastRoundsPrizes,
   currentRoundPrize,
 }: EliminateScreenProps) {
@@ -64,10 +60,7 @@ export default function EliminateScreen({
   const [playBurst] = useSound(burstSound);
   return (
     <div className="flex flex-row items-start gap-x-8 mt-8">
-      <YourTicketsContainer
-        userAllTickets={userAllTickets}
-        userAllTicketsCount={userAllTicketsCount}
-      />
+      <YourTicketsContainer userAllTickets={userAllTickets} />
       <div className="flex flex-col items-center justify-center mt-[16px] gap-[16px] w-full">
         <JackpotDisplay
           daiAmount={
@@ -92,10 +85,6 @@ export default function EliminateScreen({
           isSpinning={isEliminateUserTransactionLoading}
           eliminations={eliminatedNumbers}
           totalParticipants={totalParticipants}
-        />
-        <Grid
-          currentParticipatedList={currentParticipatedList}
-          activeTicketCount={currentActiveTicketsCount}
         />
       </div>
       <WinnerHistoryTable lastRoundsPrizes={lastRoundsPrizes} />

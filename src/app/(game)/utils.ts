@@ -14,8 +14,8 @@ function extractRoundsPrizes(prizes: PrizeArrays) {
 
   const currentRoundPrize = {
     roundId: currentIndex + 1,
-    daiAmount: formatUnits(daiAmounts[currentIndex], 18),
-    darkAmount: formatUnits(darkAmounts[currentIndex], 18),
+    daiAmount: formatUnits(daiAmounts[currentIndex] || BigInt(0), 18),
+    darkAmount: formatUnits(darkAmounts[currentIndex] || BigInt(0), 18),
   };
 
   const lastRoundsPrizes = [];
