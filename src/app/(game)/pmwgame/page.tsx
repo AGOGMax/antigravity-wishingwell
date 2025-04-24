@@ -10,6 +10,7 @@ export default function PinkMistGame() {
   return (
     <div
       style={{
+        // background: `url(https://i.ibb.co/hJyzpcG9/pink-mist-whale-bg-pink.jpg)`,
         background: `url(https://i.ibb.co/wZyxgPyb/background-pmwgame.png)`,
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",

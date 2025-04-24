@@ -63,7 +63,7 @@ export default function EnterGameScreen({
         userAllTicketsCount={userAllTicketsCount}
       />
       <div className="flex flex-col justify-center items-center">
-        <div className="flex flex-col items-center mb-12">
+        <div className="flex flex-col items-center">
           <Text>
             {`${activeTicketsCount} out of 
             ${totalParticipants}...`}
@@ -83,7 +83,7 @@ export default function EnterGameScreen({
           eliminations={[]}
         />
 
-        <div className="flex flex-row items-center gap-8 my-8">
+        <div className="flex flex-row items-center gap-8">
           <div className="flex flex-col">
             <Input
               type="number"

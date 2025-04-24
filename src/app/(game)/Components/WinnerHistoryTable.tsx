@@ -42,7 +42,13 @@ export default function WinnerHistoryTable({
                   {Number(roundPrize?.winningTicket)}
                 </td>
                 <td className="text-center">
-                  {roundPrize?.daiAmount} + {roundPrize.darkAmount}
+                  <span className="text-[#E49006]">
+                    {roundPrize?.daiAmount}
+                  </span>{" "}
+                  +{" "}
+                  <span className="text-[#4A1B78]">
+                    {roundPrize.darkAmount}
+                  </span>
                 </td>
               </tr>
             );

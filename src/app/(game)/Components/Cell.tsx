@@ -2,7 +2,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { PiSkullFill } from "react-icons/pi";
-import useSound from "use-sound";
 
 interface CellProps {
   cellNumber: number;
@@ -17,15 +16,7 @@ export default function Cell({
   isBurst,
   activeTicketCount,
 }: CellProps) {
-  const burstSound = "/burstSound.wav";
-  const [playBurst] = useSound(burstSound);
   const [showSkull, setShowSkull] = useState(false);
-
-  useEffect(() => {
-    if (isBurst) {
-      playBurst();
-    }
-  }, [isBurst]);
 
   return (
     <div
