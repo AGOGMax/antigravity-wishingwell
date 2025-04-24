@@ -204,9 +204,9 @@ export default function PMWGame() {
 
   const renderEliminateUserButtonState = () => {
     if (isEliminateUserTransactionLoading) {
-      return "Misting 'em...";
+      return "Sniping 'em...";
     }
-    return "Mist 'em";
+    return "Snipe 'em";
   };
 
   const isAccountConnected = account.isConnected;

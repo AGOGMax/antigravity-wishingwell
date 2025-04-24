@@ -5,6 +5,7 @@ import { useMemo } from "react";
 import YourTicketsContainer from "./YourTicketsContainer";
 import WinnerHistoryTable from "./WinnerHistoryTable";
 import JackpotDisplay from "../pmwgame/JackpotDisplay";
+import useSound from "use-sound";
 
 interface EliminateScreenProps {
   eliminateUser: () => void;
@@ -59,6 +60,8 @@ export default function EliminateScreen({
     return [currentActiveTickets, eliminatedNumbers];
   }, [currentParticipatedList]);
 
+  const burstSound = "/burstSound.wav";
+  const [playBurst] = useSound(burstSound);
   return (
     <div className="flex flex-row items-start gap-x-8 mt-8">
       <YourTicketsContainer
@@ -78,7 +81,7 @@ export default function EliminateScreen({
         />
         <Button
           color="primary"
-          onClick={eliminateUser}
+          onClick={() => (playBurst(), eliminateUser())}
           disabled={isEliminateUserTransactionLoading}
           size="large"
         >

@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
 import {
   useAccount,
-  useReadContract,
   useReadContracts,
   useWaitForTransactionReceipt,
   useWriteContract,
 } from "wagmi";
 import usePinkMistWellContract from "@/abi/PinkMistWell";
-import { erc20Abi } from "viem";
 import { ToastOptions, toast } from "react-hot-toast";
 
 const TOAST_SETTINGS: ToastOptions = {
@@ -20,7 +18,6 @@ const TOAST_SETTINGS: ToastOptions = {
 
 const useEliminateUser = () => {
   const [transactionLoading, setTransactionLoading] = useState<boolean>(false);
-  const account = useAccount();
 
   const PMWContract = usePinkMistWellContract();
 
