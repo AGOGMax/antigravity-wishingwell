@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { PixelBorder } from "nes-ui-react";
 
 interface JackpotDisplayProps {
   daiAmount: string;
@@ -11,8 +10,8 @@ export default function JackpotDisplay({
   darkAmount,
 }: JackpotDisplayProps) {
   return (
-    <PixelBorder className="flex items-center justify-center w-fit p-4 m-[0px, 0px,8px, 0px]">
-      <div className="w-[6rem] h-[6rem] relative mr-2">
+    <div className="flex items-center justify-center h-fit p-4 m-[0px, 0px,8px, 0px] border-[4px] border-[#FDC62C] rounded-[10px] bg-[#00224E]">
+      <div className="w-[8rem] h-[6rem] relative">
         <Image
           src="https://i.ibb.co/yvm1Jdk/dai-coin-icon-isolated-on-white-background-vector-40276186-Photoroom.png"
           alt="DAI Token"
@@ -21,7 +20,7 @@ export default function JackpotDisplay({
       </div>
 
       <div className="flex flex-col items-center">
-        <div className="w-[24rem] h-[6rem] relative">
+        <div className="w-[16rem] h-[4rem] relative">
           <Image
             src="https://i.ibb.co/ksJRg7kX/Chat-GPT-Image-Apr-16-2025-08-01-56-PM-Photoroom-1.png"
             alt="Jackpot"
@@ -35,13 +34,13 @@ export default function JackpotDisplay({
         </div>
       </div>
 
-      <div className="w-[6rem] h-[6rem] relative ml-2">
+      <div className="w-[10rem] h-[6rem] relative ml-2">
         <Image
           src="https://i.ibb.co/7N13kzMp/4900401657620311773-Photoroom.png"
           alt="DARK Token"
           fill
         />
       </div>
-    </PixelBorder>
+    </div>
   );
 }

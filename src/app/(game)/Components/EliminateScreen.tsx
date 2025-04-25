@@ -1,10 +1,8 @@
 import { Button, Text } from "nes-ui-react";
-import Grid from "./Grid";
 import GlobeRoulette from "./GlobeDisplay";
 import { useMemo } from "react";
 import YourTicketsContainer from "./YourTicketsContainer";
 import WinnerHistoryTable from "./WinnerHistoryTable";
-import JackpotDisplay from "../pmwgame/JackpotDisplay";
 import useSound from "use-sound";
 
 interface EliminateScreenProps {
@@ -63,22 +61,12 @@ export default function EliminateScreen({
   const burstSound = "/burstSound.wav";
   const [playBurst] = useSound(burstSound);
   return (
-    <div className="flex flex-row items-start gap-x-8 mt-8">
+    <div className="flex flex-row items-start gap-x-8 mt-8 justify-between w-full">
       <YourTicketsContainer
         userAllTickets={userAllTickets}
         userAllTicketsCount={userAllTicketsCount}
       />
       <div className="flex flex-col items-center justify-center mt-[16px] gap-[16px] w-full">
-        <JackpotDisplay
-          daiAmount={
-            "daiAmount" in currentRoundPrize ? currentRoundPrize.daiAmount : "0"
-          }
-          darkAmount={
-            "darkAmount" in currentRoundPrize
-              ? currentRoundPrize.darkAmount
-              : "0"
-          }
-        />
         <Button
           color="primary"
           onClick={() => (playBurst(), eliminateUser())}
@@ -92,10 +80,6 @@ export default function EliminateScreen({
           isSpinning={isEliminateUserTransactionLoading}
           eliminations={eliminatedNumbers}
           totalParticipants={totalParticipants}
-        />
-        <Grid
-          currentParticipatedList={currentParticipatedList}
-          activeTicketCount={currentActiveTicketsCount}
         />
       </div>
       <WinnerHistoryTable lastRoundsPrizes={lastRoundsPrizes} />

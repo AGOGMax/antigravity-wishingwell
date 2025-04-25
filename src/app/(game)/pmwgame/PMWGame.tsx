@@ -13,6 +13,7 @@ import PMWTitle from "../Components/PMWTitle";
 import ConnectWallet from "../Components/ConnectWallet";
 import EnterGameScreen from "../Components/EnterGameScreen";
 import EliminateScreen from "../Components/EliminateScreen";
+import JackpotDisplay from "./JackpotDisplay";
 
 type PrizeArrays = [bigint[], bigint[], boolean[], string[], bigint[]];
 
@@ -211,8 +212,34 @@ export default function PMWGame() {
 
   const isAccountConnected = account.isConnected;
   return (
-    <div className="min-h-screen p-8 flex flex-col box-border items-center bg-agblack bg-opacity-80">
-      <PMWTitle />
+    <div className="min-h-screen p-5 flex flex-col box-border items-center">
+      {isRegistrationOpen ? (
+        <PMWTitle />
+      ) : (
+        <div className="grid grid-cols-[32vw_32vw_32vw] max-w-[100vw] items-center">
+          <div className="w-full flex justify-center items-center">
+            <div className="flex justify-center items-center p-5 h-fit border-4 border-[#FDC62C] rounded-[10px] w-[50%] bg-[#005004] !text-[18px]">
+              PLAYERS LEFT: {currentParticipatedList?.length}
+            </div>
+          </div>
+          <div className="w-full flex items-center justify-center">
+            <PMWTitle />
+          </div>
+          <JackpotDisplay
+            daiAmount={
+              "daiAmount" in currentRoundPrize
+                ? currentRoundPrize.daiAmount
+                : "0"
+            }
+            darkAmount={
+              "darkAmount" in currentRoundPrize
+                ? currentRoundPrize.darkAmount
+                : "0"
+            }
+          />
+        </div>
+      )}
+
       <Header
         activeTicketsCount={userActiveTicketCount || 0}
         currentRoundId={Number(currentRoundId)}
