@@ -13,7 +13,6 @@ interface EnterGameScreenProps {
   maxTickets: number;
   isEnterGameTransactionLoading: boolean;
   enterGame: () => void;
-  userAllTicketsCount: number;
   userAllTickets: (boolean[] | number[])[];
   lastRoundsPrizes:
     | {
@@ -42,7 +41,6 @@ export default function EnterGameScreen({
   isEnterGameTransactionLoading,
   enterGame,
   userAllTickets,
-  userAllTicketsCount,
   lastRoundsPrizes,
   currentParticipatedList,
 }: EnterGameScreenProps) {
@@ -58,10 +56,7 @@ export default function EnterGameScreen({
 
   return (
     <div className="flex flex-row items-start gap-x-8 mt-8">
-      <YourTicketsContainer
-        userAllTickets={userAllTickets}
-        userAllTicketsCount={userAllTicketsCount}
-      />
+      <YourTicketsContainer userAllTickets={userAllTickets} />
       <div className="flex flex-col justify-center items-center">
         <div className="flex flex-col items-center">
           <Text>

@@ -1,12 +1,10 @@
 import { Container, Text } from "nes-ui-react";
 
 interface YourTicketsProps {
-  userAllTicketsCount: number;
   userAllTickets: (number[] | boolean[])[];
 }
 
 export default function YourTicketsContainer({
-  userAllTicketsCount,
   userAllTickets,
 }: YourTicketsProps) {
   return (
@@ -20,7 +18,7 @@ export default function YourTicketsContainer({
         style={{ width: "fit-content" }}
       >
         <div className="flex flex-col items-center justify-start">
-          {userAllTicketsCount === 0 ? (
+          {userAllTickets?.length === 0 ? (
             <span className="!text-[16px] !text-pretty">
               {`Hit 'Enter Game' to buy Tickets!`}
             </span>
