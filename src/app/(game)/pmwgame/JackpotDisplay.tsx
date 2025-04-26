@@ -1,4 +1,5 @@
 import Image from "next/image";
+import IMAGEKIT from "../images";
 
 interface JackpotDisplayProps {
   daiAmount: string;
@@ -21,11 +22,7 @@ export default function JackpotDisplay({
 
       <div className="flex flex-col items-center">
         <div className="w-[16rem] h-[4rem] relative">
-          <Image
-            src="https://i.ibb.co/ksJRg7kX/Chat-GPT-Image-Apr-16-2025-08-01-56-PM-Photoroom-1.png"
-            alt="Jackpot"
-            fill
-          />
+          <Image src={IMAGEKIT.JACKPOT_LOGO} alt="Jackpot" fill />
         </div>
 
         <div className="flex justify-between w-full mt-2 gap-4 text-white text-lg font-semibold">
