@@ -85,7 +85,7 @@ const useEliminateUser = () => {
   }, [eliminateUserReceipt]);
 
   const eliminateUser = () => {
-    if (eliminationTokenAddress && eliminationFee) {
+    if (eliminationTokenAddress && typeof eliminationFee === "bigint") {
       setTransactionLoading(true);
 
       eliminateUserFn({
