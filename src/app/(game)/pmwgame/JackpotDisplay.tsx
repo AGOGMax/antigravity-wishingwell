@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { Text } from "nes-ui-react";
 
 interface JackpotDisplayProps {
   daiAmount: string;
@@ -10,36 +10,29 @@ export default function JackpotDisplay({
   darkAmount,
 }: JackpotDisplayProps) {
   return (
-    <div className="flex items-center justify-center h-fit p-4 m-[0px, 0px,8px, 0px] border-[4px] border-[#FDC62C] rounded-[10px] bg-[#00224E]">
-      <div className="w-[8rem] h-[6rem] relative">
-        <Image
+    <div className="flex flex-col justify-center items-center gap-5 h-fit px-8 py-4 mb-8 border-[4px] border-[#FDC62C] rounded-[10px] bg-[#00224E]">
+      <div className="flex items-center justify-center ">
+        <img
           src="https://i.ibb.co/yvm1Jdk/dai-coin-icon-isolated-on-white-background-vector-40276186-Photoroom.png"
           alt="DAI Token"
-          fill
+          className="w-[20%]"
         />
-      </div>
 
-      <div className="flex flex-col items-center">
-        <div className="w-[16rem] h-[4rem] relative">
-          <Image
-            src="https://i.ibb.co/ksJRg7kX/Chat-GPT-Image-Apr-16-2025-08-01-56-PM-Photoroom-1.png"
-            alt="Jackpot"
-            fill
-          />
-        </div>
+        <img
+          src="https://i.ibb.co/ksJRg7kX/Chat-GPT-Image-Apr-16-2025-08-01-56-PM-Photoroom-1.png"
+          alt="Jackpot"
+          className="w-[70%]"
+        />
 
-        <div className="flex justify-between w-full mt-2 gap-4 text-white text-lg font-semibold">
-          <span className="text-[#E49006]">{`${daiAmount} $DAI`}</span>
-          <span className="text-[#4A1B78]">{`${darkAmount} $DARK`}</span>
-        </div>
-      </div>
-
-      <div className="w-[10rem] h-[6rem] relative ml-2">
-        <Image
+        <img
           src="https://i.ibb.co/7N13kzMp/4900401657620311773-Photoroom.png"
           alt="DARK Token"
-          fill
+          className="w-[20%]"
         />
+      </div>
+      <div className="flex justify-between font-semibold w-full">
+        <span className="text-[#FDC62C]">{`${daiAmount} $DAI`}</span>
+        <span className="text-[#ff69b4] text-right">{`${darkAmount} $DARK`}</span>
       </div>
     </div>
   );

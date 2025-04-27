@@ -1,4 +1,3 @@
-import { Button, Text } from "nes-ui-react";
 import GlobeRoulette from "./GlobeDisplay";
 import { useMemo } from "react";
 import YourTicketsContainer from "./YourTicketsContainer";
@@ -60,14 +59,13 @@ export default function EliminateScreen({
     <div className="flex flex-row items-start gap-x-8 mt-8 justify-between w-full">
       <YourTicketsContainer userAllTickets={userAllTickets} />
       <div className="flex flex-col items-center justify-center mt-[16px] gap-[16px] w-full">
-        <Button
-          color="primary"
+        <button
           onClick={() => (playBurst(), eliminateUser())}
           disabled={isEliminateUserTransactionLoading}
-          size="large"
+          className=" p-4 !text-[16px] rounded-[10px] border-[4px] border-[#FDC62C] bg-gradient-to-r from-[#003678] to-[#0087e7]"
         >
-          <Text size="large">{renderEliminateUserButtonState()}</Text>
-        </Button>
+          {renderEliminateUserButtonState()}
+        </button>
         <GlobeRoulette
           numbers={globeNumbers}
           isSpinning={isEliminateUserTransactionLoading}

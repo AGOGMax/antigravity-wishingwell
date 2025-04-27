@@ -225,7 +225,7 @@ export default function PMWGame() {
 
   return (
     <div className="min-h-screen p-5 flex flex-col box-border items-center">
-      {isRegistrationOpen ? (
+      {isRegistrationOpen || !isAccountConnected ? (
         <PMWTitle />
       ) : (
         <div className="grid grid-cols-[32vw_32vw_32vw] max-w-[100vw] items-center">
