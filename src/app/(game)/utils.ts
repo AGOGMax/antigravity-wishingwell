@@ -18,9 +18,10 @@ function extractRoundsPrizes(prizes: PrizeArrays) {
     darkAmount: formatUnits(darkAmounts[currentIndex] || BigInt(0), 18),
   };
 
+  const lastRoundIndex = isCompleted.lastIndexOf(true);
   const lastRoundsPrizes = [];
   for (
-    let i = currentIndex - 1;
+    let i = lastRoundIndex;
     i >= 0 && lastRoundsPrizes.length < numberOfRecords;
     i--
   ) {

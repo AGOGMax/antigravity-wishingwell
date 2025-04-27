@@ -1,10 +1,19 @@
-import IMAGEKIT from "../images";
-export default function PMWTitle() {
+import { IMAGEKIT_LOGOS } from "@/assets/imageKit";
+import Image from "next/image";
+
+interface PMWTitleProps {
+  width?: number;
+}
+
+export default function PMWTitle({ width = 60 }: PMWTitleProps) {
   return (
-    <img
-      src={IMAGEKIT.PMW_HEADING}
+    <Image
+      src={IMAGEKIT_LOGOS.PINK_MIST_WHALE_LOGO}
       alt="Pink Mist Whale"
-      className="w-[60%] mb-5"
+      className="mb-5"
+      width={100}
+      height={100}
+      style={{ width: `${width}%` }}
     />
   );
 }

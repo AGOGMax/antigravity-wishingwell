@@ -1,7 +1,7 @@
 "use client";
 import "@rainbow-me/rainbowkit/styles.css";
 import dynamic from "next/dynamic";
-import IMAGEKIT from "../images";
+import { IMAGEKIT_IMAGES } from "@/assets/imageKit";
 
 const PMWGame = dynamic(() => import("./PMWGame"), {
   ssr: false,
@@ -11,8 +11,7 @@ export default function PinkMistGame() {
   return (
     <div
       style={{
-        // background: `url(https://i.ibb.co/hJyzpcG9/pink-mist-whale-bg-pink.jpg)`,
-        background: `url(${IMAGEKIT.PMW_BACKGROUND})`,
+        background: `url(${IMAGEKIT_IMAGES.PINK_MIST_WHALE_COING_BG})`,
         backgroundRepeat: "no-repeat",
         backgroundPosition: "top",
         backgroundColor: "#D90887",

@@ -12,10 +12,6 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        hostname: "i.ibb.co",
-        protocol: "https",
-      },
-      {
         hostname: "ik.imagekit.io",
         protocol: "https",
       },
@@ -37,16 +33,16 @@ const nextConfig = {
       },
       {
         hostname: "coin-images.coingecko.com",
-        protocol: "https"
+        protocol: "https",
       },
       {
         hostname: "assets.geckoterminal.com",
-        protocol: "https"
+        protocol: "https",
       },
       {
         hostname: "ui-avatars.com",
-        protocol: "https"
-      }
+        protocol: "https",
+      },
     ],
     dangerouslyAllowSVG: true,
   },

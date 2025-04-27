@@ -1,3 +1,4 @@
+"use client";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
 import RainbowKitContext from "@/components/RainbowKit";

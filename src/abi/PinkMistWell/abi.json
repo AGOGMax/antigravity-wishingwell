@@ -5,6 +5,26 @@
     "type": "constructor"
   },
   {
+    "inputs": [],
+    "name": "FeeTooLow",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidWinnerAddress",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "LastTicket",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "MaxEntriesReached",
+    "type": "error"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -27,21 +47,25 @@
     "type": "error"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "token",
-        "type": "address"
-      }
-    ],
-    "name": "SafeERC20FailedOperation",
+    "inputs": [],
+    "name": "RoundClosed",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "RoundCompleted",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "RoundNotClosed",
     "type": "error"
   },
   {
     "anonymous": false,
     "inputs": [
       {
-        "indexed": true,
+        "indexed": false,
         "internalType": "uint256",
         "name": "roundId",
         "type": "uint256"
@@ -67,6 +91,25 @@
       }
     ],
     "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "roundId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "usersLength",
+        "type": "uint256"
+      }
+    ],
+    "name": "Randomise",
     "type": "event"
   },
   {
@@ -124,6 +167,12 @@
       },
       {
         "indexed": false,
+        "internalType": "uint256",
+        "name": "ticketCount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
         "internalType": "address",
         "name": "owner",
         "type": "address"
@@ -161,25 +210,6 @@
       }
     ],
     "name": "Winner",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "roundId",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "usersLength",
-        "type": "uint256"
-      }
-    ],
-    "name": "randomise",
     "type": "event"
   },
   {
@@ -384,12 +414,12 @@
     "outputs": [
       {
         "internalType": "uint256[]",
-        "name": "",
+        "name": "ticketIds",
         "type": "uint256[]"
       },
       {
         "internalType": "address[]",
-        "name": "",
+        "name": "owners",
         "type": "address[]"
       }
     ],
@@ -466,12 +496,12 @@
     "outputs": [
       {
         "internalType": "uint256[]",
-        "name": "",
+        "name": "ticketIds",
         "type": "uint256[]"
       },
       {
         "internalType": "bool[]",
-        "name": "",
+        "name": "isActive",
         "type": "bool[]"
       }
     ],
@@ -522,6 +552,25 @@
     "name": "renounceOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "roundRandomNumber",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {

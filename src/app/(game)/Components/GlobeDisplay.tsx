@@ -416,7 +416,7 @@ export default function GlobeRoulette({
 
     const globeRadius = 10;
     const shootDistance = globeRadius * 0.8;
-    const duration = 5500;
+    const duration = 2000;
 
     const direction = originalPos.clone().normalize();
     const targetPosition = originalPos

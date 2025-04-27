@@ -1,6 +1,6 @@
 "use client";
 import { useAccount } from "wagmi";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import useEnterGame from "@/hooks/sc-fns/useEnterGame";
 import useEliminateUser from "@/hooks/sc-fns/useEliminateUser";
 import usePMWReader from "@/hooks/sc-fns/usePMWReader";
@@ -14,6 +14,16 @@ import EnterGameScreen from "../Components/EnterGameScreen";
 import EliminateScreen from "../Components/EliminateScreen";
 import JackpotDisplay from "./JackpotDisplay";
 import WalletGate from "./WalletGate";
+import toast, { ToastOptions } from "react-hot-toast";
+
+const TOAST_SETTINGS: ToastOptions = {
+  duration: 3000,
+  position: "bottom-right",
+  style: {
+    width: "200px",
+  },
+  icon: "🔫",
+};
 
 type PrizeArrays = [bigint[], bigint[], boolean[], string[], bigint[]];
 
@@ -53,10 +63,12 @@ export default function PMWGame() {
   const { roundsDataReader, isRoundsFetched, refetchRounds } =
     useCurrentRound(currentRoundId); //Rounds Data Reader (Used to change enter/eliminate screen)
   const { prizesReader, isPrizesFetched, refetchPrizes } = usePrizes(); //Used to fetch current round prize, and previous rounds prizes.
-  const { currentRoundPrize, lastRoundsPrizes } = extractRoundsPrizes(
-    //Util to convert into usable data
-    prizesReader as PrizeArrays,
-  );
+  const { currentRoundPrize, lastRoundsPrizes } = useMemo(() => {
+    return extractRoundsPrizes(
+      //Util to convert into usable data
+      prizesReader as PrizeArrays,
+    );
+  }, [prizesReader]);
 
   const {
     getUserTicketsReader,
@@ -192,10 +204,13 @@ export default function PMWGame() {
       });
 
       setcurrentParticipatedList(participantsListWithEliminatedTickets);
+      if (currentParticipatedList?.length !== eliminatedParticipants?.length) {
+        toast(`Eliminated ${eliminatedParticipants}`, TOAST_SETTINGS);
+      }
 
       setTimeout(() => {
         setcurrentParticipatedList(newParticipantsList);
-      }, 5500);
+      }, 2000);
     } else {
       const [tickets, addresses] = (PMWReader?.[0].result ?? [[], []]) as [
         number[],
@@ -226,11 +241,11 @@ export default function PMWGame() {
   return (
     <div className="min-h-screen p-5 flex flex-col box-border items-center">
       {isRegistrationOpen || !isAccountConnected ? (
-        <PMWTitle />
+        <PMWTitle width={20} />
       ) : (
         <div className="grid grid-cols-[32vw_32vw_32vw] max-w-[100vw] items-center">
           <div className="w-full flex justify-center items-center">
-            <div className="flex justify-center items-center p-5 h-fit border-4 border-[#FDC62C] rounded-[10px] w-[50%] bg-[#005004] !text-[18px]">
+            <div className="flex justify-center items-center p-5 h-fit border-4 border-[#FDC62C] rounded-[10px] w-[50%] bg-[#00224E] !text-[18px]">
               PLAYERS LEFT: {currentParticipatedList?.length}
             </div>
           </div>

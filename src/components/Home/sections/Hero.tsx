@@ -50,10 +50,7 @@ export default function Hero() {
             description={
               "Will You Be The Last Degen Standing? Win A Bag Of $Dark and $eDai!!!"
             }
-            // backgroundImage={IMAGEKIT_IMAGES.WISHWELL}
-            backgroundImage={
-              "https://i.ibb.co/MDxDS0Rt/pink-mist-whale-image.jpg"
-            }
+            backgroundImage={IMAGEKIT_IMAGES.PINK_MIST_WHALE}
             animateFrom="left"
             cardExternalLink={"/pmwgame"}
             defaultImageOpacity={0.5}
