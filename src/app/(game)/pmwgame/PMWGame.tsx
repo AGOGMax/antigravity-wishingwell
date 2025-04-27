@@ -245,7 +245,7 @@ export default function PMWGame() {
       ) : (
         <div className="grid grid-cols-[32vw_32vw_32vw] max-w-[100vw] items-center">
           <div className="w-full flex justify-center items-center">
-            <div className="flex justify-center items-center p-5 h-fit border-4 border-[#FDC62C] rounded-[10px] w-[50%] bg-[#005004] !text-[18px]">
+            <div className="flex justify-center items-center p-5 h-fit border-4 border-[#FDC62C] rounded-[10px] w-[50%] bg-[#00224E] !text-[18px]">
               PLAYERS LEFT: {currentParticipatedList?.length}
             </div>
           </div>

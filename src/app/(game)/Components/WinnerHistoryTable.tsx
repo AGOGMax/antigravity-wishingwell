@@ -46,7 +46,7 @@ export default function WinnerHistoryTable({
                     {roundPrize?.daiAmount}
                   </span>{" "}
                   +{" "}
-                  <span className="text-[#4A1B78]">
+                  <span className="text-[#FF69B4]">
                     {roundPrize.darkAmount}
                   </span>
                 </td>

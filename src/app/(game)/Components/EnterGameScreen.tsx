@@ -69,6 +69,36 @@ export default function EnterGameScreen({
             color="pattern"
             style={{ width: "40vw" }}
           />
+          <div className="flex flex-row items-center gap-8">
+            <div className="flex flex-col">
+              <Input
+                type="number"
+                name="userTickets"
+                value={userTickets.toString()}
+                label="Number Of Tickets: "
+                style={{ height: "32px", fontSize: "16px" }}
+                onChange={handleChange}
+                color={
+                  userTickets < 0 || userTickets > maxTickets ? "error" : "none"
+                }
+              />
+              <Text size="medium" color="white">
+                Max Tickets: {maxTickets}
+              </Text>
+            </div>
+            <Button
+              color="primary"
+              size="large"
+              disabled={
+                userTickets <= 0 ||
+                userTickets > maxTickets ||
+                isEnterGameTransactionLoading
+              }
+              onClick={enterGame}
+            >
+              {renderEnterGameButtonState()}
+            </Button>
+          </div>
         </div>
 
         <GlobeRoulette
@@ -77,37 +107,6 @@ export default function EnterGameScreen({
           totalParticipants={totalParticipants}
           eliminations={[]}
         />
-
-        <div className="flex flex-row items-center gap-8">
-          <div className="flex flex-col">
-            <Input
-              type="number"
-              name="userTickets"
-              value={userTickets.toString()}
-              label="Number Of Tickets: "
-              style={{ height: "32px", fontSize: "16px" }}
-              onChange={handleChange}
-              color={
-                userTickets < 0 || userTickets > maxTickets ? "error" : "none"
-              }
-            />
-            <Text size="medium" color="warning">
-              Max Tickets: {maxTickets}
-            </Text>
-          </div>
-          <Button
-            color="primary"
-            size="large"
-            disabled={
-              userTickets <= 0 ||
-              userTickets > maxTickets ||
-              isEnterGameTransactionLoading
-            }
-            onClick={enterGame}
-          >
-            {renderEnterGameButtonState()}
-          </Button>
-        </div>
       </div>
       <WinnerHistoryTable lastRoundsPrizes={lastRoundsPrizes} />
     </div>
