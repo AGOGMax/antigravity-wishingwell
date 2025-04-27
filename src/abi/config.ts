@@ -50,7 +50,7 @@ export const CONTRACTS: Record<
     evilAddress: "0xf16834786221C51678cB386cf77a57ac7fcb3441",
     treasury: "0x1A530A9803B8faFA34491D70Fa7EE49C220e29Dc",
     jackpot: "0xf883c46b6Ac7d7b8936122F88b75070Ad6f2f47B",
-    pinkMistWell: "0x577917B5d25cB4ed6a485c61E0DB858fDD032b96",
+    pinkMistWell: "0x2629837B7dbb1bdFe7ab7F04F1297cF8DE00609C",
   },
   [baseSepolia.id]: {
     miningRig: "0x8Dea737AE483153c69934ff8a5c7E3D448c2DB4C",
@@ -63,7 +63,7 @@ export const CONTRACTS: Record<
     evilAddress: "0x02a5C61F0E78D8B1eBdca7346654D3d2fFDA5588",
     treasury: "0x5C0CB2f806Bfe9827709853BE7d950921Fac420E",
     jackpot: "0x557913C038C51a8f976a4De8032Bea92e8DeB4F3",
-    darkFaucet: "0x2629837B7dbb1bdFe7ab7F04F1297cF8DE00609C",
+    darkFaucet: "0xde199d27867f42b0F96614FcFe107Fabae19091c",
   },
   [pulsechain.id]: {
     miningRig: "0x1Eca1A64E18E72c46971a80D91F015a569FE9FBd",
