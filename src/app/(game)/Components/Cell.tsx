@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { PiSkullFill } from "react-icons/pi";
+import { IMAGEKIT_IMAGES } from "@/assets/imageKit";
 
 interface CellProps {
   cellNumber: number;
@@ -25,7 +26,7 @@ export default function Cell({
       {isBurst && activeTicketCount > 1 ? (
         <>
           <motion.img
-            src="https://i.ibb.co/Mkv8HsBB/pink-mist-cloud-removebg-preview.png"
+            src={IMAGEKIT_IMAGES.PINK_MIST_CLOUD}
             alt="Pink Mist"
             className={`${!isBurst ? "invisible " : "visible"}`}
             initial={{ opacity: 1, scale: 1, width: "30px" }}

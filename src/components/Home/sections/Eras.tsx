@@ -14,8 +14,7 @@ export default function Eras() {
         description={
           "Will You Be The Last Degen Standing? Win A Bag Of $Dark and $eDai!!!"
         }
-        // backgroundImage={IMAGEKIT_IMAGES.WISHWELL}
-        backgroundImage={"https://i.ibb.co/MDxDS0Rt/pink-mist-whale-image.jpg"}
+        backgroundImage={IMAGEKIT_IMAGES.PINK_MIST_WHALE}
         className="object-[50%_55%]"
         animateFrom="left"
         cardExternalLink={"/pmwgame"}
