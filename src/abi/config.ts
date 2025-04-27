@@ -63,7 +63,7 @@ export const CONTRACTS: Record<
     evilAddress: "0x02a5C61F0E78D8B1eBdca7346654D3d2fFDA5588",
     treasury: "0x5C0CB2f806Bfe9827709853BE7d950921Fac420E",
     jackpot: "0x557913C038C51a8f976a4De8032Bea92e8DeB4F3",
-    darkFaucet: "0xde199d27867f42b0F96614FcFe107Fabae19091c",
+    darkFaucet: "0x2629837B7dbb1bdFe7ab7F04F1297cF8DE00609C",
   },
   [pulsechain.id]: {
     miningRig: "0x1Eca1A64E18E72c46971a80D91F015a569FE9FBd",
