@@ -1,25 +1,10 @@
 import useContract from "@/abi/wishwell";
-import {
-  API_ENDPOINT,
-  POLL_TIME,
-  PROXY_API_ENDPOINT,
-  TEST_NETWORK,
-} from "@/constants";
-import { getApiNetwork } from "@/utils";
-import axios from "axios";
+import { POLL_TIME, TEST_NETWORK } from "@/constants";
 import { useEffect, useState } from "react";
-import { PublicClient } from "viem";
-import { base, baseSepolia, pulsechain, sepolia } from "viem/chains";
-import {
-  useAccount,
-  usePublicClient,
-  useReadContract,
-  useTransactionReceipt,
-  useWriteContract,
-} from "wagmi";
+import { pulsechain } from "viem/chains";
+import { useAccount, useTransactionReceipt, useWriteContract } from "wagmi";
 import { errorToast, generalToast, successToast } from "../frontend/toast";
 import { checkCorrectNetwork, TESTCHAINS } from "@/components/RainbowKit";
-import { gqlFetcher } from "@/api/graphqlClient";
 import { gql } from "graphql-request";
 import { useRestPost } from "../useRestClient";
 import { UserData } from "@/components/header/UserConnected";
@@ -33,7 +18,6 @@ const useWishwell = () => {
   const [isRegistered, setIsRegistered] = useState<boolean>(false);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [registering, setIsRegistering] = useState<boolean>(false);
-  // const [payableAmount, setPayableAmount] = useState(0);
   const [tokenId, setTokenId] = useState<string>("0");
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
@@ -150,25 +134,6 @@ const useWishwell = () => {
       };
     }
   }, [poll, isRegistered]);
-
-  // const hydrateData = async (poll?: boolean) => {
-  //   if (!account.isConnected) return;
-  //   if (!poll && checkCorrectNetwork(account.chainId)) {
-  //     setLoading(true);
-  //     setIsRegistered(false);
-  //     setIsSuccess(false);
-  //   }
-  //   if (isSuccess) {
-  //     setPoll(false);
-  //     return;
-  //   }
-  //   console.log("polling for wishwell contributions");
-  //   if (wishwellPoints > 0) {
-  //     setLoading(false);
-  //   } else {
-  //     mutateUserData({ walletAddress: account.address });
-  //   }
-  // };
 
   const {
     data: registerHash,

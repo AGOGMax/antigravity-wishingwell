@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./(client)/globals.css";
+import "./(game)/globals.css";
 
 import "@rainbow-me/rainbowkit/styles.css";
 import IMAGEKIT from "./(client)/home/images";

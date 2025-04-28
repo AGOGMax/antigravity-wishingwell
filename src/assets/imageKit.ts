@@ -12,6 +12,8 @@ export const IMAGEKIT_LOGOS = {
   ETH: `${IMAGEKIT_LOGOS_URL}/eth-color.svg`,
   PLS: `${IMAGEKIT_LOGOS_URL}/pls-color.svg`,
   MINING_LOGO: `${IMAGEKIT_LOGOS_URL}/mining-logo.svg`,
+  PINK_MIST_WHALE_LOGO: `${IMAGEKIT_LOGOS_URL}/pink-mist-whale-logo`,
+  JACKPOT_LOGO: `${IMAGEKIT_LOGOS_URL}/jackpot.png`,
 };
 
 export const IMAGEKIT_ICONS = {
@@ -64,6 +66,7 @@ export const IMAGEKIT_ICONS = {
   WETH_COLOR: `${IMAGEKIT_ICONS_URL}/weth-color.svg`,
   MEME_COLOR: `${IMAGEKIT_ICONS_URL}/meme-color.png`,
   FUEL_CELL: `${IMAGEKIT_ICONS_URL}/fuel-cell.png`,
+  DAI_COIN: `${IMAGEKIT_ICONS_URL}/dai-coin.png`,
 };
 
 export const IMAGEKIT_IMAGES = {
@@ -90,11 +93,14 @@ export const IMAGEKIT_IMAGES = {
   BOOK_COVER_ART: `${IMAGEKIT}/book-cover-art.png`,
   COLLECTIVE_POINTS_AND_MULTIPLIER_INFO_BG: `${IMAGEKIT}/collective-points-and-multiplier-info-bg.png`,
   COLLECTIVE_RANKUP_AND_REWARDS_INFO_BG: `${IMAGEKIT}/collective-rankup-and-rewards-info-bg.png?updatedAt=1719221781752`,
-	MINING_TOKENS_CLAIMED: `${IMAGEKIT}/mining-tokens-claimed.png`,
+  MINING_TOKENS_CLAIMED: `${IMAGEKIT}/mining-tokens-claimed.png`,
   NEBULA_BG: `${IMAGEKIT}/nebula-bg.jpg`,
   MINING_PAGE_ERA_3: `${IMAGEKIT}/mining-page-era-3.png?updatedAt=1722848751526`,
   FUEL_CELL_NFT_GREEN: `${IMAGEKIT}/fuel-cell-nft-green.png`,
   FUEL_CELL_NFT_RED: `${IMAGEKIT}/fuel-cell-nft-red.png`,
+  PINK_MIST_WHALE: `${IMAGEKIT}/pink-mist-whale.jpg`,
+  PINK_MIST_CLOUD: `${IMAGEKIT}/pink-mist-CloudInstance.png`,
+  PINK_MIST_WHALE_COING_BG: `${IMAGEKIT}/pink-mist-whale-coins-bg.png`,
 };
 
 export const IMAGEKIT_COLLECTIVE = {

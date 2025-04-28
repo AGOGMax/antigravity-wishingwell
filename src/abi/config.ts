@@ -21,6 +21,7 @@ export const CONTRACTS: Record<
     treasury?: Address;
     jackpot?: Address;
     evilAddress?: Address;
+    pinkMistWell?: Address;
   }
 > = {
   [sepolia.id]: {
@@ -49,6 +50,7 @@ export const CONTRACTS: Record<
     evilAddress: "0xf16834786221C51678cB386cf77a57ac7fcb3441",
     treasury: "0x1A530A9803B8faFA34491D70Fa7EE49C220e29Dc",
     jackpot: "0xf883c46b6Ac7d7b8936122F88b75070Ad6f2f47B",
+    pinkMistWell: "0x35BAFE8D9f92BbA6a6fbBDC85d9fd4bF74E6852e",
   },
   [baseSepolia.id]: {
     miningRig: "0x8Dea737AE483153c69934ff8a5c7E3D448c2DB4C",
@@ -75,6 +77,7 @@ export const CONTRACTS: Record<
     evilAddress: "0x3dcbDaef2D25Baeb1a39843340D88cb7124FB6D3",
     treasury: "0x9007485D1791793c857E1dCAF405e3cf2477Ef84",
     jackpot: "0x1b8E4f5300706651c3E6fE166487cCa03dE690B6",
+    pinkMistWell: "0x9F822dc6D0f29e738bF58a0E5f35aa475dA94d56",
   },
   [base.id]: {
     miningRig: "0x698Ae58B7AB13ad232A84d684e8111D2c6A6d904",
