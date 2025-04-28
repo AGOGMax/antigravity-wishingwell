@@ -94,7 +94,7 @@ export default function CollectiveHero() {
                 animationDuration: "1s",
                 animationFillMode: "forwards",
                 animationTimingFunction: "linear",
-              }
+              },
             }}
           />
         )}

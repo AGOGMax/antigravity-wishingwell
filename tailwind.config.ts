@@ -37,6 +37,7 @@ const config: Config = {
         bgblue: "#3C00DC54",
         agorange: "#FF5001",
         successgreen: "#00B031",
+        aggray: "#888888",
       },
       boxShadow: {
         button: "0 6px 0 0 #030404",
