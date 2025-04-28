@@ -77,7 +77,7 @@ export const CONTRACTS: Record<
     evilAddress: "0x3dcbDaef2D25Baeb1a39843340D88cb7124FB6D3",
     treasury: "0x9007485D1791793c857E1dCAF405e3cf2477Ef84",
     jackpot: "0x1b8E4f5300706651c3E6fE166487cCa03dE690B6",
-    pinkMistWell: "0xf573f887028D45828327B5330719a363CeAdCEF0",
+    pinkMistWell: "0x9F822dc6D0f29e738bF58a0E5f35aa475dA94d56",
   },
   [base.id]: {
     miningRig: "0x698Ae58B7AB13ad232A84d684e8111D2c6A6d904",
