@@ -55,13 +55,13 @@ const useEliminateUser = () => {
     if (eliminateUserError) {
       console.log({ eliminateUserError });
       setTransactionLoading(false);
-      if ((eliminateUserError.cause as any).code === 4001) {
+      if ((eliminateUserError.cause as any)?.code === 4001) {
         toast.error(
           "You cancelled the misting process. Please Try Again if you wish to mist'em.",
           TOAST_SETTINGS,
         );
       } else if (
-        (eliminateUserError.cause as any).details?.includes(
+        (eliminateUserError.cause as any)?.details?.includes(
           "insufficient funds",
         )
       ) {
