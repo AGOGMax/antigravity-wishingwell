@@ -84,7 +84,7 @@ const useEliminateUser = () => {
     }
   }, [eliminateUserReceipt]);
 
-  const eliminateUser = () => {
+  const eliminateUser = (ticketCount = 1) => {
     if (eliminationTokenAddress && typeof eliminationFee === "bigint") {
       setTransactionLoading(true);
 
@@ -92,7 +92,7 @@ const useEliminateUser = () => {
         address: PMWContract?.address as `0x${string}`,
         abi: PMWContract?.abi,
         functionName: "eliminateTicket",
-        args: [],
+        args: [BigInt(ticketCount)],
         value: eliminationFee as bigint,
       });
     }

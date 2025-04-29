@@ -231,11 +231,11 @@ export default function PMWGame() {
     return "Enter Game";
   };
 
-  const renderEliminateUserButtonState = () => {
+  const renderEliminateUserButtonState = (suffix: string = "") => {
     if (isEliminateUserTransactionLoading) {
-      return "Sniping 'em...";
+      return `Sniping ${suffix}...`;
     }
-    return "Snipe 'em";
+    return `Snipe ${suffix}`;
   };
 
   return (
