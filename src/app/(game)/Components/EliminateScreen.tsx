@@ -68,11 +68,11 @@ export default function EliminateScreen({
   };
 
   const isSingleEliminationButtonDisabled =
-    isEliminateUserTransactionLoading || currentActiveTicketsCount < 1;
+    isEliminateUserTransactionLoading || currentActiveTicketsCount <= 1;
   const isFiveEliminationButtonDisabled =
-    isEliminateUserTransactionLoading || currentActiveTicketsCount < 5;
+    isEliminateUserTransactionLoading || currentActiveTicketsCount <= 5;
   const isTenEliminationButtionDisabled =
-    isEliminateUserTransactionLoading || currentActiveTicketsCount < 10;
+    isEliminateUserTransactionLoading || currentActiveTicketsCount <= 10;
 
   return (
     <div className="flex flex-row items-start gap-x-8 mt-8 justify-between w-full">
