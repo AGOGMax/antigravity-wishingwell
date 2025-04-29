@@ -17,10 +17,13 @@ import WalletGate from "./WalletGate";
 import toast, { ToastOptions } from "react-hot-toast";
 
 const TOAST_SETTINGS: ToastOptions = {
-  duration: 3000,
-  position: "bottom-right",
+  duration: 10000,
+  position: "top-center",
   style: {
-    width: "200px",
+    fontSize: "16px",
+    width: "auto",
+    maxWidth: "90vw",
+    padding: "12px 16px",
   },
   icon: "🔫",
 };
@@ -204,7 +207,10 @@ export default function PMWGame() {
       });
 
       setcurrentParticipatedList(participantsListWithEliminatedTickets);
-      if (currentParticipatedList?.length !== eliminatedParticipants?.length) {
+      if (
+        currentParticipatedList?.length !== eliminatedParticipants?.length &&
+        isAccountConnected
+      ) {
         toast(`Eliminated ${eliminatedParticipants}`, TOAST_SETTINGS);
       }
 
@@ -231,12 +237,11 @@ export default function PMWGame() {
     return "Enter Game";
   };
 
-  const renderEliminateUserButtonState = () => {
+  const renderEliminateUserButtonState = (suffix: string = "") => {
     if (isEliminateUserTransactionLoading) {
-      return "Sniping 'em...";
+      return `Sniping ${suffix}...`;
     }
-    return "Snipe 'em";
-    
+    return `Snipe ${suffix}`;
   };
 
   return (
