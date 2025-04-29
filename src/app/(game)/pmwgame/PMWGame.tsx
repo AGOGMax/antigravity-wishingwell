@@ -236,6 +236,7 @@ export default function PMWGame() {
       return "Sniping 'em...";
     }
     return "Snipe 'em";
+    
   };
 
   return (
