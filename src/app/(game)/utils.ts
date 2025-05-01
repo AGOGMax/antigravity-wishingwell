@@ -14,8 +14,12 @@ function extractRoundsPrizes(prizes: PrizeArrays) {
 
   const currentRoundPrize = {
     roundId: currentIndex + 1,
-    daiAmount: formatUnits(daiAmounts[currentIndex] || BigInt(0), 18),
-    darkAmount: formatUnits(darkAmounts[currentIndex] || BigInt(0), 18),
+    daiAmount: parseFloat(
+      formatUnits(daiAmounts[currentIndex] || BigInt(0), 18),
+    ).toFixed(3),
+    darkAmount: parseFloat(
+      formatUnits(darkAmounts[currentIndex] || BigInt(0), 18),
+    ).toFixed(3),
   };
 
   const lastRoundIndex = isCompleted.lastIndexOf(true);
@@ -28,8 +32,8 @@ function extractRoundsPrizes(prizes: PrizeArrays) {
     if (isCompleted[i]) {
       lastRoundsPrizes.push({
         roundId: i + 1,
-        daiAmount: formatUnits(daiAmounts[i], 18),
-        darkAmount: formatUnits(darkAmounts[i], 18),
+        daiAmount: parseFloat(formatUnits(daiAmounts[i], 18)).toFixed(3),
+        darkAmount: parseFloat(formatUnits(darkAmounts[i], 18)).toFixed(3),
         _winner: _winners[i],
         winningTicket: Number(winningTickets[i]) + 1,
       });
