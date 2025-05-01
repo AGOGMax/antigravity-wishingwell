@@ -56,7 +56,10 @@ export default function EnterGameScreen({
 
   return (
     <div className="flex flex-row items-start gap-x-8 mt-8">
-      <YourTicketsContainer userAllTickets={userAllTickets} />
+      <YourTicketsContainer
+        userAllTickets={userAllTickets}
+        altText="Hit 'Enter Game' to buy Tickets!"
+      />
       <div className="flex flex-col justify-center items-center">
         <div className="flex flex-col items-center">
           <Text>
