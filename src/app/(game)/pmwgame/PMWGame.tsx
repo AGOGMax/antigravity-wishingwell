@@ -237,13 +237,6 @@ export default function PMWGame() {
     return "Enter Game";
   };
 
-  const renderEliminateUserButtonState = (suffix: string = "") => {
-    if (isEliminateUserTransactionLoading) {
-      return `Sniping ${suffix}...`;
-    }
-    return `Snipe ${suffix}`;
-  };
-
   return (
     <div className="min-h-screen p-5 flex flex-col box-border items-center">
       {isRegistrationOpen || !isAccountConnected ? (
@@ -299,7 +292,6 @@ export default function PMWGame() {
             isEliminateUserTransactionLoading={
               isEliminateUserTransactionLoading
             }
-            renderEliminateUserButtonState={renderEliminateUserButtonState}
             currentParticipatedList={currentParticipatedList}
             totalParticipants={totalParticipants}
             userAllTickets={userAllTickets}

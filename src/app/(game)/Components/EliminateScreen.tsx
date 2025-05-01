@@ -1,5 +1,5 @@
 import GlobeRoulette from "./GlobeDisplay";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import YourTicketsContainer from "./YourTicketsContainer";
 import WinnerHistoryTable from "./WinnerHistoryTable";
 import useSound from "use-sound";
@@ -7,7 +7,6 @@ import useSound from "use-sound";
 interface EliminateScreenProps {
   eliminateUser: (ticketCount: number) => void;
   isEliminateUserTransactionLoading: boolean;
-  renderEliminateUserButtonState: Function;
   currentParticipatedList: {
     ticketNumber: number;
     walletAddress: string;
@@ -36,7 +35,6 @@ interface EliminateScreenProps {
 export default function EliminateScreen({
   eliminateUser,
   isEliminateUserTransactionLoading,
-  renderEliminateUserButtonState,
   currentParticipatedList,
   totalParticipants,
   userAllTickets,
@@ -74,37 +72,69 @@ export default function EliminateScreen({
   const isTenEliminationButtionDisabled =
     isEliminateUserTransactionLoading || currentActiveTicketsCount <= 10;
 
+  const [eliminateCount, setEliminateCount] = useState<Number | null>(null);
+
+  const renderEliminateSingleUserButtonState = () => {
+    if (isEliminateUserTransactionLoading && eliminateCount === 1) {
+      return `Sniping 1X...`;
+    }
+    return `Snipe 1X`;
+  };
+
+  const renderEliminateFiveUserButtonState = () => {
+    if (isEliminateUserTransactionLoading && eliminateCount === 5) {
+      return `Sniping 5X...`;
+    }
+    return `Snipe 5X`;
+  };
+
+  const renderEliminateTenUserButtonState = () => {
+    if (isEliminateUserTransactionLoading && eliminateCount === 10) {
+      return `Sniping 10x...`;
+    }
+    return `Snipe 10x`;
+  };
+
   return (
     <div className="flex flex-row items-start gap-x-8 mt-8 justify-between w-full">
-      <YourTicketsContainer userAllTickets={userAllTickets} />
+      <YourTicketsContainer
+        userAllTickets={userAllTickets}
+        altText="Snipe 'em All And Enter the Next Round!"
+      />
       <div className="flex flex-col items-center justify-center mt-[16px] gap-[16px] w-full">
         <div className="flex flex-row justify-around w-full">
           <button
-            onClick={() => (playBurst(), eliminateUser(1))}
+            onClick={() => (
+              setEliminateCount(1), playBurst(), eliminateUser(1)
+            )}
             disabled={isSingleEliminationButtonDisabled}
             className={generateEliminateButtonClass(
               isSingleEliminationButtonDisabled,
             )}
           >
-            {renderEliminateUserButtonState("1X")}
+            {renderEliminateSingleUserButtonState()}
           </button>
           <button
-            onClick={() => (playBurst(), eliminateUser(5))}
+            onClick={() => (
+              setEliminateCount(5), playBurst(), eliminateUser(5)
+            )}
             disabled={isFiveEliminationButtonDisabled}
             className={generateEliminateButtonClass(
               isFiveEliminationButtonDisabled,
             )}
           >
-            {renderEliminateUserButtonState("5X")}
+            {renderEliminateFiveUserButtonState()}
           </button>
           <button
-            onClick={() => (playBurst(), eliminateUser(10))}
+            onClick={() => (
+              setEliminateCount(10), playBurst(), eliminateUser(10)
+            )}
             disabled={isTenEliminationButtionDisabled}
             className={generateEliminateButtonClass(
               isTenEliminationButtionDisabled,
             )}
           >
-            {renderEliminateUserButtonState("10X")}
+            {renderEliminateTenUserButtonState()}
           </button>
         </div>
         <GlobeRoulette

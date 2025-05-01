@@ -2,10 +2,12 @@ import { Text } from "nes-ui-react";
 
 interface YourTicketsProps {
   userAllTickets: (number[] | boolean[])[];
+  altText: string;
 }
 
 export default function YourTicketsContainer({
   userAllTickets,
+  altText,
 }: YourTicketsProps) {
   return (
     <div className="w-min border-4 border-[#FDC62C] rounded-[10px] bg-[#004750] p-8">
@@ -13,10 +15,8 @@ export default function YourTicketsContainer({
         YOUR TICKETS
       </Text>
       <div className="flex flex-col items-center justify-start">
-        {userAllTickets?.length === 0 ? (
-          <span className="!text-[16px] !text-pretty">
-            {`Hit 'Enter Game' to buy Tickets!`}
-          </span>
+        {userAllTickets?.[0]?.length === 0 ? (
+          <span className="!text-[16px] !text-pretty">{`${altText}`}</span>
         ) : (
           (userAllTickets as [number[], boolean[]])?.[0]?.map(
             (ticket, index) => {
