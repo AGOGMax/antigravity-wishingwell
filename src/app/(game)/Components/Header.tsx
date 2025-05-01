@@ -1,4 +1,3 @@
-import { Separator, Text, Toolbar } from "nes-ui-react";
 import { UserWalletAddress } from "../pmwgame/UserWalletAddress";
 
 interface HeaderProps {
@@ -13,34 +12,42 @@ export default function Header({
   isAccountConnected,
 }: HeaderProps) {
   return (
-    <Toolbar
-      style={{
-        padding: "8px 0",
-        width: "80vw",
-        display: "flex",
-        justifyContent: "space-around",
-        alignItems: "center",
-      }}
-    >
-      <div className="w-[33%] flex justify-center items-center">
-        <Text size="large" style={{ marginBottom: "0" }} centered>
-          Your Active Tickets: {activeTicketsCount || 0}
-        </Text>
+    <header className="w-full max-w-4xl bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 shadow-lg">
+      <div className="flex flex-col sm:flex-row items-center justify-between p-4 gap-4 sm:gap-0">
+        <div className="flex-1 text-center sm:text-left">
+          <p className="text-sm sm:text-base font-medium text-white/80 mb-1">
+            Your Active Tickets
+          </p>
+          <p className="text-xl font-bold text-white mb-0">
+            {activeTicketsCount || 0}
+          </p>
+        </div>
+
+        <div className="h-px w-full sm:h-12 sm:w-px bg-white/20" />
+
+        <div className="flex-1 text-center">
+          <p className="text-sm sm:text-base font-medium text-white/80 mb-1">
+            Current Round
+          </p>
+          <p className="text-xl font-bold text-white mb-0">
+            ROUND-{currentRoundId}
+          </p>
+        </div>
+
+        {isAccountConnected && (
+          <>
+            <div className="h-px w-full sm:h-12 sm:w-px bg-white/20" />
+            <div className="flex-1 text-center sm:text-right">
+              <p className="text-sm sm:text-base font-medium text-white/80 mb-1">
+                Connected Wallet
+              </p>
+              <div className="text-lg font-mono font-medium text-white truncate max-w-[180px] mx-auto sm:max-w-none">
+                <UserWalletAddress />
+              </div>
+            </div>
+          </>
+        )}
       </div>
-      <Separator />
-      <div className="w-[33%] flex justify-center items-center">
-        <Text size="large" style={{ marginBottom: "0" }}>
-          ROUND-{Number(currentRoundId)}
-        </Text>
-      </div>
-      {isAccountConnected && (
-        <>
-          <Separator />
-          <div className="w-[33%] flex justify-center items-center">
-            <UserWalletAddress />
-          </div>
-        </>
-      )}
-    </Toolbar>
+    </header>
   );
 }
