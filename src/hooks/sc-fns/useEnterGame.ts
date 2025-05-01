@@ -86,7 +86,7 @@ const useEnterGame = (tickets: bigint) => {
     if (enterGameError) {
       console.log({ enterGameError });
       setTransactionLoading(false);
-      if ((enterGameError.cause as any).code === 4001) {
+      if ((enterGameError.cause as any)?.code === 4001) {
         toast.error(
           "You cancelled the entering process. Please Try Again if you wish to enter.",
           TOAST_SETTINGS,

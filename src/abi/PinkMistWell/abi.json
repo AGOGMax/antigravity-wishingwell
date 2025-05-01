@@ -310,7 +310,13 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "ticketCount",
+        "type": "uint256"
+      }
+    ],
     "name": "eliminateTicket",
     "outputs": [],
     "stateMutability": "payable",
