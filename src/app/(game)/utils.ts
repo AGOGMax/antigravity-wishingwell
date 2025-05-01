@@ -6,7 +6,7 @@ function extractRoundsPrizes(prizes: PrizeArrays) {
     return { currentRoundPrize: {}, lastRoundsPrizes: [] };
   }
 
-  const numberOfRecords = 10;
+  const numberOfRecords = 20;
   const [daiAmounts, darkAmounts, isCompleted, _winners, winningTickets] =
     prizes;
 

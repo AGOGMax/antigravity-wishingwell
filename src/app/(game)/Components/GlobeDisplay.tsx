@@ -94,7 +94,7 @@ export default function GlobeRoulette({
     scene.add(globeGroup);
     globeGroupRef.current = globeGroup;
 
-    const globeRadius = 10;
+    const globeRadius = 9;
     const globeGeometry = new THREE.SphereGeometry(globeRadius, 64, 64);
     const globeMaterial = new THREE.MeshPhongMaterial({
       color: 0x3b0764,
@@ -150,8 +150,8 @@ export default function GlobeRoulette({
       });
       activeSpotsRef.current = [];
 
-      const numLatitudeLines = 19;
-      const numLongitudePoints = 19;
+      const numLatitudeLines = 9;
+      const numLongitudePoints = 12;
       const latitudeSpacing = Math.PI / (numLatitudeLines + 1);
       const longitudeSpacing = (Math.PI * 2) / numLongitudePoints;
       let spotCounter = 0;
@@ -274,9 +274,9 @@ export default function GlobeRoulette({
       });
       activeSpotsRef.current = [];
 
-      const globeRadius = 10;
-      const numLatitudeLines = 19;
-      const numLongitudePoints = 19;
+      const globeRadius = 9;
+      const numLatitudeLines = 9;
+      const numLongitudePoints = 12;
       const latitudeSpacing = Math.PI / (numLatitudeLines + 1);
       const longitudeSpacing = (Math.PI * 2) / numLongitudePoints;
       let spotCounter = 0;
@@ -414,7 +414,7 @@ export default function GlobeRoulette({
     const globeGroup = globeGroupRef.current;
     if (!scene || !globeGroup) return;
 
-    const globeRadius = 10;
+    const globeRadius = 9;
     const shootDistance = globeRadius * 0.8;
     const duration = 2000;
 
