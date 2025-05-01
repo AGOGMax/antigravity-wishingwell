@@ -11,32 +11,37 @@ export default function JackpotDisplay({
   darkAmount,
 }: JackpotDisplayProps) {
   return (
-    <div className="flex items-center justify-center h-fit p-4 m-[0px, 0px,8px, 0px] border-[4px] border-[#FDC62C] rounded-[10px] bg-[#00224E]">
+    <div className="flex items-center p-4 border-4 border-yellow-400 rounded-lg bg-[#00224E] gap-4 w-full max-w-md">
       <Image
         src={IMAGEKIT_ICONS.DAI_COIN}
         alt="DAI Token"
-        width={80}
-        height={80}
-        className="relative mr-2"
+        width={60}
+        height={60}
+        className="object-contain"
       />
 
-      <div className="flex flex-col items-center">
-        <div className="w-[16rem] h-[4rem] relative">
-          <Image src={IMAGEKIT_LOGOS.JACKPOT_LOGO} alt="Jackpot" fill />
+      <div className="flex-1 flex flex-col items-center">
+        <div className="relative w-40 h-12">
+          <Image
+            src={IMAGEKIT_LOGOS.JACKPOT_LOGO}
+            alt="Jackpot"
+            fill
+            className="object-contain"
+          />
         </div>
 
-        <div className="flex justify-between w-full mt-2 gap-4 text-white text-lg font-semibold">
-          <span className="text-[#E49006] !text-[1rem]">{`${daiAmount} $DAI`}</span>
-          <span className="text-[#FF69B4] !text-[1rem]">{`${darkAmount} $DARK`}</span>
+        <div className="flex justify-between w-full mt-2">
+          <span className="text-orange-400 text-sm font-bold">{`${daiAmount} $DAI`}</span>
+          <span className="text-pink-400 text-sm font-bold">{`${darkAmount} $DARK`}</span>
         </div>
       </div>
 
       <Image
         src={IMAGEKIT_ICONS.PILL_DARK_X_CLAIMED_TRANSPARENT}
-        className="ml-2 relative"
         alt="DARK Token"
-        width={80}
-        height={80}
+        width={60}
+        height={60}
+        className="object-contain"
       />
     </div>
   );

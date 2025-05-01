@@ -238,31 +238,37 @@ export default function PMWGame() {
   };
 
   return (
-    <div className="min-h-screen p-5 flex flex-col box-border items-center">
+    <div className="min-h-screen w-full p-4 sm:p-6 lg:p-8 mx-auto box-border max-w-[1800px] flex flex-col items-center gap-6">
       {isRegistrationOpen || !isAccountConnected ? (
-        <PMWTitle width={20} />
+        <PMWTitle />
       ) : (
-        <div className="grid grid-cols-[32vw_32vw_32vw] max-w-[100vw] items-center">
-          <div className="w-full flex justify-center items-center">
-            <div className="flex justify-center items-center p-5 h-fit border-4 border-[#FDC62C] rounded-[10px] w-[50%] bg-[#00224E] !text-[18px]">
-              PLAYERS LEFT: {currentParticipatedList?.length}
+        <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4 px-4 max-w-[1800px] mx-auto">
+          <div className="flex justify-center items-center">
+            <div className="p-4 border-4 border-yellow-400 rounded-lg bg-[#00224E] text-center w-full max-w-xs">
+              <p className="text-lg font-bold text-white mb-0">
+                PLAYERS LEFT: {currentParticipatedList?.length}
+              </p>
             </div>
           </div>
-          <div className="w-full flex items-center justify-center">
-            <PMWTitle />
+
+          <div className="flex justify-center items-center">
+            <PMWTitle isTrioLayout />
           </div>
-          <JackpotDisplay
-            daiAmount={
-              "daiAmount" in currentRoundPrize
-                ? currentRoundPrize.daiAmount
-                : "0"
-            }
-            darkAmount={
-              "darkAmount" in currentRoundPrize
-                ? currentRoundPrize.darkAmount
-                : "0"
-            }
-          />
+
+          <div className="flex justify-center items-center">
+            <JackpotDisplay
+              daiAmount={
+                "daiAmount" in currentRoundPrize
+                  ? currentRoundPrize.daiAmount
+                  : "0"
+              }
+              darkAmount={
+                "darkAmount" in currentRoundPrize
+                  ? currentRoundPrize.darkAmount
+                  : "0"
+              }
+            />
+          </div>
         </div>
       )}
 

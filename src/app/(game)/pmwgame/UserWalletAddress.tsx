@@ -4,45 +4,46 @@ import { useAccount } from "wagmi";
 import { PiWarningCircle } from "react-icons/pi";
 
 export const UserWalletAddress: React.FC = () => {
-  const account = useAccount();
+  const { address } = useAccount();
 
   return (
-    <div className="flex text-lg">
-      <ConnectButton.Custom>
-        {({ chain, openChainModal, mounted, openAccountModal }) => {
-          if (chain && chain.unsupported) {
-            return (
-              <div>
-                <div
-                  className="flex text-red-400 w-full h-full p-1 bg-agblack gap-2 items-center rounded-lg cursor-pointer focus:outline-none peer"
-                  onClick={openChainModal}
-                >
-                  <PiWarningCircle className="text-brred w-6 h-6" />
-                  <p className="uppercase font-extrabold mb-0 text-brred bg-clip-text z-[100]">
-                    {condenseAddress(`${account.address}`)}
-                  </p>
-                </div>
-                <div className="peer-hover:flex hidden absolute bg-brred -bottom-8 z-10 rounded font-normal text-base px-8">
-                  Wrong network
-                </div>
+    <ConnectButton.Custom>
+      {({ chain, openChainModal, openAccountModal }) => {
+        const baseClasses =
+          "flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-all justify-center md:justify-end lg:justify-end";
+        const addressClasses =
+          "uppercase font-extrabold text-transparent bg-clip-text bg-gradient-to-b from-[#B4EBF8] to-[#789DFA] text-center";
+
+        if (chain?.unsupported) {
+          return (
+            <div className="relative group">
+              <div
+                className={`${baseClasses} bg-red-900/30 text-red-400 hover:bg-red-900/40`}
+                onClick={openChainModal}
+              >
+                <PiWarningCircle className="flex-shrink-0 w-5 h-5" />
+                <span className={addressClasses}>
+                  {condenseAddress(address || "")}
+                </span>
               </div>
-            );
-          } else if (chain) {
-            return (
-              <>
-                <div className="lg:flex w-full h-full bg-agblack p-1 gap-2 items-center rounded-lg cursor-pointer focus:outline-none">
-                  <p
-                    className="flex flex-col justify-start mb-0 items-start gap-0 text-[16px] leading-[16px] uppercase bg-gradient-to-b font-extrabold from-[#B4EBF8] to-[#789DFA] text-transparent bg-clip-text"
-                    onClick={openAccountModal}
-                  >
-                    {condenseAddress(`${account.address}`)}
-                  </p>
-                </div>
-              </>
-            );
-          }
-        }}
-      </ConnectButton.Custom>
-    </div>
+              <div className="absolute hidden group-hover:block -bottom-8 left-0 bg-red-500 text-white text-xs px-3 py-1 rounded whitespace-nowrap">
+                Wrong network - Click to switch
+              </div>
+            </div>
+          );
+        }
+
+        return (
+          <div
+            className={`${baseClasses} hover:bg-white/5`}
+            onClick={openAccountModal}
+          >
+            <span className={`${addressClasses} text-[15px] leading-5`}>
+              {condenseAddress(address || "")}
+            </span>
+          </div>
+        );
+      }}
+    </ConnectButton.Custom>
   );
 };
