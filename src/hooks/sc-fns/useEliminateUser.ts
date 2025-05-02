@@ -9,7 +9,6 @@ import { ToastOptions, toast } from "react-hot-toast";
 import axios from "axios";
 import { API_ENDPOINT } from "@/constants";
 
-
 const TOAST_SETTINGS: ToastOptions = {
   duration: 3000,
   position: "bottom-right",
@@ -18,20 +17,15 @@ const TOAST_SETTINGS: ToastOptions = {
   },
 };
 
-
 async function getCallbackValue() {
   try {
-    const response = await axios.get("https://test-api.agproject.xyz/api/calldata");
-    const data = response.data;
-    const callData = JSON.parse(data).calldata;
-    console.log("api response", (callData));
-    return callData;
+    const response = await axios.get(`${API_ENDPOINT}/api/calldata`);
+    const calldata = response.data?.calldata || "0x";
+    return calldata;
   } catch (error) {
-    console.error("error", error);
+    console.error("Error while fetching calldata: ", error);
   }
 }
-
-getCallbackValue();
 
 const useEliminateUser = () => {
   const [transactionLoading, setTransactionLoading] = useState<boolean>(false);
@@ -101,15 +95,15 @@ const useEliminateUser = () => {
     }
   }, [eliminateUserReceipt]);
 
-  const eliminateUser = (ticketCount = 1) => {
+  const eliminateUser = async (ticketCount = 1) => {
     if (eliminationTokenAddress && typeof eliminationFee === "bigint") {
       setTransactionLoading(true);
-      const callData = getCallbackValue()
+      const callData = await getCallbackValue();
       eliminateUserFn({
         address: PMWContract?.address as `0x${string}`,
         abi: PMWContract?.abi,
         functionName: "eliminateTicket",
-        args: [BigInt(ticketCount),callData ], //bytes data
+        args: [BigInt(ticketCount), callData], //bytes data
         value: eliminationFee as bigint,
       });
     }
