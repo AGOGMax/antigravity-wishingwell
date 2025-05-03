@@ -83,7 +83,6 @@ export default function PMWGame() {
     //Enter Game Hook
     enterGame,
     transactionLoading: isEnterGameTransactionLoading,
-    approveIsLoading: isEnterGameTokenApprovalLoading,
     enterGameReceipt,
   } = useEnterGame(BigInt(userTickets));
 
@@ -229,9 +228,7 @@ export default function PMWGame() {
   }, [PMWReader?.[0].result]);
 
   const renderEnterGameButtonState = () => {
-    if (isEnterGameTokenApprovalLoading) {
-      return "Approving...";
-    } else if (isEnterGameTransactionLoading) {
+    if (isEnterGameTransactionLoading) {
       return "Entering Game...";
     }
     return "Enter Game";
