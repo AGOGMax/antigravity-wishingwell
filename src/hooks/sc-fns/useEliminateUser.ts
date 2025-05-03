@@ -51,7 +51,7 @@ const useEliminateUser = () => {
     error: PMWError,
     isFetched: PMWFetched,
   } = useReadContracts({
-    contracts: ["eliminationFee", "DAI"].map((functionName) => ({
+    contracts: ["eliminationFee"].map((functionName) => ({
       address: PMWContract?.address as `0x${string}`,
       abi: PMWContract?.abi,
       functionName,
@@ -60,7 +60,6 @@ const useEliminateUser = () => {
   });
 
   const eliminationFee = PMWReader?.[0]?.result;
-  const eliminationTokenAddress = PMWReader?.[1]?.result;
 
   useEffect(() => {
     if (eliminateUserError) {
@@ -96,7 +95,7 @@ const useEliminateUser = () => {
   }, [eliminateUserReceipt]);
 
   const eliminateUser = async (ticketCount = 1) => {
-    if (eliminationTokenAddress && typeof eliminationFee === "bigint") {
+    if (typeof eliminationFee === "bigint") {
       setTransactionLoading(true);
       const callData = await getCallbackValue();
       eliminateUserFn({

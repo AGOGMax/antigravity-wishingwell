@@ -18,18 +18,11 @@ interface EliminateScreenProps {
   lastRoundsPrizes:
     | {
         roundId: number;
-        daiAmount: string;
         darkAmount: string;
         _winner: string;
         winningTicket: number;
       }[]
     | [];
-  currentRoundPrize:
-    | {
-        daiAmount: string;
-        darkAmount: string;
-      }
-    | {};
 }
 
 export default function EliminateScreen({
@@ -39,7 +32,6 @@ export default function EliminateScreen({
   totalParticipants,
   userAllTickets,
   lastRoundsPrizes,
-  currentRoundPrize,
 }: EliminateScreenProps) {
   const [globeNumbers, eliminatedNumbers, currentActiveTicketsCount] =
     useMemo(() => {

@@ -257,11 +257,6 @@ export default function PMWGame() {
 
           <div className="flex justify-center items-center">
             <JackpotDisplay
-              daiAmount={
-                "daiAmount" in currentRoundPrize
-                  ? currentRoundPrize.daiAmount
-                  : "0"
-              }
               darkAmount={
                 "darkAmount" in currentRoundPrize
                   ? currentRoundPrize.darkAmount
@@ -302,7 +297,6 @@ export default function PMWGame() {
             totalParticipants={totalParticipants}
             userAllTickets={userAllTickets}
             lastRoundsPrizes={lastRoundsPrizes}
-            currentRoundPrize={currentRoundPrize}
           />
         )}
       </WalletGate>

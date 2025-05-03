@@ -2,7 +2,6 @@ interface historyTableProps {
   lastRoundsPrizes:
     | {
         roundId: number;
-        daiAmount: string;
         darkAmount: string;
         _winner: string;
         winningTicket: number;
@@ -54,10 +53,6 @@ export default function WinnerHistoryTable({
                   {Number(roundPrize?.winningTicket)}
                 </td>
                 <td className="text-center p-2 border-l-2 border-l-[#3f0009] border-b-2 border-b-[#ca0d2c]">
-                  <span className="text-[#FDC62C]">
-                    {roundPrize?.daiAmount}
-                  </span>{" "}
-                  +{" "}
                   <span className="text-[#FF69B4]">
                     {roundPrize.darkAmount}
                   </span>

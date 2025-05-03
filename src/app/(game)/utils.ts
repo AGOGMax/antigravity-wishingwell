@@ -7,16 +7,12 @@ function extractRoundsPrizes(prizes: PrizeArrays) {
   }
 
   const numberOfRecords = 20;
-  const [daiAmounts, darkAmounts, isCompleted, _winners, winningTickets] =
-    prizes;
+  const [_, darkAmounts, isCompleted, _winners, winningTickets] = prizes;
 
   const currentIndex = isCompleted.lastIndexOf(false);
 
   const currentRoundPrize = {
     roundId: currentIndex + 1,
-    daiAmount: parseFloat(
-      formatUnits(daiAmounts[currentIndex] || BigInt(0), 18),
-    ).toFixed(3),
     darkAmount: parseFloat(
       formatUnits(darkAmounts[currentIndex] || BigInt(0), 18),
     ).toFixed(3),
@@ -32,7 +28,6 @@ function extractRoundsPrizes(prizes: PrizeArrays) {
     if (isCompleted[i]) {
       lastRoundsPrizes.push({
         roundId: i + 1,
-        daiAmount: parseFloat(formatUnits(daiAmounts[i], 18)).toFixed(3),
         darkAmount: parseFloat(formatUnits(darkAmounts[i], 18)).toFixed(3),
         _winner: _winners[i],
         winningTicket: Number(winningTickets[i]) + 1,

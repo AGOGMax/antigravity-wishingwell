@@ -17,7 +17,6 @@ interface EnterGameScreenProps {
   lastRoundsPrizes:
     | {
         roundId: number;
-        daiAmount: string;
         darkAmount: string;
         _winner: string;
         winningTicket: number;
