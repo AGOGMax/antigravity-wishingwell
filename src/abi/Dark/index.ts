@@ -1,6 +1,5 @@
 import { TEST_NETWORK } from "@/constants";
 import { baseSepolia, pulsechain, pulsechainV4, sepolia } from "viem/chains";
-import { useAccount } from "wagmi";
 
 interface IContract {
   address?: `0x${string}`;

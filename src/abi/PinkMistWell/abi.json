@@ -5,6 +5,11 @@
         "internalType": "uint256",
         "name": "ticketCount",
         "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
       }
     ],
     "name": "eliminateTicket",
