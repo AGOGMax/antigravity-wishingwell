@@ -11,6 +11,7 @@ type GlobeRouletteProps = {
   isSpinning: boolean;
   eliminations: number[];
   totalParticipants: number;
+  style?: React.CSSProperties;
 };
 
 type Spot = {
@@ -24,6 +25,7 @@ export default function GlobeRoulette({
   isSpinning,
   eliminations,
   totalParticipants,
+  style,
 }: GlobeRouletteProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
 
@@ -503,7 +505,10 @@ export default function GlobeRoulette({
   }, [eliminations]);
 
   return (
-    <div className="relative w-full h-screen bg-transparent text-gray-100 overflow-hidden">
+    <div
+      className="relative bg-transparent text-gray-100 overflow-hidden"
+      style={style}
+    >
       <div ref={containerRef} className="w-full h-full" />
     </div>
   );

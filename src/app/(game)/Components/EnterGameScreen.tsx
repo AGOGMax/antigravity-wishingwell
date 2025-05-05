@@ -54,61 +54,72 @@ export default function EnterGameScreen({
   }, [currentParticipatedList]);
 
   return (
-    <div className="flex flex-row items-start gap-x-8 mt-8">
-      <YourTicketsContainer
-        userAllTickets={userAllTickets}
-        altText="Hit 'Enter Game' to buy Tickets!"
-      />
-      <div className="flex flex-col justify-center items-center">
-        <div className="flex flex-col items-center">
-          <Text>
-            {`${activeTicketsCount} out of 
-            ${totalParticipants}...`}
-          </Text>
-          <Progress
-            value={activeTicketsCount}
-            max={totalParticipants}
-            color="pattern"
-            style={{ width: "40vw" }}
-          />
-          <div className="flex flex-row items-center gap-8">
-            <div className="flex flex-col">
-              <Input
-                type="number"
-                name="userTickets"
-                value={userTickets.toString()}
-                label="Number Of Tickets: "
-                style={{ height: "32px", fontSize: "16px" }}
-                onChange={handleChange}
-                color={
-                  userTickets < 0 || userTickets > maxTickets ? "error" : "none"
-                }
-              />
-              <Text size="medium" color="white">
-                Max Tickets: {maxTickets}
-              </Text>
-            </div>
-            <Button
-              color="primary"
-              size="large"
-              disabled={
-                userTickets <= 0 ||
-                userTickets > maxTickets ||
-                isEnterGameTransactionLoading
-              }
-              onClick={enterGame}
-            >
-              {renderEnterGameButtonState()}
-            </Button>
+    <div className="flex flex-col lg:flex-row items-center justify-center lg:items-start gap-4 lg:gap-6 w-full px-4 mt-8">
+      <div className="w-full lg:w-[fit-content] flex justify-center">
+        <YourTicketsContainer
+          userAllTickets={userAllTickets}
+          altText="Hit 'Enter Game' to buy Tickets!"
+        />
+      </div>
+      <div className="w-full lg:w-2/4 flex flex-col items-center gap-6">
+        <div className="text-center w-full">
+          <p className="text-white mb-2">
+            {`${activeTicketsCount} out of ${totalParticipants}`}
+          </p>
+          <div className="w-full lg:w-[90%] mx-auto">
+            <Progress
+              value={activeTicketsCount}
+              max={totalParticipants}
+              color="pattern"
+              className="w-full h-3"
+            />
           </div>
         </div>
 
-        <GlobeRoulette
-          numbers={globeNumbers}
-          isSpinning={false}
-          totalParticipants={totalParticipants}
-          eliminations={[]}
-        />
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
+          <div className="w-full sm:w-auto min-w-[200px]">
+            <Input
+              type="number"
+              name="userTickets"
+              value={userTickets.toString()}
+              label="Number Of Tickets: "
+              className="w-full"
+              onChange={handleChange}
+              color={
+                userTickets < 0 || userTickets > maxTickets ? "error" : "none"
+              }
+            />
+            <p className="text-white text-sm mt-1">Max Tickets: {maxTickets}</p>
+          </div>
+
+          <Button
+            color="primary"
+            size="large"
+            disabled={
+              userTickets <= 0 ||
+              userTickets > maxTickets ||
+              isEnterGameTransactionLoading
+            }
+            onClick={enterGame}
+          >
+            {renderEnterGameButtonState()}
+          </Button>
+        </div>
+
+        <div className="w-full flex justify-center mt-4">
+          <div
+            className="relative w-full max-w-[500px]"
+            style={{ aspectRatio: "1/1" }}
+          >
+            <GlobeRoulette
+              numbers={globeNumbers}
+              isSpinning={false}
+              totalParticipants={totalParticipants}
+              eliminations={[]}
+              style={{ position: "absolute", inset: 0 }}
+            />
+          </div>
+        </div>
       </div>
       <WinnerHistoryTable lastRoundsPrizes={lastRoundsPrizes} />
     </div>
