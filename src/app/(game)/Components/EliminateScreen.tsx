@@ -129,12 +129,15 @@ export default function EliminateScreen({
             {renderEliminateTenUserButtonState()}
           </button>
         </div>
-        <GlobeRoulette
-          numbers={globeNumbers}
-          isSpinning={isEliminateUserTransactionLoading}
-          eliminations={eliminatedNumbers}
-          totalParticipants={totalParticipants}
-        />
+        <div className="relative w-full">
+          <GlobeRoulette
+            numbers={globeNumbers}
+            isSpinning={isEliminateUserTransactionLoading}
+            eliminations={eliminatedNumbers}
+            totalParticipants={totalParticipants}
+            style={{ height: "500px" }}
+          />
+        </div>
       </div>
       <WinnerHistoryTable lastRoundsPrizes={lastRoundsPrizes} />
     </div>
