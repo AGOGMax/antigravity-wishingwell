@@ -88,58 +88,67 @@ export default function EliminateScreen({
   };
 
   return (
-    <div className="flex flex-row items-start gap-x-8 mt-8 justify-between w-full">
-      <YourTicketsContainer
-        userAllTickets={userAllTickets}
-        altText="Snipe 'em All And Enter the Next Round!"
-      />
-      <div className="flex flex-col items-center justify-center mt-[16px] gap-[16px] w-full">
-        <div className="flex flex-row justify-around w-full">
-          <button
-            onClick={() => (
-              setEliminateCount(1), playBurst(), eliminateUser(1)
-            )}
-            disabled={isSingleEliminationButtonDisabled}
-            className={generateEliminateButtonClass(
-              isSingleEliminationButtonDisabled,
-            )}
-          >
-            {renderEliminateSingleUserButtonState()}
-          </button>
-          <button
-            onClick={() => (
-              setEliminateCount(5), playBurst(), eliminateUser(5)
-            )}
-            disabled={isFiveEliminationButtonDisabled}
-            className={generateEliminateButtonClass(
-              isFiveEliminationButtonDisabled,
-            )}
-          >
-            {renderEliminateFiveUserButtonState()}
-          </button>
-          <button
-            onClick={() => (
-              setEliminateCount(10), playBurst(), eliminateUser(10)
-            )}
-            disabled={isTenEliminationButtionDisabled}
-            className={generateEliminateButtonClass(
-              isTenEliminationButtionDisabled,
-            )}
-          >
-            {renderEliminateTenUserButtonState()}
-          </button>
+    <div className="flex flex-col lg:flex-row items-center justify-center lg:items-start gap-6 w-full px-4 mt-8">
+      <div className="w-full lg:w-[fit-content] flex justify-center">
+        <YourTicketsContainer
+          userAllTickets={userAllTickets}
+          altText="Snipe 'em All And Enter the Next Round!"
+        />
+      </div>
+
+      <div className="w-full lg:w-2/4 flex flex-col items-center gap-6">
+        <div className="flex flex-col sm:flex-row justify-center gap-4 w-full">
+          {[1, 5, 10].map((count) => (
+            <button
+              key={count}
+              onClick={() => {
+                setEliminateCount(count);
+                playBurst();
+                eliminateUser(count);
+              }}
+              disabled={
+                count === 1
+                  ? isSingleEliminationButtonDisabled
+                  : count === 5
+                    ? isFiveEliminationButtonDisabled
+                    : isTenEliminationButtionDisabled
+              }
+              className={generateEliminateButtonClass(
+                count === 1
+                  ? isSingleEliminationButtonDisabled
+                  : count === 5
+                    ? isFiveEliminationButtonDisabled
+                    : isTenEliminationButtionDisabled,
+              )}
+            >
+              {count === 1
+                ? renderEliminateSingleUserButtonState()
+                : count === 5
+                  ? renderEliminateFiveUserButtonState()
+                  : renderEliminateTenUserButtonState()}
+            </button>
+          ))}
         </div>
-        <div className="relative w-full">
-          <GlobeRoulette
-            numbers={globeNumbers}
-            isSpinning={isEliminateUserTransactionLoading}
-            eliminations={eliminatedNumbers}
-            totalParticipants={totalParticipants}
-            style={{ height: "500px" }}
-          />
+
+        <div className="w-full flex justify-center">
+          <div
+            className="relative w-full max-w-[500px]"
+            style={{ aspectRatio: "1/1" }}
+          >
+            <GlobeRoulette
+              numbers={globeNumbers}
+              isSpinning={isEliminateUserTransactionLoading}
+              eliminations={eliminatedNumbers}
+              totalParticipants={totalParticipants}
+              style={{ position: "absolute", inset: 0 }}
+            />
+          </div>
         </div>
       </div>
+
+      {/* <div className="w-full lg:w-1/4"> */}
       <WinnerHistoryTable lastRoundsPrizes={lastRoundsPrizes} />
+      {/* </div> */}
     </div>
   );
 }
