@@ -57,10 +57,10 @@ export default function EliminateScreen({
     20: "/burstSounds/snipe20.mp3",
   };
 
-  const [playSnipe1] = useSound(soundMap[1]);
-  const [playSnipe5] = useSound(soundMap[5]);
-  const [playSnipe10] = useSound(soundMap[10]);
-  const [playSnipe20] = useSound(soundMap[20]);
+  const [playSnipe1] = useSound(soundMap[1], { volume: 0.2 });
+  const [playSnipe5] = useSound(soundMap[5], { volume: 0.2 });
+  const [playSnipe10] = useSound(soundMap[10], { volume: 0.2 });
+  const [playSnipe20] = useSound(soundMap[20], { volume: 0.2 });
 
   const soundFunctionMap = {
     1: playSnipe1,
