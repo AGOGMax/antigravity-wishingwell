@@ -1,5 +1,5 @@
 import { formatUnits } from "viem";
-type PrizeArrays = [bigint[], bigint[], boolean[], string[], bigint[]];
+type PrizeArrays = [ bigint[], boolean[], string[], bigint[]];
 
 function extractRoundsPrizes(prizes: PrizeArrays) {
   if (!prizes) {
@@ -7,7 +7,7 @@ function extractRoundsPrizes(prizes: PrizeArrays) {
   }
 
   const numberOfRecords = 20;
-  const [_, darkAmounts, isCompleted, _winners, winningTickets] = prizes;
+  const [darkAmounts, isCompleted, _winners, winningTickets] = prizes;
 
   const currentIndex = isCompleted.lastIndexOf(false);
 

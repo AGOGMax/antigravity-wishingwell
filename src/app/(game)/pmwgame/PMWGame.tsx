@@ -28,7 +28,7 @@ const TOAST_SETTINGS: ToastOptions = {
   icon: "🔫",
 };
 
-type PrizeArrays = [bigint[], bigint[], boolean[], string[], bigint[]];
+type PrizeArrays = [bigint[], boolean[], string[], bigint[]];
 
 export default function PMWGame() {
   const account = useAccount();

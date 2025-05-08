@@ -1,5 +1,5 @@
 import GlobeRoulette from "./GlobeDisplay";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import YourTicketsContainer from "./YourTicketsContainer";
 import WinnerHistoryTable from "./WinnerHistoryTable";
 import useSound from "use-sound";
