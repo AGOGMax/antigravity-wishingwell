@@ -3,6 +3,8 @@ import { useMemo, useState } from "react";
 import YourTicketsContainer from "./YourTicketsContainer";
 import WinnerHistoryTable from "./WinnerHistoryTable";
 import useSound from "use-sound";
+import Image from "next/image";
+import { IMAGEKIT_ICONS } from "@/assets/imageKit";
 
 interface EliminateScreenProps {
   eliminateUser: (ticketCount: number) => void;
@@ -73,7 +75,34 @@ export default function EliminateScreen({
   `;
   };
 
-  const [eliminateCount, setEliminateCount] = useState<Number | null>(null);
+  const renderSnipeButtonLabel = ({
+    imageSrc,
+    alt = "",
+    count,
+    width = 60,
+    height = 60,
+  }: {
+    imageSrc: string;
+    alt?: string;
+    count: number;
+    width?: number;
+    height?: number;
+  }) => {
+    return (
+      <span
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "16px",
+          justifyContent: "center",
+          fontSize: "1.5rem",
+          color: "gold",
+        }}
+      >
+        <Image src={imageSrc} alt={alt} width={width} height={height} />x{count}
+      </span>
+    );
+  };
 
   const eliminationOptions = [
     {
@@ -81,36 +110,44 @@ export default function EliminateScreen({
       isDisabled:
         isEliminateUserTransactionLoading || currentActiveTicketsCount <= 1,
       renderLabel: () =>
-        isEliminateUserTransactionLoading && eliminateCount === 1
-          ? "Sniping 1X..."
-          : "Snipe 1X",
+        renderSnipeButtonLabel({
+          imageSrc: IMAGEKIT_ICONS.SNIPE_1_ICON,
+          count: 1,
+        }),
     },
     {
       count: 5,
       isDisabled:
         isEliminateUserTransactionLoading || currentActiveTicketsCount <= 5,
       renderLabel: () =>
-        isEliminateUserTransactionLoading && eliminateCount === 5
-          ? "Sniping 5X..."
-          : "Snipe 5X",
+        renderSnipeButtonLabel({
+          imageSrc: IMAGEKIT_ICONS.SNIPE_5_ICON,
+          count: 5,
+          width: 50,
+          height: 50,
+        }),
     },
     {
       count: 10,
       isDisabled:
         isEliminateUserTransactionLoading || currentActiveTicketsCount <= 10,
       renderLabel: () =>
-        isEliminateUserTransactionLoading && eliminateCount === 10
-          ? "Sniping 10X..."
-          : "Snipe 10X",
+        renderSnipeButtonLabel({
+          imageSrc: IMAGEKIT_ICONS.SNIPE_10_ICON,
+          count: 10,
+        }),
     },
     {
       count: 20,
       isDisabled:
         isEliminateUserTransactionLoading || currentActiveTicketsCount <= 20,
       renderLabel: () =>
-        isEliminateUserTransactionLoading && eliminateCount === 20
-          ? "Sniping 20X..."
-          : "Snipe 20X",
+        renderSnipeButtonLabel({
+          imageSrc: IMAGEKIT_ICONS.SNIPE_20_ICON,
+          count: 20,
+          width: 50,
+          height: 50,
+        }),
     },
   ];
 
@@ -129,7 +166,6 @@ export default function EliminateScreen({
             <button
               key={count}
               onClick={() => {
-                setEliminateCount(count);
                 soundFunctionMap[count as 1 | 5 | 10 | 20]?.();
                 eliminateUser(count);
               }}
@@ -157,9 +193,7 @@ export default function EliminateScreen({
         </div>
       </div>
 
-      {/* <div className="w-full lg:w-1/4"> */}
       <WinnerHistoryTable lastRoundsPrizes={lastRoundsPrizes} />
-      {/* </div> */}
     </div>
   );
 }

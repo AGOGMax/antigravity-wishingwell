@@ -242,7 +242,10 @@ export default function PMWGame() {
         <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4 px-4 max-w-[1800px] mx-auto">
           <div className="flex justify-center items-center">
             <div className="p-4 border-4 border-yellow-400 rounded-lg bg-[#00224E] text-center w-full max-w-xs">
-              <p className="text-lg font-bold text-white mb-0">
+              <p
+                className="text-lg font-bold text-[gold] mb-0"
+                style={{ fontSize: "1.5rem" }}
+              >
                 PLAYERS LEFT: {currentParticipatedList?.length}
               </p>
             </div>

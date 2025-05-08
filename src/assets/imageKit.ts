@@ -67,6 +67,10 @@ export const IMAGEKIT_ICONS = {
   MEME_COLOR: `${IMAGEKIT_ICONS_URL}/meme-color.png`,
   FUEL_CELL: `${IMAGEKIT_ICONS_URL}/fuel-cell.png`,
   DAI_COIN: `${IMAGEKIT_ICONS_URL}/dai-coin.png`,
+  SNIPE_1_ICON: `${IMAGEKIT_ICONS_URL}/snipe1.png`,
+  SNIPE_5_ICON: `${IMAGEKIT_ICONS_URL}/snipe5.png`,
+  SNIPE_10_ICON: `${IMAGEKIT_ICONS_URL}/snipe10.png`,
+  SNIPE_20_ICON: `${IMAGEKIT_ICONS_URL}/snipe20.png`,
 };
 
 export const IMAGEKIT_IMAGES = {

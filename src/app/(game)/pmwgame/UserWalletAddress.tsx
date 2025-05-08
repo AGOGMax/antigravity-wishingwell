@@ -12,7 +12,7 @@ export const UserWalletAddress: React.FC = () => {
         const baseClasses =
           "flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-all justify-center md:justify-end lg:justify-end";
         const addressClasses =
-          "uppercase font-extrabold text-transparent bg-clip-text bg-gradient-to-b from-[#B4EBF8] to-[#789DFA] text-center";
+          "uppercase font-extrabold text-[gold] text-center";
 
         if (chain?.unsupported) {
           return (
@@ -22,7 +22,7 @@ export const UserWalletAddress: React.FC = () => {
                 onClick={openChainModal}
               >
                 <PiWarningCircle className="flex-shrink-0 w-5 h-5" />
-                <span className={addressClasses}>
+                <span className={addressClasses} style={{ fontSize: "1rem" }}>
                   {condenseAddress(address || "")}
                 </span>
               </div>
@@ -38,7 +38,10 @@ export const UserWalletAddress: React.FC = () => {
             className={`${baseClasses} hover:bg-white/5`}
             onClick={openAccountModal}
           >
-            <span className={`${addressClasses} text-[15px] leading-5`}>
+            <span
+              className={`${addressClasses} text-[15px] leading-5`}
+              style={{ fontSize: "1rem" }}
+            >
               {condenseAddress(address || "")}
             </span>
           </div>

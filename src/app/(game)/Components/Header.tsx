@@ -18,7 +18,10 @@ export default function Header({
           <p className="text-sm sm:text-base font-medium text-white/80 mb-1">
             Your Active Tickets
           </p>
-          <p className="text-xl font-bold text-white mb-0">
+          <p
+            className="text-xl font-bold text-[gold] mb-0"
+            style={{ fontSize: "1.5rem" }}
+          >
             {activeTicketsCount || 0}
           </p>
         </div>
@@ -29,7 +32,10 @@ export default function Header({
           <p className="text-sm sm:text-base font-medium text-white/80 mb-1">
             Current Round
           </p>
-          <p className="text-xl font-bold text-white mb-0">
+          <p
+            className="text-xl font-bold text-[gold] mb-0"
+            style={{ fontSize: "1.5rem" }}
+          >
             ROUND-{currentRoundId}
           </p>
         </div>
