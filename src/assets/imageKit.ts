@@ -104,7 +104,7 @@ export const IMAGEKIT_IMAGES = {
   FUEL_CELL_NFT_RED: `${IMAGEKIT}/fuel-cell-nft-red.png`,
   PINK_MIST_WHALE: `${IMAGEKIT}/pink-mist-whale.jpg`,
   PINK_MIST_CLOUD: `${IMAGEKIT}/pink-mist-CloudInstance.png`,
-  PINK_MIST_WHALE_COING_BG: `${IMAGEKIT}/pmwgame-bg-withcoins-4.png`,
+  PINK_MIST_WHALE_COING_BG: `${IMAGEKIT}/pink-mist-well-bg-resize.png`,
 };
 
 export const IMAGEKIT_COLLECTIVE = {
