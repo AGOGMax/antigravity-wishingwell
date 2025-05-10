@@ -17,7 +17,7 @@ import WalletGate from "./WalletGate";
 import toast, { ToastOptions } from "react-hot-toast";
 
 const TOAST_SETTINGS: ToastOptions = {
-  duration: 10000,
+  duration: 20000,
   position: "top-center",
   style: {
     fontSize: "16px",
@@ -25,7 +25,7 @@ const TOAST_SETTINGS: ToastOptions = {
     maxWidth: "90vw",
     padding: "12px 16px",
   },
-  icon: "🔫",
+  icon: "💀",
 };
 
 type PrizeArrays = [bigint[], boolean[], string[], bigint[]];
