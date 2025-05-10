@@ -14,8 +14,9 @@ export default function PinkMistGame() {
         background: `url(${IMAGEKIT_IMAGES.PINK_MIST_WHALE_COING_BG})`,
         backgroundRepeat: "no-repeat",
         backgroundPosition: "top",
+        backgroundAttachment: "fixed",
         backgroundColor: "#D90887",
-        backgroundSize: "100% 100vh",
+        backgroundSize: "cover",
       }}
       className="min-h-screen"
     >
