@@ -53,6 +53,7 @@ const useEnterGame = (tickets: bigint) => {
   });
 
   const ticketPrice = PMWReader?.[0]?.result;
+  // const ticketPrice = BigInt(1);
 
   useEffect(() => {
     if (enterGameError) {

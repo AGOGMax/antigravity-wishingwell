@@ -20,7 +20,7 @@ const TOAST_SETTINGS: ToastOptions = {
 async function getCallbackValue() {
   try {
     const response = await axios.get(`${API_ENDPOINT}/api/calldata`);
-    const calldata = response.data?.calldata || "0x";
+    const calldata = response?.data?.calldata || "0x";
     return calldata;
   } catch (error) {
     console.error("Error while fetching calldata: ", error);
@@ -60,6 +60,7 @@ const useEliminateUser = () => {
   });
 
   const eliminationFee = PMWReader?.[0]?.result;
+  // const eliminationFee = BigInt(1);
 
   useEffect(() => {
     if (eliminateUserError) {
