@@ -15,6 +15,9 @@ import EliminateScreen from "../Components/EliminateScreen";
 import JackpotDisplay from "./JackpotDisplay";
 import WalletGate from "./WalletGate";
 import toast, { ToastOptions } from "react-hot-toast";
+import CongratulationsPage from "../Components/CongratulationsPage";
+import useWinner from "@/hooks/sc-fns/useWinner";
+import Confetti from "react-confetti";
 
 const TOAST_SETTINGS: ToastOptions = {
   duration: 20000,
@@ -95,6 +98,10 @@ export default function PMWGame() {
     transactionLoading: isEliminateUserTransactionLoading,
     eliminateUserReceipt,
   } = useEliminateUser();
+
+  const { winnerReader = {}, refetchWinner } = useWinner(
+    BigInt(Number(currentRoundId) - 1),
+  );
 
   useEffect(() => {
     //Change loading ref value to support polling refetches.
@@ -183,15 +190,13 @@ export default function PMWGame() {
       const newRoundId = (PMWReader?.[2].result as bigint) ?? 0;
 
       if (currentRoundId != BigInt(0) && newRoundId > currentRoundId) {
-        console.log("last round prizes 1", lastRoundsPrizes);
+        refetchWinner();
         setIsCongratulating(true);
         setTimeout(() => {
           setIsCongratulating(false);
           setCurrentRoundId(newRoundId);
         }, 10000);
       } else {
-        console.log("last round prizes 2", lastRoundsPrizes);
-
         setCurrentRoundId((PMWReader?.[2].result as bigint) ?? 0);
       }
       const eliminatedParticipants = currentParticipatedList
@@ -290,7 +295,15 @@ export default function PMWGame() {
       />
       <WalletGate>
         {isCongratulating ? (
-          <div>Congratulations to winner</div>
+          <>
+            <Confetti width={window.innerWidth} height={window.innerHeight} />
+
+            <CongratulationsPage
+              winnerDetails={
+                winnerReader as [bigint, string, bigint, bigint, bigint]
+              }
+            />
+          </>
         ) : isRegistrationOpen ? (
           <EnterGameScreen
             activeTicketsCount={currentActiveTicketsCount}

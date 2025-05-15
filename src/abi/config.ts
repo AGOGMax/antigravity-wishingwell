@@ -50,7 +50,7 @@ export const CONTRACTS: Record<
     evilAddress: "0xf16834786221C51678cB386cf77a57ac7fcb3441",
     treasury: "0x1A530A9803B8faFA34491D70Fa7EE49C220e29Dc",
     jackpot: "0xf883c46b6Ac7d7b8936122F88b75070Ad6f2f47B",
-    pinkMistWell: "0x4D665D3c942c0Cf9a78f81BDE49C61f28531852D",
+    pinkMistWell: "0x789DE75eCe7DE078Fb5d6442c0fD85C7A3ce7084",
   },
   [baseSepolia.id]: {
     miningRig: "0x8Dea737AE483153c69934ff8a5c7E3D448c2DB4C",

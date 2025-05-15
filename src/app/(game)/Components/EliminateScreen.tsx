@@ -51,16 +51,16 @@ export default function EliminateScreen({
     }, [currentParticipatedList]);
 
   const soundMap = {
-    1: "/burstSounds/snipe1.wav",
-    5: "/burstSounds/snipe5.mp3",
-    10: "/burstSounds/snipe10.mp3",
-    20: "/burstSounds/snipe20.mp3",
+    1: "/sounds/snipe1.wav",
+    5: "/sounds/snipe5.mp3",
+    10: "/sounds/snipe10.mp3",
+    20: "/sounds/snipe20.mp3",
   };
 
-  const [playSnipe1] = useSound(soundMap[1], { volume: 0.2 });
-  const [playSnipe5] = useSound(soundMap[5], { volume: 0.2 });
-  const [playSnipe10] = useSound(soundMap[10], { volume: 0.2 });
-  const [playSnipe20] = useSound(soundMap[20], { volume: 0.2 });
+  const [playSnipe1] = useSound(soundMap[1], { volume: 0.3 });
+  const [playSnipe5] = useSound(soundMap[5], { volume: 0.3 });
+  const [playSnipe10] = useSound(soundMap[10], { volume: 0.3 });
+  const [playSnipe20] = useSound(soundMap[20], { volume: 0.3 });
 
   const soundFunctionMap = {
     1: playSnipe1,

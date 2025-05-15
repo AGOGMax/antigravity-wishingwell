@@ -1,4 +1,4 @@
-import { useReadContract, useReadContracts } from "wagmi";
+import { useReadContract} from "wagmi";
 import usePinkMistWellContract from "@/abi/PinkMistWell";
 import { TEST_NETWORK } from "@/constants";
 import { pulsechain, pulsechainV4 } from "viem/chains";
