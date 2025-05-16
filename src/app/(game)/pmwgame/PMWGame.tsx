@@ -15,6 +15,9 @@ import EliminateScreen from "../Components/EliminateScreen";
 import JackpotDisplay from "./JackpotDisplay";
 import WalletGate from "./WalletGate";
 import toast, { ToastOptions } from "react-hot-toast";
+import CongratulationsPage from "../Components/CongratulationsPage";
+import useWinner from "@/hooks/sc-fns/useWinner";
+import Confetti from "react-confetti";
 
 const TOAST_SETTINGS: ToastOptions = {
   duration: 20000,
@@ -36,6 +39,7 @@ export default function PMWGame() {
   const isAccountConnected = account.isConnected;
 
   const [isRegistrationOpen, setIsRegistrationOpen] = useState(true); //Used to render enter game or eliminate screen.
+  const [isCongratulating, setIsCongratulating] = useState(false);
   const [userTickets, setUserTickets] = useState(0); //Input to handle enter game user input.
   const [maxTickets, setMaxTickets] = useState(0); //Used to handle the number of tickets that can be bought.
   const [currentParticipatedList, setcurrentParticipatedList] = useState([
@@ -61,7 +65,9 @@ export default function PMWGame() {
 
   const { PMWReader, PMWFetched, refetchPMWReader } = usePMWReader(); //PMW Contract Reader
   const totalParticipants = Number(PMWReader?.[1].result) || 0; //Pool size of the game MAX_TICKETS.
-  const currentRoundId = (PMWReader?.[2].result as bigint) ?? 0; //Round ID which is going on.
+  const [currentRoundId, setCurrentRoundId] = useState(
+    (PMWReader?.[2].result as bigint) ?? 0,
+  ); //Round ID which is going on.
 
   const { roundsDataReader, isRoundsFetched, refetchRounds } =
     useCurrentRound(currentRoundId); //Rounds Data Reader (Used to change enter/eliminate screen)
@@ -92,6 +98,10 @@ export default function PMWGame() {
     transactionLoading: isEliminateUserTransactionLoading,
     eliminateUserReceipt,
   } = useEliminateUser();
+
+  const { winnerReader = {}, refetchWinner } = useWinner(
+    BigInt(Number(currentRoundId) - 1),
+  );
 
   useEffect(() => {
     //Change loading ref value to support polling refetches.
@@ -177,7 +187,18 @@ export default function PMWGame() {
         [tickets, addresses],
         userAddress,
       );
+      const newRoundId = (PMWReader?.[2].result as bigint) ?? 0;
 
+      if (currentRoundId != BigInt(0) && newRoundId > currentRoundId) {
+        refetchWinner();
+        setIsCongratulating(true);
+        setTimeout(() => {
+          setIsCongratulating(false);
+          setCurrentRoundId(newRoundId);
+        }, 30000);
+      } else {
+        setCurrentRoundId((PMWReader?.[2].result as bigint) ?? 0);
+      }
       const eliminatedParticipants = currentParticipatedList
         ?.filter(
           (participant) =>
@@ -188,7 +209,7 @@ export default function PMWGame() {
         )
         .map((eliminatedParticipant) => eliminatedParticipant.ticketNumber);
 
-      if (eliminatedParticipants.length === 0) {
+      if (eliminatedParticipants?.length === 0) {
         //This means when enter game is going on or elimination is going on but eliminated participants are 0 (at the moment, not in real).
         return setcurrentParticipatedList(newParticipantsList);
       }
@@ -273,7 +294,17 @@ export default function PMWGame() {
         isAccountConnected={isAccountConnected}
       />
       <WalletGate>
-        {isRegistrationOpen ? (
+        {isCongratulating ? (
+          <>
+            <Confetti width={window.innerWidth} height={window.innerHeight} />
+
+            <CongratulationsPage
+              winnerDetails={
+                winnerReader as [bigint, string, bigint, bigint, bigint]
+              }
+            />
+          </>
+        ) : isRegistrationOpen ? (
           <EnterGameScreen
             activeTicketsCount={currentActiveTicketsCount}
             totalParticipants={totalParticipants}
