@@ -195,7 +195,7 @@ export default function PMWGame() {
         setTimeout(() => {
           setIsCongratulating(false);
           setCurrentRoundId(newRoundId);
-        }, 10000);
+        }, 30000);
       } else {
         setCurrentRoundId((PMWReader?.[2].result as bigint) ?? 0);
       }
