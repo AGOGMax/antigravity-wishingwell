@@ -1,5 +1,6 @@
 import React from "react";
-import { PieChart } from "@mui/x-charts/PieChart";
+import { PieChart, pieArcLabelClasses } from "@mui/x-charts/PieChart";
+import { DefaultizedPieValueType } from "@mui/x-charts/models";
 
 type PieData = {
   value: number;
@@ -22,13 +23,28 @@ const PieChartComponent: React.FC<PieChartComponentProps> = ({
     ...item,
   }));
 
+  const getArcLabel = (params: DefaultizedPieValueType) => {
+    const percent = params.value / 338402;
+    return `${(percent * 100).toFixed(0)}%`;
+  };
+
   return (
     <PieChart
       series={[
         {
+          arcLabel: getArcLabel,
+          arcLabelMinAngle: 35,
+          highlightScope: { fade: "global", highlight: "item" },
+          faded: { innerRadius: 30, additionalRadius: -30, color: "gray" },
           data: formattedData,
         },
       ]}
+      sx={{
+        [`& .${pieArcLabelClasses.root}`]: {
+          fill: "black",
+          fontSize: 14,
+        },
+      }}
       width={width}
       height={height}
     />

@@ -82,11 +82,11 @@ export default function Hero() {
           />
         )}
         <HeroItemCard
-          title="The Collective"
-          description="Learn how to leverage points, rank up and earn exciting rewards. Join The Collective!"
+          title="View My Fuel Cells"
+          description="Get a detailed dashboard of your fuel cells and the amount you made $$$!"
           backgroundImage={IMAGEKIT_IMAGES.MINTING}
           animateFrom="right"
-          cardExternalLink="/collective"
+          cardExternalLink="/myfuelcells"
           defaultImageOpacity={0.5}
           hoverImageOpacity={0.35}
         />
