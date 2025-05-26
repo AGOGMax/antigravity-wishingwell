@@ -227,9 +227,9 @@ const Header = () => {
               </Link>
               <Link
                 href={
-                  location.pathname === "/collective"
-                    ? "/collective#"
-                    : "/collective"
+                  location.pathname === "/myfuelcells"
+                    ? "/myfuelcells#"
+                    : "/myfuelcells"
                 }
                 className="p-[8px]"
               >
@@ -239,7 +239,7 @@ const Header = () => {
                   extrabold
                   className="font-sans font-extrabold"
                 >
-                  Collective
+                  My Fuel Cells
                 </P>
               </Link>
               {timer.isMintingActive && (
