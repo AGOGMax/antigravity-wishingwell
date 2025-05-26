@@ -14,7 +14,7 @@ type PieChartComponentProps = {
 };
 
 const PieChartComponent: React.FC<PieChartComponentProps> = ({
-  data,
+  data = [],
   width = 400,
   height = 300,
 }) => {

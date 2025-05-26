@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import { useAccount } from "wagmi";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import FuelCellTable from "@/components/FuelCellTable";
 import { LeagueMapping } from "./LeagueMapping";
 import { cn } from "@/lib/tailwindUtils";
@@ -66,12 +66,19 @@ export default function MyFuelCells() {
     setPrice(String(event.target.value));
   }
 
-  const data = [
-    { value: 49490, label: "Journey 1", color: "#00FF94" },
-    { value: 61197, label: "Journey 2", color: "#00E0FF" },
-    { value: 106679, label: "Journey 3", color: "#4B56FF" },
-    { value: 121036, label: "Journey 4", color: "#FF2D55" },
-  ];
+  const pieChartData = useMemo(() => {
+    return tableData?.journeySummary?.map((journey) => ({
+      value: journey.totalFuelCells,
+      label: `Journey ${journey.journeyId}`,
+    }));
+  }, [tableData]);
+
+  const totalFuelCellsForAllJourneys = useMemo(() => {
+    return tableData?.journeySummary?.reduce(
+      (total, journey) => total + journey.totalFuelCells,
+      0,
+    );
+  }, [tableData]);
 
   return (
     <div className="text-agwhite relative flex flex-col justify-start items-center w-full gap-[10px] pt-[100px] lg:pt-[200px] z-0">
@@ -151,34 +158,24 @@ export default function MyFuelCells() {
           <div className="flex justify-between border-b border-[#3d3d3d] py-1">
             <span className="text-sm text-[#f0f0f0]">Total Supply</span>
             <span className="text-sm font-semibold text-[#FFA500]">
-              338,402
+              {totalFuelCellsForAllJourneys || 0}
             </span>
           </div>
 
-          <div className="flex justify-between py-1">
-            <span className="text-sm text-[#ccc]">Journey #1</span>
-            <span className="text-sm font-semibold text-[#00FF94]">49,490</span>
-          </div>
-          <div className="flex justify-between py-1">
-            <span className="text-sm text-[#ccc]">Journey #2</span>
-            <span className="text-sm font-semibold text-[#00E0FF]">61,197</span>
-          </div>
-          <div className="flex justify-between py-1">
-            <span className="text-sm text-[#ccc]">Journey #3</span>
-            <span className="text-sm font-semibold text-[#4B56FF]">
-              106,679
-            </span>
-          </div>
-          <div className="flex justify-between py-1">
-            <span className="text-sm text-[#ccc]">Journey #4</span>
-            <span className="text-sm font-semibold text-[#FF2D55]">
-              121,036
-            </span>
-          </div>
+          {tableData?.journeySummary?.map((journey) => (
+            <div key={journey.journeyId} className="flex justify-between py-1">
+              <span className="text-sm text-[#ccc]">
+                Journey #{journey.journeyId}
+              </span>
+              <span className="text-sm font-semibold text-white">
+                {journey.totalFuelCells}
+              </span>
+            </div>
+          ))}
         </div>
 
         <div className="w-1/2 flex justify-center items-center">
-          <PieChartComponent data={data} width={300} height={250} />
+          <PieChartComponent data={pieChartData} width={300} height={250} />
         </div>
       </div>
     </div>
