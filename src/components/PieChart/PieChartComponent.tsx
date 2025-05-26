@@ -44,6 +44,12 @@ const PieChartComponent: React.FC<PieChartComponentProps> = ({
           fill: "black",
           fontSize: 14,
         },
+
+        // CSS class
+        [".MuiChartsLegend-series"]: {
+          gap: "8px",
+          color: "white",
+        },
       }}
       width={width}
       height={height}
