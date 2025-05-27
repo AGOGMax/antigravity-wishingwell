@@ -1,5 +1,5 @@
 "use client";
-import { IMAGEKIT_IMAGES } from "@/assets/imageKit";
+import { IMAGEKIT_IMAGES, IMAGEKIT_GIFS } from "@/assets/imageKit";
 import HeroItemCard from "@/components/Home/components/HeroItemCard";
 import useTimer from "@/hooks/frontend/useTimer";
 import useClaim from "@/hooks/sc-fns/useClaim";
@@ -48,7 +48,7 @@ export default function Eras() {
       <HeroItemCard
         title="View My Fuel Cells"
         description="Get a detailed dashboard of your fuel cells and the amount you made $$$!"
-        backgroundImage={IMAGEKIT_IMAGES.MINTING}
+        backgroundGif={IMAGEKIT_GIFS.DARK_TO_FUEL_CELL}
         animateFrom="left"
         className="object-[0px_25%]"
         cardExternalLink="/myfuelcells"

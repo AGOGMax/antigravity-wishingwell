@@ -7,6 +7,7 @@ import FuelCellTable from "@/components/FuelCellTable";
 import { LeagueMapping } from "./LeagueMapping";
 import { cn } from "@/lib/tailwindUtils";
 import PieChartComponent from "@/components/PieChart/PieChartComponent";
+import { neonColors } from "./ColorMapping";
 
 type tableDataType = {
   journeySummary: Array<{
@@ -67,9 +68,10 @@ export default function MyFuelCells() {
   }
 
   const pieChartData = useMemo(() => {
-    return tableData?.journeySummary?.map((journey) => ({
+    return tableData?.journeySummary?.map((journey, i) => ({
       value: journey.totalFuelCells,
       label: `Journey ${journey.journeyId}`,
+      color: neonColors[i],
     }));
   }, [tableData]);
 
@@ -151,7 +153,7 @@ export default function MyFuelCells() {
       <FuelCellTable tableData={tableData} price={price || "0"} />
       <div className="flex justify-between bg-black border border-[#3d3d3d] rounded-2xl p-8 mb-8 w-[70%] text-white">
         <div className="flex flex-col gap-2 w-1/2">
-          <h2 className="text-2xl font-bold text-white mb-4">
+          <h2 className="text-2xl font-bold text-[#f0f0f0] mb-4">
             FUEL CELLS SUPPLY
           </h2>
 
@@ -162,12 +164,17 @@ export default function MyFuelCells() {
             </span>
           </div>
 
-          {tableData?.journeySummary?.map((journey) => (
+          {tableData?.journeySummary?.map((journey, i) => (
             <div key={journey.journeyId} className="flex justify-between py-1">
               <span className="text-sm text-[#ccc]">
                 Journey #{journey.journeyId}
               </span>
-              <span className="text-sm font-semibold text-white">
+              <span
+                className={cn(
+                  "text-sm font-semibold",
+                  `text-[${neonColors[i]}]`,
+                )}
+              >
                 {journey.totalFuelCells}
               </span>
             </div>
