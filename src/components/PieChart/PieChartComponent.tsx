@@ -50,6 +50,17 @@ const PieChartComponent: React.FC<PieChartComponentProps> = ({
           gap: "8px",
           color: "white",
         },
+        [".MuiChartsLegend-root"]: {
+          display: "flex",
+          flexWrap: "wrap",
+          fontFamily: "Cabinet Grotesk, sans-serif",
+          padding: "6px",
+        },
+      }}
+      slotProps={{
+        legend: {
+          direction: "horizontal",
+        },
       }}
       width={width}
       height={height}

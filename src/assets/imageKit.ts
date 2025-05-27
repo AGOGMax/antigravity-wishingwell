@@ -107,6 +107,10 @@ export const IMAGEKIT_IMAGES = {
   PINK_MIST_WHALE_COING_BG: `${IMAGEKIT}/pink-mist-well-bg-resize.png`,
 };
 
+export const IMAGEKIT_GIFS={
+  DARK_TO_FUEL_CELL: `${IMAGEKIT}/dark_matter_to_fuel_cell_gif.gif`
+}
+
 export const IMAGEKIT_COLLECTIVE = {
   ANTIGRAVITY_MEETUP_1: {
     link: `${IMAGEKIT_COLLECTIVE_URL}/1.jpg?updatedAt=1718985312834`,

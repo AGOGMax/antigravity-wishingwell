@@ -7,6 +7,7 @@ import FuelCellTable from "@/components/FuelCellTable";
 import { LeagueMapping } from "./LeagueMapping";
 import { cn } from "@/lib/tailwindUtils";
 import PieChartComponent from "@/components/PieChart/PieChartComponent";
+import { neonColors } from "./ColorMapping";
 
 type tableDataType = {
   journeySummary: Array<{
@@ -50,13 +51,11 @@ export default function MyFuelCells() {
   const [price, setPrice] = useState(
     process.env.NEXT_PUBLIC_DARK_ALL_TIME_HIGH_PRICE,
   );
-  console.log("price env", price);
 
   useEffect(() => {
     async function fetchData() {
       const data = await getFuelCellData();
       setTableData(data);
-      console.log("fuelcelldata", data);
     }
 
     fetchData();
@@ -67,9 +66,10 @@ export default function MyFuelCells() {
   }
 
   const pieChartData = useMemo(() => {
-    return tableData?.journeySummary?.map((journey) => ({
+    return tableData?.journeySummary?.map((journey, i) => ({
       value: journey.totalFuelCells,
       label: `Journey ${journey.journeyId}`,
+      color: neonColors[i],
     }));
   }, [tableData]);
 
@@ -81,29 +81,29 @@ export default function MyFuelCells() {
   }, [tableData]);
 
   return (
-    <div className="text-agwhite relative flex flex-col justify-start items-center w-full gap-[10px] pt-[100px] lg:pt-[200px] z-0">
+    <div className="text-agwhite relative flex flex-col justify-start items-center w-full gap-[10px] pt-[160px] lg:pt-[200px] z-0">
       <div className="flex flex-col gap-[10px] items-center justify-center m-0">
         {account.isConnected ? (
           <>
-            <span className="text-[28px] ">MY NFTS</span>
-            <span className="text-[32px] font-bold text-agyellow">
+            <span className="text-[24px] md:text-[28px] ">MY NFTS</span>
+            <span className="text-[28px] md:text-[32px] font-bold text-agyellow">
               {currentEmoji} {currentLeague} {currentEmoji}
             </span>
-            <span className="text-[24px]">
+            <span className="text-[16px] md:text-[24px]">
               {tableData?.league?.fuelCellsToNext} more NFTS to reach{" "}
               {tableData?.league?.nextLeague}!!!
             </span>
           </>
         ) : (
-          <span className="text-[32px] font-bold">
+          <span className="text-[28px] md:text-[32px] font-bold">
             Connect Your Wallet To See Your Fuel Cell Data!
           </span>
         )}
       </div>
-      <div className="flex gap-[10px] items-center justify-center">
+      <div className="flex flex-wrap gap-[10px] mt-2 items-center justify-center">
         <button
           className={cn(
-            "border-[2px] rounded-[8px] px-5 py-2 text-agblack",
+            "border-[2px] rounded-[8px] px-2 md:px-5 py-2 text-agblack",
             selected === "current"
               ? "bg-[#FEE4A9] border-[#FF9C0D]"
               : "bg-[#92E4FC] border-[#10739D]",
@@ -117,7 +117,7 @@ export default function MyFuelCells() {
         </button>
         <button
           className={cn(
-            "border-[2px] rounded-[8px] px-5 py-2 text-agblack",
+            "border-[2px] rounded-[8px] px-2 md:px-5 py-2 text-agblack",
             selected === "alltime"
               ? "bg-[#FEE4A9] border-[#FF9C0D]"
               : "bg-[#92E4FC] border-[#10739D]",
@@ -128,7 +128,7 @@ export default function MyFuelCells() {
         </button>
         <button
           className={cn(
-            "border-[2px] rounded-[8px] px-5 py-2 text-agblack",
+            "border-[2px] rounded-[8px] px-2 md:px-5 py-2 text-agblack",
             selected === "moonmath"
               ? "bg-[#FEE4A9] border-[#FF9C0D]"
               : "bg-[#92E4FC] border-[#10739D]",
@@ -149,9 +149,9 @@ export default function MyFuelCells() {
         )}
       </div>
       <FuelCellTable tableData={tableData} price={price || "0"} />
-      <div className="flex justify-between bg-black border border-[#3d3d3d] rounded-2xl p-8 mb-8 w-[70%] text-white">
+      <div className="flex flex-col-reverse items-center sm:flex-row justify-between gap-10 md:gap-20 bg-black border border-[#3d3d3d] rounded-2xl p-8 mb-8 w-[70%] text-white">
         <div className="flex flex-col gap-2 w-1/2">
-          <h2 className="text-2xl font-bold text-white mb-4">
+          <h2 className="text-2xl font-bold text-[#f0f0f0] mb-4">
             FUEL CELLS SUPPLY
           </h2>
 
@@ -162,12 +162,17 @@ export default function MyFuelCells() {
             </span>
           </div>
 
-          {tableData?.journeySummary?.map((journey) => (
+          {tableData?.journeySummary?.map((journey, i) => (
             <div key={journey.journeyId} className="flex justify-between py-1">
               <span className="text-sm text-[#ccc]">
                 Journey #{journey.journeyId}
               </span>
-              <span className="text-sm font-semibold text-white">
+              <span
+                className={cn(
+                  "text-sm font-semibold",
+                  `text-[${neonColors[i]}]`,
+                )}
+              >
                 {journey.totalFuelCells}
               </span>
             </div>

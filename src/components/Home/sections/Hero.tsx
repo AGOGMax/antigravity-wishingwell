@@ -4,7 +4,7 @@ import Spinner from "@/components/Home/components/Spinner";
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import HeroItemCard from "@/components/Home/components/HeroItemCard";
-import { IMAGEKIT_IMAGES } from "@/assets/imageKit";
+import { IMAGEKIT_IMAGES, IMAGEKIT_GIFS } from "@/assets/imageKit";
 import useTimer from "@/hooks/frontend/useTimer";
 import useClaim from "@/hooks/sc-fns/useClaim";
 
@@ -84,7 +84,7 @@ export default function Hero() {
         <HeroItemCard
           title="View My Fuel Cells"
           description="Get a detailed dashboard of your fuel cells and the amount you made $$$!"
-          backgroundImage={IMAGEKIT_IMAGES.MINTING}
+          backgroundGif={IMAGEKIT_GIFS.DARK_TO_FUEL_CELL}
           animateFrom="right"
           cardExternalLink="/myfuelcells"
           defaultImageOpacity={0.5}

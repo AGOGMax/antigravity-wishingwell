@@ -23,7 +23,6 @@ interface tableData {
 }
 
 export default function FuelCellTable({ tableData, price }: tableData) {
-  console.log("price", price);
   const currentJourneyId = tableData?.journeySummary?.length;
   const body = tableData?.journeySummary?.map((journey) => [
     journey.journeyId,

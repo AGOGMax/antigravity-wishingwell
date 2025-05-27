@@ -24,7 +24,9 @@ type HeroItemCardProps = {
   /**
    * Background image of the card
    */
-  backgroundImage: StaticImport | string;
+  backgroundImage?: StaticImport | string;
+  backgroundGif?: string;
+
   /**
    * Animation direction of the card when it enters the viewport
    */
@@ -64,6 +66,7 @@ export default function HeroItemCard({
   title,
   description,
   backgroundImage,
+  backgroundGif,
   animateFrom = "none",
   defaultImageOpacity = 0.65,
   hoverImageOpacity = 0.25,
@@ -101,20 +104,38 @@ export default function HeroItemCard({
         onMouseMove={() => setHover(true)}
         onMouseEnter={() => setHover(true)}
       >
-        <Image
-          src={backgroundImage}
-          alt="Wishing Well"
-          quality={100}
-          height={1136}
-          width={1024}
-          style={{
-            opacity: hover ? hoverImageOpacity : defaultImageOpacity,
-          }}
-          className={twMerge(
-            "absolute top-0 left-0 object-cover h-full w-full -z-10 transition-opacity duration-500",
-            className ?? "",
-          )}
-        />
+        {backgroundImage && (
+          <Image
+            src={backgroundImage}
+            alt="Wishing Well"
+            quality={100}
+            height={1136}
+            width={1024}
+            style={{
+              opacity: hover ? hoverImageOpacity : defaultImageOpacity,
+            }}
+            className={twMerge(
+              "absolute top-0 left-0 object-cover h-full w-full -z-10 transition-opacity duration-500",
+              className ?? "",
+            )}
+          />
+        )}
+
+        {backgroundGif && (
+          <img
+            src={backgroundGif}
+            alt="Background GIF"
+            height={1136}
+            width={1024}
+            style={{
+              opacity: hover ? hoverImageOpacity : defaultImageOpacity,
+            }}
+            className={twMerge(
+              "absolute top-0 left-0 object-cover h-full w-full -z-10 transition-opacity duration-500",
+              className ?? "",
+            )}
+          />
+        )}
         <H1>{title}</H1>
         <motion.p
           animate={{ height: hover ? "auto" : 0 }}
