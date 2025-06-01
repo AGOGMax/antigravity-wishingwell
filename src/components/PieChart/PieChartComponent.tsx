@@ -33,7 +33,7 @@ const PieChartComponent: React.FC<PieChartComponentProps> = ({
       series={[
         {
           arcLabel: getArcLabel,
-          arcLabelMinAngle: 35,
+          arcLabelMinAngle: 20,
           highlightScope: { fade: "global", highlight: "item" },
           faded: { innerRadius: 30, additionalRadius: -30, color: "gray" },
           data: formattedData,

@@ -10,6 +10,7 @@ type TableProps = {
   className?: string;
   headerClassName?: string;
   bodyClassName?: string;
+  isGreenArr?: Array<boolean>;
 };
 
 export default function GenericTable({
@@ -18,11 +19,12 @@ export default function GenericTable({
   className,
   headerClassName,
   bodyClassName,
+  isGreenArr,
 }: TableProps) {
   return (
     <div
       className={cn(
-        "max-h-[300px] max-w-[80vw] w-full lg:w-fit overflow-y-auto [scroll-snap-type]:[y_mandatory] rounded-[6px] md:mr-[8px]",
+        "max-w-[80vw] w-full lg:w-fit overflow-y-auto [scroll-snap-type]:[y_mandatory] rounded-[6px] md:mr-[8px]",
         className,
       )}
     >
@@ -34,14 +36,19 @@ export default function GenericTable({
                 key={i}
                 className={cn(Gradients.redToBlue, `p-[1px] sticky top-0 z-10`)}
               >
-                <div className={cn("bg-agblack", "px-[12px] py-[10px] h-full")}>
+                <div
+                  className={cn(
+                    "bg-agblack",
+                    "px-[12px] py-[10px] h-full min-h-[72px]",
+                  )}
+                >
                   <div
                     className={cn(
                       Gradients.whiteGradientText,
                       "uppercase tracking-widest text-[14px] leading-[24px] font-sans",
                       "[&_svg]:text-[24px] text-center",
                       "grid grid-flow-col gap-[8px]",
-                      "[&_img]:[min-w-[24px] min-h-[24px]] h-full flex items-center justify-center",
+                      "[&_img]:[min-w-[24px] min-h-[72px] h-full flex items-center justify-center",
                       headerClassName,
                     )}
                   >
@@ -62,9 +69,13 @@ export default function GenericTable({
                       className={cn(
                         "uppercase tracking-widest text-[14px] font-general-sans font-medium",
                         "[&_svg]:text-[24px]",
-                        "relative flex gap-[8px] items-centerr justify-center",
+                        "relative flex gap-[8px] items-center justify-center",
                         "px-[12px] py-[10px]",
                         bodyClassName,
+                        isGreenArr &&
+                          (isGreenArr[i] && j === 5
+                            ? "text-[#80ed99] font-bold"
+                            : null),
                       )}
                     >
                       {cell}

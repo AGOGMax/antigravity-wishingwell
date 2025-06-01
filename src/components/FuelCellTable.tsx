@@ -1,6 +1,7 @@
 "use client";
 
 import GenericTable from "@/components/GenericTable/GenericTable";
+import { useEffect, useState } from "react";
 
 interface tableData {
   tableData: {
@@ -29,19 +30,42 @@ export default function FuelCellTable({ tableData, price }: tableData) {
     journey.userFuelCells ?? 0,
     journey.darkAmount,
     `$${(parseFloat(journey.darkAmount) * parseFloat(price ? price : "0")).toFixed(3)}`,
+    `$${(parseFloat(journey.darkAmount) * (journey.userFuelCells ?? 0)).toFixed(3)}`,
+    `$${(parseFloat(journey.darkAmount) * parseFloat(price ? price : "0") * (journey.userFuelCells ?? 0)).toFixed(3)}`,
+
     journey.projectedDark,
     `$${(parseFloat(journey.projectedDark) * parseFloat(price ? price : "0")).toFixed(3)}`,
     "?",
     "?",
   ]);
 
+  const [isGreenArr, setIsGreenArr] = useState([] as Array<boolean>);
+
+  useEffect(() => {
+    const arr = tableData?.journeySummary?.map((journey) => {
+      if (
+        parseFloat(journey.darkAmount) *
+          parseFloat(price ? price : "0") *
+          (journey.userFuelCells ?? 0) >
+        0
+      ) {
+        return true;
+      }
+      return false;
+    });
+
+    setIsGreenArr(arr);
+  }, [tableData.journeySummary]);
+
   return (
     <GenericTable
       header={[
-        "Journey #",
+        "Journey",
         "Fuel Cells",
-        "Total Dark",
+        "Dark Value",
         "USD Value",
+        "Your Total Dark",
+        "Total USD Value",
         `Projected Dark After J${currentJourneyId}`,
         `Projected USD After J${currentJourneyId}`,
         `Projected Dark After J${currentJourneyId + 1}`,
@@ -51,6 +75,7 @@ export default function FuelCellTable({ tableData, price }: tableData) {
       className="my-4"
       headerClassName="text-white"
       bodyClassName="text-gray-200"
+      isGreenArr={isGreenArr}
     />
   );
 }
