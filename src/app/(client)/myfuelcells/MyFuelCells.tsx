@@ -89,13 +89,30 @@ export default function MyFuelCells() {
             <span className="text-[28px] md:text-[32px] font-bold text-agyellow">
               {currentEmoji} {currentLeague} {currentEmoji}
             </span>
+            {/* 
+            <div className="flex w-[95%] justify-between items-center bg-agwhite bg-opacity-30 px-2 rounded-[8px]">
+              <img
+                src="https://i.ibb.co/2750Prd9/dark-dolphin-removebg-preview.png"
+                alt="dark-dolphin-removebg-preview"
+                className="w-[80px]"
+              />
+              <span className="text-[32px] text-center font-bold text-agyellow">
+                {currentLeague}
+              </span>
+              <img
+                src="https://i.ibb.co/2750Prd9/dark-dolphin-removebg-preview.png"
+                alt="dark-dolphin-removebg-preview"
+                className="w-[80px]"
+              />
+            </div> */}
+
             <span className="text-[16px] md:text-[24px]">
               {tableData?.league?.fuelCellsToNext} more NFTS to reach{" "}
               {tableData?.league?.nextLeague}!!!
             </span>
           </>
         ) : (
-          <span className="text-[28px] md:text-[32px] font-bold">
+          <span className="text-[28px] text-center md:text-[32px] font-bold">
             Connect Your Wallet To See Your Fuel Cell Data!
           </span>
         )}
@@ -149,7 +166,7 @@ export default function MyFuelCells() {
         )}
       </div>
       <FuelCellTable tableData={tableData} price={price || "0"} />
-      <div className="flex flex-col-reverse items-center sm:flex-row justify-between gap-10 md:gap-20 bg-black border border-[#3d3d3d] rounded-2xl p-8 mb-8 w-[70%] text-white">
+      <div className="flex flex-col-reverse items-center sm:flex-row justify-between gap-10 md:gap-20 bg-black border border-[#3d3d3d] rounded-2xl p-8 mb-8 w-[80%] text-white">
         <div className="flex flex-col gap-2 w-1/2">
           <h2 className="text-2xl font-bold text-[#f0f0f0] mb-4">
             FUEL CELLS SUPPLY
@@ -168,10 +185,8 @@ export default function MyFuelCells() {
                 Journey #{journey.journeyId}
               </span>
               <span
-                className={cn(
-                  "text-sm font-semibold",
-                  `text-[${neonColors[i]}]`,
-                )}
+                className="text-sm font-semibold"
+                style={{ color: neonColors[i] }}
               >
                 {journey.totalFuelCells}
               </span>
