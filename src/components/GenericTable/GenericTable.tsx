@@ -21,7 +21,6 @@ export default function GenericTable({
   bodyClassName,
   isGreenArr,
 }: TableProps) {
-  console.log("isgreenarr", isGreenArr);
   return (
     <div
       className={cn(

@@ -43,12 +43,6 @@ export default function FuelCellTable({ tableData, price }: tableData) {
 
   useEffect(() => {
     const arr = tableData?.journeySummary?.map((journey) => {
-      console.log(
-        "total usd value user",
-        parseFloat(journey.darkAmount) *
-          parseFloat(price ? price : "0") *
-          (journey.userFuelCells ?? 0),
-      );
       if (
         parseFloat(journey.darkAmount) *
           parseFloat(price ? price : "0") *
