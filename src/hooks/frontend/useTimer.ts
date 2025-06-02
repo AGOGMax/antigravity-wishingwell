@@ -2,10 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { client } from "../../../sanity/lib/client";
-import axios from "axios";
-import { API_ENDPOINT } from "@/constants";
 import { useAccount } from "wagmi";
-import { fetcher } from "@/api/restClient";
 import { useRestPost } from "../useRestClient";
 
 export type CountdownType = {
@@ -180,7 +177,8 @@ export default function useTimer() {
           isJourneyPaused: journeyData?.isJourneyPaused,
           nextJourneyTimestamp: journeyData?.nextJourneyTimestamp * 1000,
           mintEndTimestamp: journeyData?.mintEndTimestamp * 1000,
-          nextPhaseStartTimestamp: Number(journeyData?.nextPhaseStartTimestamp) * 1000,
+          nextPhaseStartTimestamp:
+            Number(journeyData?.nextPhaseStartTimestamp) * 1000,
         };
         const now = new Date().getTime();
         const era2End = new Date(
@@ -436,14 +434,12 @@ export default function useTimer() {
                 claimTransition: false,
                 mintingTransition: false,
                 isMintingActive: true,
-                journey: Number(timestamps?.mintingTimestamps.currentJourney) as
-                  | 1
-                  | 2
-                  | 3,
-                phaseNumber: Number(timestamps?.mintingTimestamps.currentPhase) as
-                  | 1
-                  | 2
-                  | 3,
+                journey: Number(
+                  timestamps?.mintingTimestamps.currentJourney,
+                ) as 1 | 2 | 3,
+                phaseNumber: Number(
+                  timestamps?.mintingTimestamps.currentPhase,
+                ) as 1 | 2 | 3,
                 isJourneyPaused: timestamps?.mintingTimestamps.isJourneyPaused,
                 nextJourneyTimeStamp:
                   timestamps?.mintingTimestamps.nextJourneyTimestamp,
@@ -470,7 +466,7 @@ export default function useTimer() {
                 mintingTransition: false,
                 isMintingActive: true,
                 journey: Number(
-                 Number(timestamps?.mintingTimestamps.currentJourney),
+                  Number(timestamps?.mintingTimestamps.currentJourney),
                 ) as 1 | 2 | 3,
                 phaseNumber: Number(
                   Number(timestamps?.mintingTimestamps.currentPhase),

@@ -1,7 +1,7 @@
 "use client";
 
 import GenericTable from "@/components/GenericTable/GenericTable";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 interface tableData {
   tableData: {
@@ -25,19 +25,85 @@ interface tableData {
 
 export default function FuelCellTable({ tableData, price }: tableData) {
   const currentJourneyId = tableData?.journeySummary?.length;
-  const body = tableData?.journeySummary?.map((journey) => [
-    journey.journeyId,
-    journey.userFuelCells ?? 0,
-    journey.darkAmount,
-    `$${(parseFloat(journey.darkAmount) * parseFloat(price ? price : "0")).toFixed(3)}`,
-    `$${(parseFloat(journey.darkAmount) * (journey.userFuelCells ?? 0)).toFixed(3)}`,
-    `$${(parseFloat(journey.darkAmount) * parseFloat(price ? price : "0") * (journey.userFuelCells ?? 0)).toFixed(3)}`,
 
-    journey.projectedDark,
-    `$${(parseFloat(journey.projectedDark) * parseFloat(price ? price : "0")).toFixed(3)}`,
-    "?",
-    "?",
-  ]);
+  const data = useMemo(() => {
+    if (!tableData?.journeySummary) return { body: [], totalRow: [] };
+
+    const totals = {
+      totalUserFuelCells: 0,
+      totalDarkAmount: 0,
+      totalUsdValue: 0,
+      totalUserDarkAmount: 0,
+      totalUserDarkUsdValue: 0,
+      totalProjectedDark: 0,
+      totalProjectedDarkUsdValue: 0,
+    };
+
+    const body = tableData.journeySummary.map((journey) => {
+      const {
+        journeyId,
+        darkAmount,
+        userFuelCells = 0,
+        projectedDark,
+      } = journey;
+
+      const dark = parseFloat(darkAmount);
+      const projected = parseFloat(projectedDark);
+      const priceNum = parseFloat(price);
+      const usdValue = dark * priceNum;
+      const yourTotalDark = dark * userFuelCells;
+      const userUsdValue = usdValue * userFuelCells;
+      const projectedUsdValue = projected * priceNum;
+
+      totals.totalUserFuelCells += userFuelCells;
+      totals.totalDarkAmount += dark;
+      totals.totalUsdValue += usdValue;
+      totals.totalUserDarkAmount += yourTotalDark;
+      totals.totalUserDarkUsdValue += userUsdValue;
+      totals.totalProjectedDark += projected;
+      totals.totalProjectedDarkUsdValue += projectedUsdValue;
+
+      return [
+        journeyId,
+        userFuelCells,
+        dark.toFixed(3),
+        `$${usdValue.toFixed(3)}`,
+        `$${yourTotalDark.toFixed(3)}`,
+        `$${userUsdValue.toFixed(3)}`,
+        projected.toFixed(3),
+        `$${projectedUsdValue.toFixed(3)}`,
+        "?",
+        "?",
+      ];
+    });
+
+    const {
+      totalUserFuelCells,
+      totalDarkAmount,
+      totalUsdValue,
+      totalUserDarkAmount,
+      totalUserDarkUsdValue,
+      totalProjectedDark,
+      totalProjectedDarkUsdValue,
+    } = totals;
+
+    const totalRow = [
+      "Total",
+      totalUserFuelCells,
+      totalDarkAmount.toFixed(3),
+      `$${totalUsdValue.toFixed(3)}`,
+      `$${totalUserDarkAmount.toFixed(3)}`,
+      `$${totalUserDarkUsdValue.toFixed(3)}`,
+      totalProjectedDark.toFixed(3),
+      `$${totalProjectedDarkUsdValue.toFixed(3)}`,
+      "?",
+      "?",
+    ];
+
+    return { body, totalRow };
+  }, [tableData, price]);
+
+  const { body, totalRow } = data;
 
   const [isGreenArr, setIsGreenArr] = useState([] as Array<boolean>);
 
@@ -71,7 +137,7 @@ export default function FuelCellTable({ tableData, price }: tableData) {
         `Projected Dark After J${currentJourneyId + 1}`,
         `Projected USD After J${currentJourneyId + 1}`,
       ]}
-      body={body}
+      body={[...body, totalRow]}
       className="my-4"
       headerClassName="text-white"
       bodyClassName="text-gray-200"
