@@ -27,7 +27,15 @@ export default function FuelCellTable({ tableData, price }: tableData) {
   const currentJourneyId = tableData?.journeySummary?.length;
 
   const data = useMemo(() => {
-    if (!tableData?.journeySummary) return { body: [], totalRow: [] };
+    if (!tableData?.journeySummary) {
+      return {
+        body: [],
+        totalRow: {
+          cells: [],
+          blackBackground: true,
+        },
+      };
+    }
 
     const totals = {
       totalUserFuelCells: 0,
@@ -63,18 +71,20 @@ export default function FuelCellTable({ tableData, price }: tableData) {
       totals.totalProjectedDark += projected;
       totals.totalProjectedDarkUsdValue += projectedUsdValue;
 
-      return [
-        journeyId,
-        userFuelCells,
-        dark.toFixed(3),
-        `$${usdValue.toFixed(3)}`,
-        `$${yourTotalDark.toFixed(3)}`,
-        `$${userUsdValue.toFixed(3)}`,
-        projected.toFixed(3),
-        `$${projectedUsdValue.toFixed(3)}`,
-        "?",
-        "?",
-      ];
+      return {
+        cells: [
+          journeyId,
+          userFuelCells,
+          dark.toFixed(3),
+          `$${usdValue.toFixed(3)}`,
+          `$${yourTotalDark.toFixed(3)}`,
+          `$${userUsdValue.toFixed(3)}`,
+          projected.toFixed(3),
+          `$${projectedUsdValue.toFixed(3)}`,
+          "?",
+          "?",
+        ],
+      };
     });
 
     const {
@@ -87,41 +97,26 @@ export default function FuelCellTable({ tableData, price }: tableData) {
       totalProjectedDarkUsdValue,
     } = totals;
 
-    const totalRow = [
-      "Total",
-      totalUserFuelCells,
-      totalDarkAmount.toFixed(3),
-      `$${totalUsdValue.toFixed(3)}`,
-      `$${totalUserDarkAmount.toFixed(3)}`,
-      `$${totalUserDarkUsdValue.toFixed(3)}`,
-      totalProjectedDark.toFixed(3),
-      `$${totalProjectedDarkUsdValue.toFixed(3)}`,
-      "?",
-      "?",
-    ];
+    const totalRow = {
+      cells: [
+        "Total",
+        totalUserFuelCells,
+        totalDarkAmount.toFixed(3),
+        `$${totalUsdValue.toFixed(3)}`,
+        `$${totalUserDarkAmount.toFixed(3)}`,
+        `$${totalUserDarkUsdValue.toFixed(3)}`,
+        totalProjectedDark.toFixed(3),
+        `$${totalProjectedDarkUsdValue.toFixed(3)}`,
+        "?",
+        "?",
+      ],
+      blackBackground: true,
+    };
 
     return { body, totalRow };
   }, [tableData, price]);
 
   const { body, totalRow } = data;
-
-  const [isGreenArr, setIsGreenArr] = useState([] as Array<boolean>);
-
-  useEffect(() => {
-    const arr = tableData?.journeySummary?.map((journey) => {
-      if (
-        parseFloat(journey.darkAmount) *
-          parseFloat(price ? price : "0") *
-          (journey.userFuelCells ?? 0) >
-        0
-      ) {
-        return true;
-      }
-      return false;
-    });
-
-    setIsGreenArr(arr);
-  }, [tableData.journeySummary]);
 
   return (
     <GenericTable
@@ -141,7 +136,7 @@ export default function FuelCellTable({ tableData, price }: tableData) {
       className="my-4"
       headerClassName="text-white"
       bodyClassName="text-gray-200"
-      isGreenArr={isGreenArr}
+      highlightPositiveInColumns={[3, 5, 7]}
     />
   );
 }

@@ -4,13 +4,18 @@ import { Gradients } from "@/lib/tailwindClassCombinators";
 import { cn } from "@/lib/tailwindUtils";
 import { ReactNode } from "react";
 
+type TableRow = {
+  cells: Array<number | string | boolean | React.ReactNode>;
+  blackBackground?: boolean;
+};
+
 type TableProps = {
   header: React.ReactNode[];
-  body: Array<Array<number | string | boolean | ReactNode>>;
+  body: Array<TableRow>;
   className?: string;
   headerClassName?: string;
   bodyClassName?: string;
-  isGreenArr?: Array<boolean>;
+  highlightPositiveInColumns?: number[];
 };
 
 export default function GenericTable({
@@ -19,7 +24,7 @@ export default function GenericTable({
   className,
   headerClassName,
   bodyClassName,
-  isGreenArr,
+  highlightPositiveInColumns,
 }: TableProps) {
   return (
     <div
@@ -62,8 +67,14 @@ export default function GenericTable({
         <tbody className={cn(Gradients.tableBlue, "relative")}>
           {body?.length ? (
             body.map((row, i) => (
-              <tr key={i} className="[scroll-snap-align]:[start]">
-                {row.map((cell, j) => (
+              <tr
+                key={i}
+                className={cn(
+                  "[scroll-snap-align]:[start]",
+                  row.blackBackground ? "bg-agblack" : "",
+                )}
+              >
+                {row.cells?.map((cell, j) => (
                   <td key={j} className="border-[1px] border-agpurple">
                     <div
                       className={cn(
@@ -72,10 +83,10 @@ export default function GenericTable({
                         "relative flex gap-[8px] items-center justify-center",
                         "px-[12px] py-[10px]",
                         bodyClassName,
-                        isGreenArr &&
-                          (isGreenArr[i] && j === 5
-                            ? "text-[#80ed99] font-bold"
-                            : null),
+                        highlightPositiveInColumns?.includes(j) &&
+                          parseFloat(String(cell).replace(/[^0-9.-]+/g, "")) > 0
+                          ? "text-[#80ed99] font-bold"
+                          : "",
                       )}
                     >
                       {cell}
