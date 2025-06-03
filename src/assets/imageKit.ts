@@ -1,4 +1,4 @@
-import { IMAGEKIT, TELEGRAM, YOUTUBE } from "@/constants";
+import { IMAGEKIT } from "@/constants";
 
 const IMAGEKIT_ICONS_URL = `${IMAGEKIT}/icons`;
 const IMAGEKIT_LOGOS_URL = `${IMAGEKIT}/logos`;
