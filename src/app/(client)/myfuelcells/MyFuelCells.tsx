@@ -86,25 +86,22 @@ export default function MyFuelCells() {
         {account.isConnected ? (
           <>
             <span className="text-[24px] md:text-[28px] ">MY NFTS</span>
-            <span className="text-[28px] md:text-[32px] font-bold text-agyellow">
-              {currentEmoji} {currentLeague} {currentEmoji}
-            </span>
-            {/* 
-            <div className="flex w-[95%] justify-between items-center bg-agwhite bg-opacity-30 px-2 rounded-[8px]">
+
+            <div className="flex w-full gap-5 justify-between items-center bg-agwhite bg-opacity-30 px-2 py-2 rounded-[8px]">
               <img
-                src="https://i.ibb.co/2750Prd9/dark-dolphin-removebg-preview.png"
-                alt="dark-dolphin-removebg-preview"
+                src={currentEmoji}
+                alt={currentLeague}
                 className="w-[80px]"
               />
               <span className="text-[32px] text-center font-bold text-agyellow">
                 {currentLeague}
               </span>
               <img
-                src="https://i.ibb.co/2750Prd9/dark-dolphin-removebg-preview.png"
-                alt="dark-dolphin-removebg-preview"
+                src={currentEmoji}
+                alt={currentLeague}
                 className="w-[80px]"
               />
-            </div> */}
+            </div>
 
             <span className="text-[16px] md:text-[24px]">
               {tableData?.league?.fuelCellsToNext} more NFTS to reach{" "}
