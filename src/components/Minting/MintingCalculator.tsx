@@ -479,7 +479,7 @@ function Multiplyer({ buymoreHighlight }: { buymoreHighlight?: boolean }) {
       >
         <div className="absolute inset-0 opacity-[0.66] bg-agblack -z-[1]"></div>
         <div className="text-[16px] leading-[19.2px] text-agwhite font-extrabold font-sans">
-          Total
+          Bonus
         </div>
         <div className="text-[32px] leading-[32px] text-agwhite font-extrabold font-sans">
           {multiplier}x
