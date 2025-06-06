@@ -149,7 +149,6 @@ export default function CaptureScreenshotButton({
       <button
         onClick={() => {
           setShowPopOver(!showPopOver);
-          console.log("popover", showPopOver);
         }}
         className={cn(
           "flex items-center gap-2 border-[2px] border-agwhite rounded-[8px] px-4 py-2 mx-auto",
@@ -164,7 +163,7 @@ export default function CaptureScreenshotButton({
         <div className="absolute top-[110%] left-1/2 -translate-x-1/2 flex flex-col items-center bg-[#121212] border border-white rounded-md shadow-lg px-2 py-2 space-y-2 z-50 min-w-[180px] w-max text-sm">
           <button
             onClick={() => {
-              handleCopy(), setShowPopOver(false);
+              setShowPopOver(false), handleCopy();
             }}
             className="w-max flex items-center justify-center gap-2 text-left text-white hover:text-black hover:bg-white rounded px-2 py-1 transition-colors duration-150"
           >
@@ -172,7 +171,7 @@ export default function CaptureScreenshotButton({
           </button>
           <button
             onClick={() => {
-              handleDownload(), setShowPopOver(false);
+              setShowPopOver(false), handleDownload();
             }}
             className="w-max flex items-center justify-center gap-2 text-left text-white hover:text-black hover:bg-white rounded px-2 py-1 transition-colors duration-150"
           >
