@@ -2,12 +2,13 @@
 
 import axios from "axios";
 import { useAccount } from "wagmi";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import FuelCellTable from "@/components/FuelCellTable";
 import { LeagueMapping } from "./LeagueMapping";
 import { cn } from "@/lib/tailwindUtils";
 import PieChartComponent from "@/components/PieChart/PieChartComponent";
 import { neonColors } from "./ColorMapping";
+import CaptureScreenshotButton from "@/components/MyFuelCells/CaptureScreenshotButton";
 
 type tableDataType = {
   journeySummary: Array<{
@@ -80,8 +81,14 @@ export default function MyFuelCells() {
     );
   }, [tableData]);
 
+  const screenshotRef = useRef(null);
+  const fullScreenshotRef = useRef(null);
+
   return (
-    <div className="text-agwhite relative flex flex-col justify-start items-center w-full gap-[10px] pt-[160px] lg:pt-[200px] z-0">
+    <div
+      ref={fullScreenshotRef}
+      className="text-agwhite relative flex flex-col justify-start items-center w-full gap-[10px] pt-[160px] lg:pt-[200px] z-0"
+    >
       <div className="flex flex-col gap-[10px] items-center justify-center m-0">
         {account.isConnected ? (
           <>
@@ -161,39 +168,57 @@ export default function MyFuelCells() {
             className="bg-black text-white placeholder-white border-[2px] border-[#FF9C0D] rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#FF9C0D] transition"
           />
         )}
+        <CaptureScreenshotButton
+          screenshotRef={fullScreenshotRef.current}
+          buttonText="Capture Screenshot"
+        />
       </div>
       <FuelCellTable tableData={tableData} price={price || "0"} />
-      <div className="flex flex-col-reverse items-center sm:flex-row justify-between gap-10 md:gap-20 bg-black border border-[#3d3d3d] rounded-2xl p-8 mb-8 w-[80%] text-white">
-        <div className="flex flex-col gap-2 w-1/2">
-          <h2 className="text-2xl font-bold text-[#f0f0f0] mb-4">
-            FUEL CELLS SUPPLY
-          </h2>
 
-          <div className="flex justify-between border-b border-[#3d3d3d] py-1">
-            <span className="text-sm text-[#f0f0f0]">Total Supply</span>
-            <span className="text-sm font-semibold text-[#FFA500]">
-              {totalFuelCellsForAllJourneys || 0}
-            </span>
-          </div>
+      <div
+        ref={screenshotRef}
+        className="flex flex-col gap-[10px] bg-black border border-[#3d3d3d] rounded-2xl p-8 mb-[64px] w-[80%] text-white"
+      >
+        <div className="flex flex-col-reverse items-center sm:flex-row justify-between gap-10 md:gap-20">
+          <div className="flex flex-col gap-2 w-1/2">
+            <h2 className="text-2xl font-bold text-[#f0f0f0] mb-4">
+              FUEL CELLS SUPPLY
+            </h2>
 
-          {tableData?.journeySummary?.map((journey, i) => (
-            <div key={journey.journeyId} className="flex justify-between py-1">
-              <span className="text-sm text-[#ccc]">
-                Journey #{journey.journeyId}
-              </span>
-              <span
-                className="text-sm font-semibold"
-                style={{ color: neonColors[i] }}
-              >
-                {journey.totalFuelCells}
+            <div className="flex justify-between border-b border-[#3d3d3d] py-1">
+              <span className="text-sm text-[#f0f0f0]">Total Supply</span>
+              <span className="text-sm font-semibold text-[#FFA500]">
+                {totalFuelCellsForAllJourneys || 0}
               </span>
             </div>
-          ))}
+
+            {tableData?.journeySummary?.map((journey, i) => (
+              <div
+                key={journey.journeyId}
+                className="flex justify-between py-1"
+              >
+                <span className="text-sm text-[#ccc]">
+                  Journey #{journey.journeyId}
+                </span>
+                <span
+                  className="text-sm font-semibold"
+                  style={{ color: neonColors[i] }}
+                >
+                  {journey.totalFuelCells}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <div className="w-1/2 flex justify-center items-center">
+            <PieChartComponent data={pieChartData} width={300} height={250} />
+          </div>
         </div>
 
-        <div className="w-1/2 flex justify-center items-center">
-          <PieChartComponent data={pieChartData} width={300} height={250} />
-        </div>
+        <CaptureScreenshotButton
+          screenshotRef={screenshotRef.current}
+          buttonText="Capture Screenshot"
+        />
       </div>
     </div>
   );
