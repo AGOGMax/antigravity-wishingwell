@@ -216,7 +216,7 @@ export default function MyFuelCells() {
         </div>
 
         <CaptureScreenshotButton
-          screenshotRef={fullScreenshotRef.current}
+          screenshotRef={screenshotRef.current}
           buttonText="Capture Screenshot"
         />
       </div>
