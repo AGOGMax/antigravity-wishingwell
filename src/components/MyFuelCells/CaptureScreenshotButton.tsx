@@ -15,7 +15,7 @@ const COPY_TOAST_SETTINGS: ToastOptions = {
   style: {
     fontSize: "16px",
     width: "auto",
-    maxWidth: "30vw",
+    maxWidth: "50vw",
     padding: "12px 16px",
   },
   icon: <PiCopyFill />,
@@ -27,7 +27,7 @@ const DOWNLOAD_TOAST_SETTINGS: ToastOptions = {
   style: {
     fontSize: "16px",
     width: "auto",
-    maxWidth: "30vw",
+    maxWidth: "50vw",
     padding: "12px 16px",
   },
   icon: <PiDownloadFill />,
@@ -39,7 +39,7 @@ const ERROR_TOAST_SETTINGS: ToastOptions = {
   style: {
     fontSize: "16px",
     width: "auto",
-    maxWidth: "30vw",
+    maxWidth: "50vw",
     padding: "12px 16px",
   },
   icon: <PiXCircleDuotone />,
