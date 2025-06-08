@@ -71,6 +71,7 @@ export const IMAGEKIT_ICONS = {
   SNIPE_5_ICON: `${IMAGEKIT_ICONS_URL}/snipe5.png`,
   SNIPE_10_ICON: `${IMAGEKIT_ICONS_URL}/snipe10.png`,
   SNIPE_20_ICON: `${IMAGEKIT_ICONS_URL}/snipe20.png`,
+  GIFT_WHITE: `${IMAGEKIT_ICONS_URL}/GIFT_WHITE.svg?updatedAt=1749384509141`,
 };
 
 export const IMAGEKIT_IMAGES = {
@@ -107,9 +108,9 @@ export const IMAGEKIT_IMAGES = {
   PINK_MIST_WHALE_COING_BG: `${IMAGEKIT}/pink-mist-well-bg-resize.png`,
 };
 
-export const IMAGEKIT_GIFS={
-  DARK_TO_FUEL_CELL: `${IMAGEKIT}/dark_matter_to_fuel_cell_gif.gif`
-}
+export const IMAGEKIT_GIFS = {
+  DARK_TO_FUEL_CELL: `${IMAGEKIT}/dark_matter_to_fuel_cell_gif.gif`,
+};
 
 export const IMAGEKIT_COLLECTIVE = {
   ANTIGRAVITY_MEETUP_1: {

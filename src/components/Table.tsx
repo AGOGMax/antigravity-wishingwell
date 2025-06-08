@@ -14,6 +14,7 @@ import {
 import pointsConverterToUSCommaseparated from "./pointsConverterToUSCommaseparated";
 import H1 from "./HTML/H1";
 import P from "./HTML/P";
+import { RankToRewardMapping } from "./RankToRewardMapping";
 
 function TH({
   icon,
@@ -174,7 +175,7 @@ function TR({
         delay: position ? parseFloat((position * 0.1).toFixed(2)) : 0,
       }}
       className={twMerge(
-        "relative grid grid-cols-[2fr_1fr] md:grid-cols-[2fr_1fr_1fr] w-full md:border-l-2 border-b-2 border-[#414343] md:border-[#8275A5] z-0",
+        "relative grid grid-cols-[2fr_1fr] md:grid-cols-[2fr_1fr_1fr_1fr] w-full md:border-l-2 border-b-2 border-[#414343] md:border-[#8275A5] z-0",
         special && " text-black font-extrabold  border-none",
         empty &&
           "bg-gradient-to-b from-[#142266] via-[#0A1133] to-[#142266] border-r-2",
@@ -221,12 +222,11 @@ function Rank({
   special?: boolean;
   badge: string;
 }) {
-  const iconLink = `@/assets/icons/${special ? "wallet-black.svg" : "wallet.svg"}`;
   return (
     <TD special={special} border className="w-full">
       #{rank} <Badge special={special}>{badge}</Badge>
       <div
-        className={`flex gap-[4px] justify-start items-center md:hidden ${
+        className={`flex gap-[8px] justify-start items-center md:hidden ${
           special
             ? "text-[22px] leading-[28.6px] md:text-[18px] md:leading-[23.6px]"
             : "text-[18px] leading-[23.4px]"
@@ -255,6 +255,25 @@ function Rank({
   );
 }
 
+function Reward({ badge }: { badge: string; special?: boolean }) {
+  return (
+    <TD border className="w-full">
+      <div
+        className={`flex gap-[8px] justify-start items-start text-[18px] leading-[23.4px]`}
+      >
+        <Image
+          src={IMAGEKIT_ICONS.GIFT_WHITE}
+          alt="reward icon"
+          width={60}
+          height={60}
+          className="object-cover md:hidden" // Show only on mobile if desired
+        />
+        {RankToRewardMapping[badge as keyof typeof RankToRewardMapping]}
+      </div>
+    </TD>
+  );
+}
+
 type tableDataType = {
   rank: number;
   badge: string;
@@ -262,12 +281,6 @@ type tableDataType = {
   points: number;
   special?: boolean;
 } | null;
-
-type tableHeaderType = {
-  icon: string | StaticImport;
-  heading: string;
-  className?: string;
-};
 
 export default function Table({
   tableData: currentTableData,
@@ -301,11 +314,6 @@ export default function Table({
     >
       <thead className="w-full">
         <TR th>
-          {/* {
-              tableHeader.map((header, idx) => (
-                  <TH key={idx} icon={header.icon} heading={header.heading} className={header.className} />
-              ))
-          } */}
           <TH
             icon={IMAGEKIT_ICONS.LEADERBOARD}
             heading="Rank"
@@ -342,6 +350,19 @@ export default function Table({
               },
             }}
           />
+          <TH
+            icon={IMAGEKIT_ICONS.GIFT_WHITE}
+            heading="Rewards"
+            className="hidden md:flex"
+            variants={{
+              hover: {
+                animationName: "wiggle",
+                animationDuration: "1s",
+                animationFillMode: "forwards",
+                animationTimingFunction: "linear",
+              },
+            }}
+          />
         </TR>
       </thead>
       <motion.tbody
@@ -354,11 +375,7 @@ export default function Table({
             <AnimatePresence>
               {tableData.map((data, idx) =>
                 data !== null ? (
-                  <TR
-                    key={idx}
-                    special={data.special ?? false}
-                    position={idx}
-                  >
+                  <TR key={idx} special={data.special ?? false} position={idx}>
                     <Rank
                       rank={data.rank}
                       wallet={data.wallet}
@@ -397,6 +414,7 @@ export default function Table({
                         )}
                       </span>
                     </TD>
+                    <Reward badge={data.badge} />
                   </TR>
                 ) : (
                   <TR key={idx} className="h-[2.5rem]" empty>
