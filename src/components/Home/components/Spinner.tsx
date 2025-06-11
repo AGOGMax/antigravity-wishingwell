@@ -736,21 +736,21 @@ const decideArcSectorAngles = (
 } => {
   if (timer?.phaseNumber === 1) {
     // Current: Minting
-    return { startAngle: -47, endAngle: 47 };
+    return { startAngle: -135, endAngle: 225 };
   } else if (timer?.phaseNumber === 2) {
     if (lotteryTimerData?.lotteriesInfo?.lotteryId === "3") {
       // Current: Lottery 1
-      return { startAngle: 47, endAngle: 137 };
+      return { startAngle: 223, endAngle: 313 };
     } else if (lotteryTimerData?.lotteriesInfo?.lotteryId === "1") {
       // Current: Lottery 2
-      return { startAngle: 135, endAngle: 225 };
+      return { startAngle: -47, endAngle: 47 };
     } else if (lotteryTimerData?.lotteriesInfo?.lotteryId === "2") {
       // Current: Lottery 3
-      return { startAngle: 223, endAngle: 313 };
+      return { startAngle: 47, endAngle: 137 };
     }
   } else {
     // Current: Lottery 3 (Ideally, Payout Time or Buffer Time)
-    return { startAngle: 223, endAngle: 313 };
+    return { startAngle: 47, endAngle: 137 };
   }
   return { startAngle: 0, endAngle: 0 };
 };
