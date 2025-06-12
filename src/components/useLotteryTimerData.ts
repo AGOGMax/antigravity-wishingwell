@@ -152,7 +152,7 @@ const useLotteryTimerData = () => {
     return 0;
   }, [JPMReadData, lotteriesInfo]);
 
-  return { nextLotteryTimestamp, refreshTimer: onTimerEnd };
+  return { nextLotteryTimestamp, lotteriesInfo, refreshTimer: onTimerEnd };
 };
 
 export default useLotteryTimerData;

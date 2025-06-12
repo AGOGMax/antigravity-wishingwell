@@ -1,27 +1,36 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { twMerge } from "tailwind-merge";
 import { MotionValue, motion, useTransform } from "framer-motion";
 import DynamicNumberCounter from "../../DynamicNumberCounter";
 import AutomaticIncreamentalNumberCounter from "../../AutomaticIncreamentalNumberCounter";
-import useTimer from "@/hooks/frontend/useTimer";
-import { IMAGEKIT_IMAGES, IMAGEKIT_LOGOS } from "@/assets/imageKit";
+import useTimer, { calculateTimeDifference } from "@/hooks/frontend/useTimer";
+import { IMAGEKIT_IMAGES } from "@/assets/imageKit";
 import { useRestPost } from "@/hooks/useRestClient";
 import { getEra } from "@/utils";
 import If from "@/components/If";
+import useLotteryTimerData from "@/components/useLotteryTimerData";
 
 let globalDelay = 0;
 
 type SpinnerProps = {
   era: "wishwell" | "mining" | "minting" | "journey1" | "journey2" | "journey3";
-  stage: 1 | 2 | 3;
+  stage: 1 | 2 | 3 | 4;
   bonus: number;
   days: number;
   hours: number;
   mins: number;
   secs: number;
+};
+
+type ArcSectorProps = {
+  fromDeg: number;
+  toDeg: number;
+  fromColor?: string;
+  toColor?: string;
+  className?: string;
 };
 
 const styles = {
@@ -30,7 +39,7 @@ const styles = {
       "absolute flex justify-center items-center top-0 left-[50%] translate-x-[-50%] translate-y-[-50%] origin-bottom h-[470px] w-[2em] z-10 pt-24",
     active: "uppercase text-center text-black font-sans font-black text-3xl",
     passive:
-      "uppercase text-center from-white to-[#999999] bg-gradient-to-b text-transparent bg-clip-text font-sans font-black text-3xl",
+      "uppercase text-center from-white to-[#999999] bg-gradient-to-b text-transparent bg-clip-text font-sans font-black text-3xl whitespace-nowrap",
   },
   "border-styles": {
     era: "absolute top-0 left-[50%] translate-x-[-50%] translate-y-[-50%] origin-bottom w-[3px] h-[490px] bg-black",
@@ -63,7 +72,7 @@ function H1({
   era: SpinnerProps["era"];
   stage: SpinnerProps["stage"];
   parentClassName: string;
-  isEraLetter?: string;
+  isEraLetter?: React.ReactNode;
 }) {
   const timer = useTimer();
   const currentEra = timer.isMintingActive
@@ -282,162 +291,40 @@ function EraHighlighter() {
 }
 
 function Era() {
-  const activePhase = useTimer().phase;
   return (
     <>
-      <EraHighlighter />
-      <div id="journey1">
-        <H1
-          era="journey1"
-          stage={activePhase}
-          parentClassName="rotate-[-100deg]"
-          isEraLetter={"J"}
-        />
-        <H1
-          era="journey1"
-          stage={activePhase}
-          parentClassName="rotate-[-93.5deg]"
-          isEraLetter={"o"}
-        />
-        <H1
-          era="journey1"
-          stage={activePhase}
-          parentClassName="rotate-[-86.5deg]"
-          isEraLetter={"u"}
-        />
-        <H1
-          era="journey1"
-          stage={activePhase}
-          parentClassName="rotate-[-80deg]"
-          isEraLetter={"r"}
-        />
-        <H1
-          era="journey1"
-          stage={activePhase}
-          parentClassName="rotate-[-73.5deg]"
-          isEraLetter={"n"}
-        />
-        <H1
-          era="journey1"
-          stage={activePhase}
-          parentClassName="rotate-[-67deg]"
-          isEraLetter={"e"}
-        />
-        <H1
-          era="journey1"
-          stage={activePhase}
-          parentClassName="rotate-[-60.5deg]"
-          isEraLetter={"y"}
-        />
-        <H1
-          era="journey1"
-          stage={activePhase}
-          parentClassName="rotate-[-51deg]"
-          isEraLetter={"1"}
-        />
-      </div>
-      <Border eraBorder className="rotate-[-37.5deg]" />
-      <div id="journey2">
-        <H1
-          era="journey2"
-          stage={activePhase}
-          parentClassName="rotate-[-22deg]"
-          isEraLetter={"J"}
-        />
-        <H1
-          era="journey2"
-          stage={activePhase}
-          parentClassName="rotate-[-16deg]"
-          isEraLetter={"o"}
-        />
-        <H1
-          era="journey2"
-          stage={activePhase}
-          parentClassName="rotate-[-9.5deg]"
-          isEraLetter={"u"}
-        />
-        <H1
-          era="journey2"
-          stage={activePhase}
-          parentClassName="rotate-[-3deg]"
-          isEraLetter={"r"}
-        />
-        <H1
-          era="journey2"
-          stage={activePhase}
-          parentClassName="rotate-[3.5deg]"
-          isEraLetter={"n"}
-        />
-        <H1
-          era="journey2"
-          stage={activePhase}
-          parentClassName="rotate-[9.5deg]"
-          isEraLetter={"e"}
-        />
-        <H1
-          era="journey2"
-          stage={activePhase}
-          parentClassName="rotate-[15deg]"
-          isEraLetter={"y"}
-        />
-        <H1
-          era="journey2"
-          stage={activePhase}
-          parentClassName="rotate-[24deg]"
-          isEraLetter={"2"}
-        />
-      </div>
-      <Border eraBorder className="rotate-[37.5deg]" />
-      <div id="journey3">
-        <H1
-          era="journey3"
-          stage={activePhase}
-          parentClassName="rotate-[51.5deg]"
-          isEraLetter={"J"}
-        />
-        <H1
-          era="journey3"
-          stage={activePhase}
-          parentClassName="rotate-[58deg]"
-          isEraLetter={"o"}
-        />
-        <H1
-          era="journey3"
-          stage={activePhase}
-          parentClassName="rotate-[65deg]"
-          isEraLetter={"u"}
-        />
-        <H1
-          era="journey3"
-          stage={activePhase}
-          parentClassName="rotate-[72deg]"
-          isEraLetter={"r"}
-        />
-        <H1
-          era="journey3"
-          stage={activePhase}
-          parentClassName="rotate-[79deg]"
-          isEraLetter={"n"}
-        />
-        <H1
-          era="journey3"
-          stage={activePhase}
-          parentClassName="rotate-[85deg]"
-          isEraLetter={"e"}
-        />
-        <H1
-          era="journey3"
-          stage={activePhase}
-          parentClassName="rotate-[91deg]"
-          isEraLetter={"y"}
-        />
-        <H1
-          era="journey3"
-          stage={activePhase}
-          parentClassName="rotate-[100deg]"
-          isEraLetter={"3"}
-        />
-      </div>
+      <H1
+        era="minting"
+        stage={1}
+        parentClassName="rotate-[-90deg]"
+        isEraLetter="Lottery 1"
+      />
+      <Border eraBorder className="rotate-[45deg]" />
+      <H1
+        era="minting"
+        stage={2}
+        parentClassName="rotate-[0deg]"
+        isEraLetter="Lottery 2"
+      />
+      <Border eraBorder className="rotate-[135deg]" />
+      <H1
+        era="minting"
+        stage={3}
+        parentClassName="rotate-[90deg]"
+        isEraLetter="Lottery 3"
+      />
+      <Border eraBorder className="rotate-[225deg]" />
+      <H1
+        era="minting"
+        stage={4}
+        parentClassName="rotate-[180deg]"
+        isEraLetter={
+          <span className="inline-block scale-y-[-1] scale-x-[-1] from-white to-[#999999] bg-gradient-to-b text-transparent bg-clip-text">
+            Minting
+          </span>
+        }
+      />
+      <Border eraBorder className="rotate-[315deg]" />
     </>
   );
 }
@@ -617,21 +504,6 @@ function StageNumberOfEra2() {
   );
 }
 
-function StageInBetweenBorders() {
-  return (
-    <div>
-      <Border eraBorder={false} className="rotate-[-87.5deg]" />
-      <Border eraBorder={false} className="rotate-[-62.5deg]" />
-      <Border eraBorder={false} className="rotate-[-37.5deg]" />
-      <Border eraBorder={false} className="rotate-[-12.5deg]" />
-      <Border eraBorder={false} className="rotate-[12.5deg]" />
-      <Border eraBorder={false} className="rotate-[37.5deg]" />
-      <Border eraBorder={false} className="rotate-[62.5deg]" />
-      <Border eraBorder={false} className="rotate-[87.5deg]" />
-    </div>
-  );
-}
-
 function Pointer() {
   const activeState = useTimer();
   const rotation = decideActiveStageLocation({
@@ -704,22 +576,49 @@ zustand multiplier aur rewardMultiplier
 
 function Timer() {
   const timer = useTimer();
+  const lotteryTimerData = useLotteryTimerData();
+
+  let timerText = "";
+  let timerTimestamp = timer?.nextJourneyTimeStamp;
+
+  if (timer?.phaseNumber === 1) {
+    timerText = "TIL Minting Ends";
+    timerTimestamp = timer?.nextPhaseStartTimestamp ?? 0;
+    //nextPhaseStartTimestamp (TIL Minting Ends) Minting
+  } else if (timer?.phaseNumber === 2) {
+    if (lotteryTimerData?.lotteriesInfo?.lotteryId === "3") {
+      timerText = "TIL Lottery 1";
+      timerTimestamp = lotteryTimerData?.nextLotteryTimestamp * 1000;
+      //nextLotteryTimestamp TIL Lottery 1 Lottery 1
+    } else if (lotteryTimerData?.lotteriesInfo?.lotteryId === "1") {
+      timerText = "TIL Lottery 2";
+      timerTimestamp = lotteryTimerData?.nextLotteryTimestamp * 1000;
+      //nextLotteryTimestamp TIL Lottery 2 Lottery 2
+    } else if (lotteryTimerData?.lotteriesInfo?.lotteryId === "2") {
+      timerText = "TIL Lottery 3";
+      timerTimestamp = lotteryTimerData?.nextLotteryTimestamp * 1000;
+      //nextLotteryTimestamp TIL Lottery 3 Lottery 3
+    }
+  } else {
+    timerText = "TIL Next Journey";
+    timerTimestamp = timer?.nextJourneyTimeStamp;
+    //nextJourneyTimeStamp TIL Next Journey Lottery 3
+  }
+
+  const newTimer = {
+    ...timer,
+    ...(timerTimestamp
+      ? calculateTimeDifference(new Date(timerTimestamp).toISOString())
+      : { days: 0, hours: 0, mins: 0, secs: 0 }),
+  };
 
   return (
-    <div className="absolute flex flex-col justify-center items-center gap-2 z-[100] w-[400px] h-[200px] translate-y-[60%]">
-      <Image
-        src={IMAGEKIT_IMAGES.COUNTER_BG}
-        width={450}
-        height={225}
-        layout="fixed"
-        alt="Counter Background"
-        className="absolute top-0 left-0 h-[220px] -z-[1]"
-      />
-      <div className="flex gap-4">
+    <div className="absolute flex flex-col justify-center items-center gap-2 z-[100] w-[400px] h-[200px] translate-y-[10%]">
+      <div className="flex gap-2">
         <div className={styles["timer-styles"].parent}>
           <div className={styles["timer-styles"].number}>
             <DynamicNumberCounter
-              count={timer.days}
+              count={newTimer.days}
               setCount={() => {}}
               modulo={100000000}
             />
@@ -729,7 +628,7 @@ function Timer() {
         <div className={styles["timer-styles"].parent}>
           <div className={styles["timer-styles"].number}>
             <DynamicNumberCounter
-              count={timer.hours}
+              count={newTimer.hours}
               setCount={() => {}}
               modulo={24}
             />
@@ -739,7 +638,7 @@ function Timer() {
         <div className={styles["timer-styles"].parent}>
           <div className={styles["timer-styles"].number}>
             <DynamicNumberCounter
-              count={timer.mins}
+              count={newTimer.mins}
               setCount={() => {}}
               modulo={60}
             />
@@ -748,12 +647,8 @@ function Timer() {
         </div>
         <div className={styles["timer-styles"].parent}>
           <div className={styles["timer-styles"].number}>
-            {/* <NumberCounter
-				from={activeState.secs}
-				to={activeState.secs - 1}
-			/> */}
             <DynamicNumberCounter
-              count={timer.secs}
+              count={newTimer.secs}
               setCount={() => {}}
               modulo={60}
             />
@@ -764,45 +659,12 @@ function Timer() {
 
       <div
         style={{
-          fontSize:
-            timer.claimTransition ||
-            (timer.era === "mining" && timer.phase === 3) ||
-            timer.claimStarted ||
-            (timer.isJourneyPaused && timer.isMintingActive) ||
-            timer.mintingTransition
-              ? "1rem"
-              : "1.5rem",
+          fontSize: "1.7rem",
+          fontWeight: 900,
         }}
         className="font-sans text-agyellow text-2xl font-bold text-center uppercase tracking-widest"
       >
-        {timer.era === "mining" &&
-        timer.phase === 3 &&
-        !timer.claimTransition &&
-        !timer.claimStarted
-          ? "Mining ends in"
-          : timer.claimTransition
-            ? "Public Test live until"
-            : timer.claimStarted
-              ? "Claming ends in"
-              : timer.mintingTransition
-                ? "Minting starts in"
-                : timer.isJourneyPaused && timer.isMintingActive
-                  ? "Journey Paused"
-                  : timer.journey <= 3
-                    ? COUNTDOWN_TITLE?.[
-                        timer.isMintingActive
-                          ? `journey${timer.journey}`
-                          : timer.era
-                      ]?.[
-                        timer.isMintingActive
-                          ? Number(timer.phaseNumber ?? 0) - 1
-                          : Number(timer.phase ?? 0) - 1
-                      ]
-                    : COUNTDOWN_TITLE?.default?.[
-                        timer.isMintingActive
-                          ? Number(timer.phaseNumber ?? 0) - 1
-                          : Number(timer.phase ?? 0) - 1
-                      ]}
+        {timerText}
       </div>
     </div>
   );
@@ -838,12 +700,68 @@ function Bonus({ era }: { era: string }) {
   );
 }
 
+const ArcSector = ({
+  fromDeg,
+  toDeg,
+  fromColor = "#3C00DC",
+  toColor = "#FF5001",
+  className = "",
+}: ArcSectorProps) => {
+  return (
+    <div className={`absolute w-full h-full rounded-full z-0 ${className}`}>
+      <div
+        className="absolute w-full h-full rounded-full"
+        style={{
+          background: `conic-gradient(from ${fromDeg}deg, ${fromColor} 0deg, ${toColor} ${toDeg - fromDeg}deg, transparent ${toDeg - fromDeg}deg, transparent 360deg)`,
+          zIndex: 0,
+        }}
+      />
+    </div>
+  );
+};
+
+const decideArcSectorAngles = (
+  timer: {
+    phaseNumber?: number;
+    nextJourneyTimeStamp?: number;
+  },
+  lotteryTimerData: {
+    lotteriesInfo?: {
+      lotteryId?: string;
+    } | null;
+  },
+): {
+  startAngle: number;
+  endAngle: number;
+} => {
+  if (timer?.phaseNumber === 1) {
+    // Current: Minting
+    return { startAngle: -135, endAngle: 225 };
+  } else if (timer?.phaseNumber === 2) {
+    if (lotteryTimerData?.lotteriesInfo?.lotteryId === "3") {
+      // Current: Lottery 1
+      return { startAngle: 223, endAngle: 313 };
+    } else if (lotteryTimerData?.lotteriesInfo?.lotteryId === "1") {
+      // Current: Lottery 2
+      return { startAngle: -47, endAngle: 47 };
+    } else if (lotteryTimerData?.lotteriesInfo?.lotteryId === "2") {
+      // Current: Lottery 3
+      return { startAngle: 47, endAngle: 137 };
+    }
+  } else {
+    // Current: Lottery 3 (Ideally, Payout Time or Buffer Time)
+    return { startAngle: 47, endAngle: 137 };
+  }
+  return { startAngle: 0, endAngle: 0 };
+};
+
 export default function Spinner({
   scrollYProgress,
 }: {
   scrollYProgress: MotionValue<number>;
 }) {
   const timer = useTimer();
+  const lotteryTimerData = useLotteryTimerData();
   const opacity = useTransform(scrollYProgress, [1, 0], [0, 1]);
 
   useEffect(() => {
@@ -851,6 +769,11 @@ export default function Spinner({
       globalDelay = 0;
     }, 2000);
   }, []);
+
+  const arcSectorAngles = useMemo(
+    () => decideArcSectorAngles(timer, lotteryTimerData),
+    [timer, lotteryTimerData],
+  );
 
   return (
     <motion.div
@@ -871,41 +794,13 @@ export default function Spinner({
           then={<EraOfEra2 />}
           else={<Era />}
         />
+        <ArcSector
+          fromDeg={arcSectorAngles?.startAngle}
+          toDeg={arcSectorAngles?.endAngle}
+        />
         <div className="relative w-[300px] h-[300px] bg-[radial-gradient(circle_at_center,#B7A4EA,#1C0068_65%)] rounded-full border-[10px] border-agblack flex justify-center items-center overflow-hidden z-10">
-          <StageHighlighter />
-          <StageInBetweenBorders />
-          <div className="relative w-[180px] h-[180px] bg-[#1C0068] rounded-full border-[10px] border-agblack flex justify-center items-center z-10">
-            <If
-              condition={timer.era !== "minting"}
-              then={<StageNumberOfEra2 />}
-              else={<StageNumber />}
-            />
-
-            <div
-              className={twMerge(
-                "relative w-[100px] h-[100px] rounded-full flex justify-center items-center",
-                !timer.isMintingActive && "bg-agyellow",
-              )}
-            >
-              <div className="flex flex-col justify-center items-center">
-                <Pointer />
-                <If
-                  condition={timer.era !== "minting"}
-                  then={<Bonus era={timer.era} />}
-                  else={
-                    <Image
-                      src={IMAGEKIT_LOGOS.LOGO}
-                      width={100}
-                      height={100}
-                      alt="AG logo"
-                    />
-                  }
-                />
-              </div>
-            </div>
-          </div>
+          <Timer />
         </div>
-        <Timer />
       </div>
     </motion.div>
   );
