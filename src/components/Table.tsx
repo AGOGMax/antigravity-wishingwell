@@ -496,8 +496,8 @@ export default function Table({
                       </H1>
                     </div>
                     <P className="text-center text-[14px]">
-                      We're currently processing all participants' contributions
-                      for the Leaderboard.
+                      We&apos;re currently processing all participants&apos;
+                      contributions for the Leaderboard.
                     </P>
                     <P className="text-center text-[14px]">
                       Please check back in after a short while.
