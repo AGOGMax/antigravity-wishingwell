@@ -3,14 +3,10 @@
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { twMerge } from "tailwind-merge";
 import H3 from "@/components/HTML/H3";
-import {
-  IMAGEKIT_ICONS,
-  IMAGEKIT_IMAGES,
-  IMAGEKIT_LOGOS,
-} from "@/assets/imageKit";
+import { IMAGEKIT_ICONS, IMAGEKIT_LOGOS } from "@/assets/imageKit";
 import pointsConverterToUSCommaseparated from "./pointsConverterToUSCommaseparated";
 import H1 from "./HTML/H1";
 import P from "./HTML/P";
@@ -50,7 +46,7 @@ function TH({
             alt={`${heading} icon`}
             width={25}
             height={25}
-            className="object-cover w-[25px] h-[25px]"
+            className={`object-cover ${heading === "Rewards" ? "w-[20px]" : "w-[25px] h-[25px]"}`}
           />
         </motion.div>
         {heading}
@@ -259,7 +255,7 @@ function Reward({ badge }: { badge: string; special?: boolean }) {
   return (
     <TD border className="w-full">
       <div
-        className={`flex gap-[8px] justify-start items-start text-[18px] leading-[23.4px]`}
+        className={`flex gap-[8px] justify-start items-start text-[16px] leading-[23.4px]`}
       >
         <Image
           src={IMAGEKIT_ICONS.GIFT_WHITE}
@@ -290,7 +286,7 @@ export default function Table({
   era: number;
 }) {
   const [tableData, setTableData] = useState<tableDataType[]>(currentTableData);
-
+  const tableContainerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     // then null fields are added to the tableData array to make the tableData length 10
     setTableData([]);
@@ -305,161 +301,214 @@ export default function Table({
     };
   }, [currentTableData]);
 
+  // Handle mouse wheel events for the table container
+  useEffect(() => {
+    const tableContainer = tableContainerRef.current;
+    if (!tableContainer) return;
+    const handleWheel = (e: WheelEvent) => {
+      // Check if the mouse is over the table container
+      const rect = tableContainer.getBoundingClientRect();
+      const isMouseOverTable =
+        e.clientX >= rect.left &&
+        e.clientX <= rect.right &&
+        e.clientY >= rect.top &&
+        e.clientY <= rect.bottom;
+      if (isMouseOverTable) {
+        const { scrollTop, scrollHeight, clientHeight } = tableContainer;
+        const isAtTop = scrollTop <= 1;
+        const isAtBottom = scrollTop + clientHeight >= scrollHeight - 1;
+
+        // If scrolling up and already at top, or scrolling down and already at bottom,
+        // allow the page to scroll instead
+        if ((e.deltaY < 0 && isAtTop) || (e.deltaY > 0 && isAtBottom)) {
+          // Don't prevent default - let the page scroll
+          return;
+        }
+
+        // Otherwise, prevent the default page scroll and scroll the table
+        e.preventDefault();
+        // Stop the event from bubbling up to parent elements
+        e.stopPropagation();
+        // Scroll the table container instead
+        tableContainer.scrollTop += e.deltaY;
+      }
+    };
+    // Add event listener to the table container directly instead of document
+    tableContainer.addEventListener("wheel", handleWheel, { passive: false });
+
+    return () => {
+      tableContainer.removeEventListener("wheel", handleWheel);
+    };
+  }, []);
+
   return (
-    <table
-      style={{
-        minHeight: tableData?.length === 0 ? "calc(2.5rem*11)" : "auto",
-      }}
-      className="w-full bg-gradient-to-b from-[#0A1133] to-[#142266] min-h-[calc(2.5rem*11)] h-fit transition-all duration-300"
+    <div
+      ref={tableContainerRef}
+      className="h-[100vh] overflow-y-auto overflow-x-hidden"
     >
-      <thead className="w-full">
-        <TR th>
-          <TH
-            icon={IMAGEKIT_ICONS.LEADERBOARD}
-            heading="Rank"
-            variants={{
-              hover: {
-                scale: 1.25,
-                transition: {
-                  duration: 0.5,
-                  type: "spring",
+      <table className="w-full bg-gradient-to-b from-[#0A1133] to-[#142266] h-fit transition-all duration-300 table-fixed">
+        <thead className="w-full sticky top-0 bg-gradient-to-b from-[#0A1133] to-[#142266] z-10">
+          <TR th>
+            <TH
+              icon={IMAGEKIT_ICONS.LEADERBOARD}
+              heading="Rank"
+              variants={{
+                hover: {
+                  scale: 1.25,
+                  transition: {
+                    duration: 0.5,
+                    type: "spring",
+                  },
                 },
-              },
-            }}
-          />
-          <TH
-            icon={IMAGEKIT_ICONS.WALLET_WHITE}
-            heading="Wallet"
-            className="hidden md:flex"
-            variants={{
-              hover: {
-                animationName: "wiggle",
-                animationDuration: "1s",
-                animationFillMode: "forwards",
-                animationTimingFunction: "linear",
-              },
-            }}
-          />
-          <TH
-            icon={IMAGEKIT_ICONS.POINTS}
-            heading="Points"
-            variants={{
-              hover: {
-                rotate: 120,
-                transition: { duration: 1, type: "spring" },
-              },
-            }}
-          />
-          <TH
-            icon={IMAGEKIT_ICONS.GIFT_WHITE}
-            heading="Rewards"
-            className="hidden md:flex"
-            variants={{
-              hover: {
-                animationName: "wiggle",
-                animationDuration: "1s",
-                animationFillMode: "forwards",
-                animationTimingFunction: "linear",
-              },
-            }}
-          />
-        </TR>
-      </thead>
-      <motion.tbody
-        layout
-        layoutRoot
-        className="text-lg font-medium font-general-sans text-agwhite min-h-[clac(2.5rem*10)] w-fit"
-      >
-        <AnimatePresence>
-          {tableData?.length !== 0 ? (
-            <AnimatePresence>
-              {tableData.map((data, idx) =>
-                data !== null ? (
-                  <TR key={idx} special={data.special ?? false} position={idx}>
-                    <Rank
-                      rank={data.rank}
-                      wallet={data.wallet}
+              }}
+            />
+            <TH
+              icon={IMAGEKIT_ICONS.WALLET_WHITE}
+              heading="Wallet"
+              className="hidden md:flex"
+              variants={{
+                hover: {
+                  animationName: "wiggle",
+                  animationDuration: "1s",
+                  animationFillMode: "forwards",
+                  animationTimingFunction: "linear",
+                },
+              }}
+            />
+            <TH
+              icon={IMAGEKIT_ICONS.POINTS}
+              heading="Points"
+              variants={{
+                hover: {
+                  rotate: 120,
+                  transition: { duration: 1, type: "spring" },
+                },
+              }}
+            />
+            <TH
+              icon={IMAGEKIT_ICONS.GIFT_WHITE}
+              heading="Rewards"
+              className="hidden md:flex"
+              variants={{
+                hover: {
+                  animationName: "wiggle",
+                  animationDuration: "1s",
+                  animationFillMode: "forwards",
+                  animationTimingFunction: "linear",
+                },
+              }}
+            />
+          </TR>
+        </thead>
+        <motion.tbody
+          layout
+          layoutRoot
+          className="text-lg font-medium font-general-sans text-agwhite w-full"
+        >
+          <AnimatePresence>
+            {tableData?.length !== 0 ? (
+              <AnimatePresence>
+                {tableData.map((data, idx) =>
+                  data !== null ? (
+                    <TR
+                      key={idx}
                       special={data.special ?? false}
-                      badge={data.badge}
-                    />
-                    <TD truncate special={data.special ?? false}>
-                      {data.wallet}
-                    </TD>
-                    <TD
-                      special={data.special ?? false}
-                      className={twMerge(
-                        data.special
-                          ? "text-[22px] leading-[28.6px] md:text-[18px] md:leading-[23.6px]"
-                          : "md:text-[14px] md:leading-[18.2px] text-[18px] leading-[23.6px]",
-                        "md:pl-[auto_!important] lg:pl-[auto_!important] pl-[auto_!important] relative max-w-full w-full [word-wrap:break-word] overflow-hidden gap-0 lg:gap-0 align-baseline",
-                      )}
+                      position={idx}
                     >
-                      <span className="ml-auto [word-wrap:break-word] max-w-full w-fit text-right">
-                        {String(data.points).includes(".") ? (
-                          <>
-                            {pointsConverterToUSCommaseparated(
-                              Number(data.points.toString().split(".")[0]),
-                            )}
-                            <span
-                              className={twMerge(
-                                "text-[0.6em] opacity-[0.66]",
-                                data.special ? "pt-[0.4em]" : "pt-[0.5em]",
-                              )}
-                            >
-                              .{data.points.toFixed(4).toString().split(".")[1]}
-                            </span>
-                          </>
-                        ) : (
-                          pointsConverterToUSCommaseparated(data.points)
+                      <Rank
+                        rank={data.rank}
+                        wallet={data.wallet}
+                        special={data.special ?? false}
+                        badge={data.badge}
+                      />
+                      <TD truncate special={data.special ?? false}>
+                        {data.wallet}
+                      </TD>
+                      <TD
+                        special={data.special ?? false}
+                        className={twMerge(
+                          data.special
+                            ? "text-[22px] leading-[28.6px] md:text-[18px] md:leading-[23.6px]"
+                            : "md:text-[14px] md:leading-[18.2px] text-[18px] leading-[23.6px]",
+                          "md:pl-[auto_!important] lg:pl-[auto_!important] pl-[auto_!important] relative w-full gap-0 lg:gap-0 align-baseline",
                         )}
-                      </span>
-                    </TD>
-                    <Reward badge={data.badge} />
-                  </TR>
-                ) : (
-                  <TR key={idx} className="h-[2.5rem]" empty>
-                    <></>
-                  </TR>
-                ),
-              )}
-            </AnimatePresence>
-          ) : (
-            <motion.div
-              initial={{
-                opacity: 0,
-              }}
-              animate={{
-                opacity: 1,
-              }}
-              exit={{
-                opacity: 0,
-              }}
-              className="m-auto w-full h-full flex flex-col justify-center items-center gap-[16px] max-w-[304px]"
-            >
-              <div className="flex justify-center items-center">
-                <Image
-                  src={IMAGEKIT_LOGOS.LOGO}
-                  height={45}
-                  width={45}
-                  className="w-[45px] h-[45px]"
-                  alt="antigravity logo"
-                />
-                <H1 className="uppercase text-[24px] leading-[24px] md:text-[24px]">
-                  Antigravity
-                </H1>
-              </div>
-              <P className="text-center text-[14px]">
-                We’re currently processing{" "}
-                {era === 1 ? "Era 1" : era == 2 ? "Era 2" : ""} participants’
-                contributions for the Leaderboard.
-              </P>
-              <P className="text-center text-[14px]">
-                Please check back in after a short while.
-              </P>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.tbody>
-    </table>
+                      >
+                        <span className="ml-auto w-fit text-right break-words">
+                          {String(data.points).includes(".") ? (
+                            <>
+                              {pointsConverterToUSCommaseparated(
+                                Number(data.points.toString().split(".")[0]),
+                              )}
+                              <span
+                                className={twMerge(
+                                  "text-[0.6em] opacity-[0.66]",
+                                  data.special ? "pt-[0.4em]" : "pt-[0.5em]",
+                                )}
+                              >
+                                .
+                                {
+                                  data.points
+                                    .toFixed(4)
+                                    .toString()
+                                    .split(".")[1]
+                                }
+                              </span>
+                            </>
+                          ) : (
+                            pointsConverterToUSCommaseparated(data.points)
+                          )}
+                        </span>
+                      </TD>
+                      <Reward badge={data.badge} />
+                    </TR>
+                  ) : (
+                    <TR key={idx} className="h-[2.5rem]" empty>
+                      <></>
+                    </TR>
+                  ),
+                )}
+              </AnimatePresence>
+            ) : (
+              <tr>
+                <td colSpan={4} className="w-full">
+                  <motion.div
+                    initial={{
+                      opacity: 0,
+                    }}
+                    animate={{
+                      opacity: 1,
+                    }}
+                    exit={{
+                      opacity: 0,
+                    }}
+                    className="m-auto w-full h-full flex flex-col justify-center items-center gap-[16px] max-w-[304px] py-20"
+                  >
+                    <div className="flex justify-center items-center">
+                      <Image
+                        src={IMAGEKIT_LOGOS.LOGO}
+                        height={45}
+                        width={45}
+                        className="w-[45px] h-[45px]"
+                        alt="antigravity logo"
+                      />
+                      <H1 className="uppercase text-[24px] leading-[24px] md:text-[24px]">
+                        Antigravity
+                      </H1>
+                    </div>
+                    <P className="text-center text-[14px]">
+                      We're currently processing all participants' contributions
+                      for the Leaderboard.
+                    </P>
+                    <P className="text-center text-[14px]">
+                      Please check back in after a short while.
+                    </P>
+                  </motion.div>
+                </td>
+              </tr>
+            )}
+          </AnimatePresence>
+        </motion.tbody>
+      </table>
+    </div>
   );
 }
