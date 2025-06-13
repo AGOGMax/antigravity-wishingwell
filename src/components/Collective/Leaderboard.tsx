@@ -69,7 +69,8 @@ export default function Leaderboard() {
 
   const handleRefresh = () => {
     mutateLeaderboardData({
-      walletAddress: account.address ?? "",
+      walletAddress: "0xec66c3810ca96ef7759c0f7b283d57989e738d90",
+      // walletAddress: account.address ?? "",
     });
   };
 
