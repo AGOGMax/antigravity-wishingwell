@@ -51,21 +51,6 @@ export default function Leaderboard() {
     ["leaderboard"],
     "/api/leaderboard",
   );
-  const [externalLinks, setExternalLinks] = useState<{
-    best_way_to_rank_up: string;
-  }>();
-
-  useEffect(() => {
-    client
-      .fetch(
-        `*[_type=="external_links"][0]{
-          best_way_to_rank_up
-        }`,
-      )
-      .then((externalLinks) => {
-        setExternalLinks(externalLinks);
-      });
-  }, []);
 
   const handleRefresh = () => {
     mutateLeaderboardData({
@@ -145,18 +130,7 @@ export default function Leaderboard() {
                 />
               </div>
               <div className="rounded-[4px] border-[2px] border-[#414343] lg:border-none overflow-hidden">
-                <Table
-                  tableData={tableData}
-                  era={
-                    selectedLeaderboard === "era1Leaderboard"
-                      ? 1
-                      : selectedLeaderboard === "era2Leaderboard"
-                        ? 2
-                        : selectedLeaderboard === "era3Leaderboard"
-                          ? 3
-                          : 1
-                  }
-                />
+                <Table tableData={tableData} />
               </div>
             </div>
 

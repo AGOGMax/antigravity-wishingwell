@@ -280,10 +280,8 @@ type tableDataType = {
 
 export default function Table({
   tableData: currentTableData,
-  era,
 }: {
   tableData: tableDataType[];
-  era: number;
 }) {
   const [tableData, setTableData] = useState<tableDataType[]>(currentTableData);
   const tableContainerRef = useRef<HTMLDivElement>(null);
@@ -292,7 +290,7 @@ export default function Table({
     setTableData([]);
     const setTableDataTimeout = setTimeout(
       () => setTableData(currentTableData),
-      200 * currentTableData?.length,
+      500,
     );
 
     return () => {

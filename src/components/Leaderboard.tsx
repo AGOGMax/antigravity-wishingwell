@@ -262,18 +262,7 @@ export default function Leaderboard({
                 />
               </div>
               <div className="rounded-[4px] border-[2px] border-[#414343] md:border-none">
-                <Table
-                  tableData={tableData}
-                  era={
-                    selectedLeaderboard === "era1Leaderboard"
-                      ? 1
-                      : selectedLeaderboard === "era2Leaderboard"
-                        ? 2
-                        : selectedLeaderboard === "era3Leaderboard"
-                          ? 3
-                          : 0
-                  }
-                />
+                <Table tableData={tableData} />
               </div>
             </div>
 
