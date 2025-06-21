@@ -467,7 +467,7 @@ export default function Table({
                 )}
               </AnimatePresence>
             ) : (
-              <tr>
+              <TR className="grid-cols-1 md:grid-cols-1">
                 <td colSpan={4} className="w-full">
                   <motion.div
                     initial={{
@@ -502,7 +502,7 @@ export default function Table({
                     </P>
                   </motion.div>
                 </td>
-              </tr>
+              </TR>
             )}
           </AnimatePresence>
         </motion.tbody>
