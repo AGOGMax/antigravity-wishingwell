@@ -15,7 +15,6 @@ import GradientBorder from "../GradientBorder";
 import { useRestPost } from "@/hooks/useRestClient";
 import Dropdownbutton from "../Dropdownbutton";
 import useTimer from "@/hooks/frontend/useTimer";
-import { client } from "../../../sanity/lib/client";
 
 function CollectiveLogo() {
   return (
@@ -54,8 +53,8 @@ export default function Leaderboard() {
 
   const handleRefresh = () => {
     mutateLeaderboardData({
-      walletAddress: "0xec66c3810ca96ef7759c0f7b283d57989e738d90",
-      // walletAddress: account.address ?? "",
+      // walletAddress: "0xec66c3810ca96ef7759c0f7b283d57989e738d90",
+      walletAddress: account.address ?? "",
     });
   };
 
@@ -110,7 +109,7 @@ export default function Leaderboard() {
                     },
                   }}
                 />
-                <AnimatedButton
+                {/* <AnimatedButton
                   innerText="Claim"
                   iconSrc={IMAGEKIT_ICONS.GIFT_WHITE}
                   iconAlt="Gift image"
@@ -127,7 +126,7 @@ export default function Leaderboard() {
                       animation: "spin 1s linear infinite forwards",
                     },
                   }}
-                />
+                /> */}
               </div>
               <div className="rounded-[4px] border-[2px] border-[#414343] lg:border-none overflow-hidden">
                 <Table tableData={tableData} />
