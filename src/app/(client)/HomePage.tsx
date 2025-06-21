@@ -6,7 +6,7 @@ import Newsletter from "@/components/Newsletter";
 import Footer from "@/components/Footer";
 import Testimonials from "@/components/Home/sections/Testimonials";
 import Eras from "@/components/Home/sections/Eras";
-import Leaderboard from "@/components/Leaderboard";
+import Leaderboard from "@/components/Collective/Leaderboard";
 import NFTReceipt from "@/components/Home/sections/NFTReceipt";
 import { useAccount } from "wagmi";
 
@@ -15,7 +15,7 @@ export default function HomePage() {
   return (
     <>
       <Hero />
-      <Leaderboard accountIsConnected={account.isConnected} />
+      <Leaderboard />
       <Testimonials />
       <NFTReceipt />
       <Eras />

@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { twMerge } from "tailwind-merge";
-import useTimer, { CountdownType } from "../../../hooks/frontend/useTimer";
+import { CountdownType } from "../../../hooks/frontend/useTimer";
 import CountdownTimer from "@/components/CountdownTimer";
 import { IMAGEKIT_IMAGES } from "@/assets/imageKit";
 import useLotteryTimerData from "@/components/useLotteryTimerData";

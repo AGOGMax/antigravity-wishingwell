@@ -5,7 +5,7 @@ import P from "@/components/HTML/P";
 import Button from "@/components/Button";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import { PublicClient, parseAbiItem } from "viem";
+import { PublicClient } from "viem";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
 import { IMAGEKIT_ICONS, IMAGEKIT_IMAGES } from "@/assets/imageKit";
