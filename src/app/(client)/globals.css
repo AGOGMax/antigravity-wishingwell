@@ -17,7 +17,7 @@
 
 /* Handle */
 *::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #FF5001, #3C00DC);
+  background: linear-gradient(180deg, #ff5001, #3c00dc);
   background-repeat: no-repeat;
   background-position: 0% 0%;
   background-size: 100% 120%;
@@ -35,6 +35,9 @@
   input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
+  }
+  p {
+    margin-bottom: 0px !important;
   }
 }
 
@@ -60,34 +63,35 @@
 }
 
 @keyframes wiggle {
-  0%, 100% {
+  0%,
+  100% {
     transform: rotate(0deg);
   }
-  10%{
+  10% {
     transform: rotate(30deg);
   }
-  20%{
+  20% {
     transform: rotate(-30deg);
   }
-  30%{
+  30% {
     transform: rotate(15deg);
   }
-  40%{
+  40% {
     transform: rotate(-15deg);
   }
-  50%{
+  50% {
     transform: rotate(10deg);
   }
-  60%{
+  60% {
     transform: rotate(-10deg);
   }
-  70%{
+  70% {
     transform: rotate(5deg);
   }
-  80%{
+  80% {
     transform: rotate(-5deg);
   }
-  90%{
+  90% {
     transform: rotate(2deg);
   }
 }

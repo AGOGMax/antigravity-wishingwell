@@ -1,10 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useMemo, useState, Fragment } from "react";
+import { useEffect, useState, Fragment } from "react";
 import { IoMenu, IoCloseCircleOutline } from "react-icons/io5";
 import { UserConnected } from "./UserConnected";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import P from "../HTML/P";
 import { PublicClient } from "viem";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
@@ -23,8 +23,7 @@ import {
   PiCopyDuotone,
 } from "react-icons/pi";
 import { useJourneyData } from "@/app/(client)/store";
-import axios from "axios";
-import { API_ENDPOINT } from "@/constants";
+import { EVIL_ADDRESS_AVAILABLE, UNWRAP_AVAILABLE } from "@/constants";
 import { useRestPost } from "@/hooks/useRestClient";
 import { warningToastInfinite } from "../../hooks/frontend/toast";
 import toast from "react-hot-toast";
@@ -242,11 +241,43 @@ const Header = () => {
                   My Fuel Cells
                 </P>
               </Link>
-              {timer.isMintingActive && (
+              <Link
+                href={
+                  location.pathname === "/lottery" ? "/lottery#" : "/lottery"
+                }
+                className="p-[8px]"
+              >
+                <P
+                  uppercase
+                  gradient
+                  extrabold
+                  className="font-sans font-extrabold"
+                >
+                  Lottery
+                </P>
+              </Link>
+              <Link
+                href={
+                  location.pathname === "/treasury" ? "/treasury#" : "/treasury"
+                }
+                className="p-[8px]"
+              >
+                <P
+                  uppercase
+                  gradient
+                  extrabold
+                  className="font-sans font-extrabold"
+                >
+                  Treasury
+                </P>
+              </Link>
+              {EVIL_ADDRESS_AVAILABLE && (
                 <Link
-                  href="https://beta.agproject.io/"
-                  target="_blank"
-                  rel="noreferrer"
+                  href={
+                    location.pathname === "/evil-address"
+                      ? "/evil-address#"
+                      : "/evil-address"
+                  }
                   className="p-[8px]"
                 >
                   <P
@@ -255,7 +286,26 @@ const Header = () => {
                     extrabold
                     className="font-sans font-extrabold"
                   >
-                    Tools
+                    Evil
+                  </P>
+                </Link>
+              )}
+              {UNWRAP_AVAILABLE && (
+                <Link
+                  href={
+                    location.pathname === "/vaporize"
+                      ? "/vaporize#"
+                      : "/vaporize"
+                  }
+                  className="p-[8px]"
+                >
+                  <P
+                    uppercase
+                    gradient
+                    extrabold
+                    className="font-sans font-extrabold"
+                  >
+                    Vaporize
                   </P>
                 </Link>
               )}
@@ -378,11 +428,41 @@ const Header = () => {
                   My Fuel Cells
                 </P>
               </Link>
-              {timer.isMintingActive && (
+              <Link
+                href={
+                  location.pathname === "/lottery" ? "/lottery#" : "/lottery"
+                }
+              >
+                <P
+                  uppercase
+                  gradient
+                  extrabold
+                  className="font-sans font-extrabold"
+                >
+                  Lottery
+                </P>
+              </Link>
+              <Link
+                href={
+                  location.pathname === "/treasury" ? "/treasury#" : "/treasury"
+                }
+              >
+                <P
+                  uppercase
+                  gradient
+                  extrabold
+                  className="font-sans font-extrabold"
+                >
+                  Treasury
+                </P>
+              </Link>
+              {EVIL_ADDRESS_AVAILABLE && (
                 <Link
-                  href="https://beta.agproject.io/"
-                  target="_blank"
-                  rel="noreferrer"
+                  href={
+                    location.pathname === "/evil-address"
+                      ? "/evil-address#"
+                      : "/evil-address"
+                  }
                 >
                   <P
                     uppercase
@@ -390,103 +470,28 @@ const Header = () => {
                     extrabold
                     className="font-sans font-extrabold"
                   >
-                    Tools
+                    Evil
                   </P>
                 </Link>
               )}
-              {/* <P
-                onClick={() => setAboutSectionOpen(!aboutSectionOpen)}
-                uppercase
-                gradient
-                extrabold
-                className="relative font-sans font-extrabold cursor-pointer w-full flex flex-col gap-[8px]"
-              >
-                <div className="flex justify-center items-center">
-                  About{" "}
-                  <Image
-                    src={IMAGEKIT_ICONS.DOWN_WHITE}
-                    alt="Dropdown"
-                    width={16}
-                    height={16}
-                    style={{
-                      transform:
-                        aboutSectionOpen && isOpen
-                          ? "rotate(180deg)"
-                          : "rotate(0deg)",
-                    }}
-                    className="origin-center transition-all duration-300 ease-in-out transform rotate-0 cursor-pointer"
-                  />
-                </div>
-                <AnimatePresence>
-                  {aboutSectionOpen && isOpen && (
-                    <motion.div
-                      exit={{
-                        height: 0,
-                        opacity: 0,
-                        gap: 0,
-                        padding: 0,
-                      }}
-                      animate={{
-                        height: "fit-content",
-                        opacity: 1,
-                        gap: "8px",
-                        padding: "10px 16px",
-                      }}
-                      initial={{
-                        height: 0,
-                        opacity: 0,
-                        gap: 0,
-                        padding: 0,
-                      }}
-                      transition={{
-                        duration: 0.3,
-                        type: "spring",
-                      }}
-                      className="w-full rounded-[8px] z-10 p-[16px] text-agwhite transition-all duration-300 ease-in-out bg-agblack bg-gradient-to-b from-[#0A1133] to-[#142266] "
-                    >
-                      <motion.div
-                        exit={{ height: 0, opacity: 0 }}
-                        animate={{
-                          height: "fit-content",
-                          opacity: 1,
-                        }}
-                        initial={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3, delay: 0.3 }}
-                        className="flex flex-col justify-center items-center gap-[2rem] overflow-hidden"
-                      >
-                        <a
-                          target="_blank"
-                          href={process.env.NEXT_PUBLIC_WHITEPAPER || "/"}
-                        >
-                          <P
-                            uppercase
-                            gradient
-                            extrabold
-                            center
-                            className="font-sans font-extrabold text-nowrap"
-                          >
-                            Dark Paper
-                          </P>
-                        </a>
-                        <a
-                          target="_blank"
-                          href={process.env.NEXT_PUBLIC_WHITEPAPER || "/"}
-                        >
-                          <P
-                            uppercase
-                            gradient
-                            extrabold
-                            center
-                            className="font-sans font-extrabold text-nowrap"
-                          >
-                            Darker Paper
-                          </P>
-                        </a>
-                      </motion.div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </P> */}
+              {UNWRAP_AVAILABLE && (
+                <Link
+                  href={
+                    location.pathname === "/vaporize"
+                      ? "/vaporize#"
+                      : "/vaporize"
+                  }
+                >
+                  <P
+                    uppercase
+                    gradient
+                    extrabold
+                    className="font-sans font-extrabold"
+                  >
+                    Vaporize
+                  </P>
+                </Link>
+              )}
             </div>
           </div>
         </div>

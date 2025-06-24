@@ -39,3 +39,24 @@ export const POLL_TIME = parseInt(`${process.env.NEXT_PUBLIC_POLL_TIME}`);
 export const IMAGEKIT = "https://ik.imagekit.io/agogmax/Antigravity";
 
 export const BUY_DARK_URL = `${process.env.NEXT_PUBLIC_BUY_DARK_URL}`;
+
+// Tools Website
+export const EVIL_ADDRESS_PRUNE_AVAILABLE =
+  process.env.NEXT_PUBLIC_EVIL_PRUNE_TOGGLE === "true";
+
+// lotteryBuffer
+
+export const AGPROJECT_LINK = `${process.env.NEXT_PUBLIC_PROD_SITE}`;
+
+export const UNWRAP_AVAILABLE =
+  process.env.NEXT_PUBLIC_UNWRAP_AVAILABLE === "true";
+
+export const EVIL_ADDRESS_AVAILABLE =
+  process.env.NEXT_PUBLIC_EVIL_ADDRESS_AVAILABLE === "true";
+
+export const BACKGROUNDS = {
+  LOTTERY: process.env.NEXT_PUBLIC_LOTTERY_BG,
+  TREASURY: process.env.NEXT_PUBLIC_TREASURY_BG,
+  EVIL_ADDRESS: process.env.NEXT_PUBLIC_EVIL_ADDRESS_BG,
+  UNWRAP: process.env.NEXT_PUBLIC_UNWRAP_BG,
+};

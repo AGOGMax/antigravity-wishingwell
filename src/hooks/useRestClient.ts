@@ -1,16 +1,11 @@
 import { fetcher, mutate } from "@/api/restClient";
 import {
-  QueryKey,
   UseMutationResult,
-  UseQueryOptions,
   UseQueryResult,
   useMutation,
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import { useEffect, useMemo, useState } from "react";
-import toast from "react-hot-toast";
-import { errorToast } from "./frontend/toast";
 
 export const useRestFetch = <T>(
   tags: string[],
