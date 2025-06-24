@@ -62,6 +62,19 @@
   },
   {
     "type": "function",
+    "name": "TEAM_FEE",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "acceptOwnership",
     "inputs": [],
     "outputs": [],
@@ -157,7 +170,7 @@
     "name": "evilMint",
     "inputs": [],
     "outputs": [],
-    "stateMutability": "nonpayable"
+    "stateMutability": "payable"
   },
   {
     "type": "function",
@@ -192,7 +205,7 @@
       }
     ],
     "outputs": [],
-    "stateMutability": "nonpayable"
+    "stateMutability": "payable"
   },
   {
     "type": "function",
@@ -477,6 +490,19 @@
   },
   {
     "type": "function",
+    "name": "updateTeamFee",
+    "inputs": [
+      {
+        "name": "newTeamFee",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
     "name": "upgradeTo",
     "inputs": [
       {
@@ -641,6 +667,11 @@
   {
     "type": "error",
     "name": "EvilCallFailed",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "IncorrectFeeSent",
     "inputs": []
   },
   {

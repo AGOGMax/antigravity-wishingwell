@@ -1,14 +1,7 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-  content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/stories/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/hooks/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
+  content: ["./app/**/*.{js,ts,jsx,tsx,mdx}", "./src/**/*.{js,ts,jsx,tsx,mdx}"],
   theme: {
     fontFamily: {
       sans: ["Cabinet Grotesk", "sans-serif"],
@@ -38,6 +31,7 @@ const config: Config = {
         agorange: "#FF5001",
         successgreen: "#00B031",
         aggray: "#888888",
+        agpurple: "#8275A5",
       },
       boxShadow: {
         button: "0 6px 0 0 #030404",
@@ -73,7 +67,6 @@ const config: Config = {
       },
     },
     screens: {
-
       xs: "375px",
       // => @media (min-width: 375px) { ... }
 
@@ -92,7 +85,7 @@ const config: Config = {
       "2xl": "1536px",
       // => @media (min-width: 1536px) { ... },
 
-      "3xl" : "1950px",
+      "3xl": "1950px",
       // => @media (min-width: 1920px) { ... },
 
       tall: { raw: "(max-height: 700px)" },
