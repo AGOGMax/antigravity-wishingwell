@@ -296,7 +296,7 @@ export default function LotteryPage() {
                   initial="initial"
                   whileHover="hover"
                   loading={pruneLoading}
-                  disabled={false}
+                  disabled={fuelCellsWon < 1 || !account.isConnected}
                   loadingText={`${pruneBatch.from}-${pruneBatch.to}/${pruneBatch.total}`}
                   className={cn(
                     "text-[24px] border-[1px] border-agyellow mb-3",
