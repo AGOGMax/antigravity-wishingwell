@@ -16,6 +16,11 @@ import { useRestPost } from "@/hooks/useRestClient";
 import Dropdownbutton from "../Dropdownbutton";
 import useTimer from "@/hooks/frontend/useTimer";
 
+const LEADERBOARD_TYPES=[
+                    { label: "Highlights", value: "allTimeLeaderboard" },
+                    { label: "Full Leaderboard", value: "fullTimeLeaderboard" },
+                  ]
+
 function CollectiveLogo() {
   return (
     <div className="flex justify-start items-center gap-2 absolute lg:relative bottom-0 right-0 z-[100] h-fit w-fit">
@@ -53,7 +58,6 @@ export default function Leaderboard() {
 
   const handleRefresh = () => {
     mutateLeaderboardData({
-      // walletAddress: "0xec66c3810ca96ef7759c0f7b283d57989e738d90",
       walletAddress: account.address ?? "",
     });
   };
@@ -89,10 +93,7 @@ export default function Leaderboard() {
                 <H1>Leaderboard</H1>
                 <Dropdownbutton
                   icon={IMAGEKIT_ICONS.CALENDAR}
-                  options={[
-                    { label: "Highlights", value: "allTimeLeaderboard" },
-                    { label: "Full Leaderboard", value: "fullTimeLeaderboard" },
-                  ]}
+                  options={LEADERBOARD_TYPES}
                   selected={selectedLeaderboard}
                   setSelected={setSelectedLeaderboard}
                 />
@@ -109,24 +110,6 @@ export default function Leaderboard() {
                     },
                   }}
                 />
-                {/* <AnimatedButton
-                  innerText="Claim"
-                  iconSrc={IMAGEKIT_ICONS.GIFT_WHITE}
-                  iconAlt="Gift image"
-                  secondary
-                  disableSparkels
-                  onClick={() =>
-                    window.open(
-                      "https://airtable.com/appRD1ZlybvvvL4sO/pagkRHUf93rnGtpsa/form",
-                      "_blank",
-                    )
-                  }
-                  variants={{
-                    hover: {
-                      animation: "spin 1s linear infinite forwards",
-                    },
-                  }}
-                /> */}
               </div>
               <div className="rounded-[4px] border-[2px] border-[#414343] lg:border-none overflow-hidden">
                 <Table tableData={tableData} />
