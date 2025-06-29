@@ -15,7 +15,11 @@ import GradientBorder from "../GradientBorder";
 import { useRestPost } from "@/hooks/useRestClient";
 import Dropdownbutton from "../Dropdownbutton";
 import useTimer from "@/hooks/frontend/useTimer";
-import { client } from "../../../sanity/lib/client";
+
+const LEADERBOARD_TYPES=[
+                    { label: "Highlights", value: "allTimeLeaderboard" },
+                    { label: "Full Leaderboard", value: "fullTimeLeaderboard" },
+                  ]
 
 function CollectiveLogo() {
   return (
@@ -45,31 +49,12 @@ export default function Leaderboard() {
   const [tableData, setTableData] = useState<tableDataType[]>([]);
   const targetRef = useRef<HTMLDivElement>(null);
   const [selectedLeaderboard, setSelectedLeaderboard] = useState<
-    | "allTimeLeaderboard"
-    | "era1Leaderboard"
-    | "era2Leaderboard"
-    | "era3Leaderboard"
-    | string
+    "allTimeLeaderboard" | "fullTimeLeaderboard" | string
   >("allTimeLeaderboard");
   const { data: leaderboardData, mutate: mutateLeaderboardData } = useRestPost(
     ["leaderboard"],
     "/api/leaderboard",
   );
-  const [externalLinks, setExternalLinks] = useState<{
-    best_way_to_rank_up: string;
-  }>();
-
-  useEffect(() => {
-    client
-      .fetch(
-        `*[_type=="external_links"][0]{
-          best_way_to_rank_up
-        }`,
-      )
-      .then((externalLinks) => {
-        setExternalLinks(externalLinks);
-      });
-  }, []);
 
   const handleRefresh = () => {
     mutateLeaderboardData({
@@ -108,14 +93,7 @@ export default function Leaderboard() {
                 <H1>Leaderboard</H1>
                 <Dropdownbutton
                   icon={IMAGEKIT_ICONS.CALENDAR}
-                  options={[
-                    { label: "All Time", value: "allTimeLeaderboard" },
-                    { label: "Era 1", value: "era1Leaderboard" },
-                    { label: "Era 2", value: "era2Leaderboard" },
-                    timer.isMintingActive
-                      ? { label: "Era 3", value: "era3Leaderboard" }
-                      : { label: "", value: "" },
-                  ]}
+                  options={LEADERBOARD_TYPES}
                   selected={selectedLeaderboard}
                   setSelected={setSelectedLeaderboard}
                 />
@@ -133,19 +111,8 @@ export default function Leaderboard() {
                   }}
                 />
               </div>
-              <div className="rounded-[4px] min-h-[434px] border-[2px] border-[#414343] lg:border-none">
-                <Table
-                  tableData={tableData}
-                  era={
-                    selectedLeaderboard === "era1Leaderboard"
-                      ? 1
-                      : selectedLeaderboard === "era2Leaderboard"
-                        ? 2
-                        : selectedLeaderboard === "era3Leaderboard"
-                          ? 3
-                          : 1
-                  }
-                />
+              <div className="rounded-[4px] border-[2px] border-[#414343] lg:border-none overflow-hidden">
+                <Table tableData={tableData} />
               </div>
             </div>
 

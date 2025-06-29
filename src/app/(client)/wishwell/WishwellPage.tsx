@@ -5,7 +5,7 @@ import "@rainbow-me/rainbowkit/styles.css";
 import useWishwell from "@/hooks/sc-fns/useWishwell";
 import Footer from "@/components/Footer";
 import Newsletter from "@/components/Newsletter";
-import Leaderboard from "@/components/Leaderboard";
+import Leaderboard from "@/components/Collective/Leaderboard";
 import NotRegisteredHero from "@/components/Wishwell/components/NotRegisteredHero";
 import RegisteredHero from "@/components/Wishwell/components/RegisteredHero";
 import ContributedHero from "@/components/Wishwell/components/ContributedHero";
@@ -54,7 +54,7 @@ export default function WishwellPage() {
           }}
         />
       )}
-      {account.isConnected && <Leaderboard accountIsConnected />}
+      {account.isConnected && <Leaderboard />}
       <Newsletter />
       <Footer />
     </>

@@ -1,7 +1,7 @@
 "use client";
 
 import Newsletter from "@/components/Newsletter";
-import Leaderboard from "@/components/Leaderboard";
+import Leaderboard from "@/components/Collective/Leaderboard";
 import { useAccount } from "wagmi";
 import Footer from "@/components/Footer";
 import MintingHero from "@/components/Minting/MintingHero";
@@ -39,7 +39,7 @@ export default function MiningPage() {
   return (
     <>
       <MintingHero />
-      {account.isConnected && <Leaderboard accountIsConnected />}
+      {account.isConnected && <Leaderboard />}
       <Newsletter />
       <Footer />
     </>
