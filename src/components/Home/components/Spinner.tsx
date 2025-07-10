@@ -736,7 +736,7 @@ const decideArcSectorAngles = (
 } => {
   if (timer?.phaseNumber === 1) {
     // Current: Minting
-    return { startAngle: -135, endAngle: 225 };
+    return { startAngle: 135, endAngle: 225 };
   } else if (timer?.phaseNumber === 2) {
     if (lotteryTimerData?.lotteriesInfo?.lotteryId === "3") {
       // Current: Lottery 1
