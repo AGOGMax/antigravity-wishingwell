@@ -363,6 +363,12 @@ const useLottery = (): {
           total: proofs.length,
         });
 
+        console.log(
+          "debug, jackpot address",
+          JackpotContract.address,
+          JackpotContract,
+        );
+
         const tx = await batchPruneWinnings({
           address: JackpotContract.address as `0x${string}`,
           abi: JackpotContract.abi,
