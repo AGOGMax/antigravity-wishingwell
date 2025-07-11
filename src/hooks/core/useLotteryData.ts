@@ -106,7 +106,6 @@ const useLotteryData = () => {
           evilBonusMapping?.[lotteryId as "big" | "bigger" | "biggest"] ?? 0;
 
         const payoutValue = (preBonusPayout + evilBonus).toFixed(2);
-        console.log("debug, row", preBonusPayout, evilBonus);
         const { journeyId, lotteryId: currentLotteryId } =
           latestPayout?.lotteryResults?.items[0] ?? {};
 

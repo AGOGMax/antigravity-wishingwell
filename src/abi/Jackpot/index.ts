@@ -25,11 +25,11 @@ const contracts: Record<
     abi,
   },
   [pulsechain.id]: {
-    address: CONTRACTS[baseSepolia.id].jackpot,
+    address: CONTRACTS[pulsechain.id].jackpot,
     abi,
   },
   [baseSepolia.id]: {
-    address: CONTRACTS[pulsechain.id].jackpot,
+    address: CONTRACTS[baseSepolia.id].jackpot,
     abi,
   },
 };
