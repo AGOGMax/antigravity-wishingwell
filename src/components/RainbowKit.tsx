@@ -39,8 +39,8 @@ export const config = getDefaultConfig({
           `https://base-mainnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_KEY}`,
         ),
         [pulsechain.id]: fallback([
-          http("https://rpc-pulsechain.g4mm4.io"),
           http("https://pulsechain-rpc.publicnode.com"),
+          http("https://rpc-pulsechain.g4mm4.io"),
         ]),
       },
   ssr: true,
