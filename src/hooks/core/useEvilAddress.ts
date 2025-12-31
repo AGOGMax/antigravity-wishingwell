@@ -8,7 +8,7 @@ import {
 import { useRestFetch, useRestPost } from "../useRestClient";
 import { createMerkleTreeForLottery } from "../../toolsUtils/merkletree";
 import MerkleTree from "merkletreejs";
-import { encodePacked, keccak256 } from "viem";
+import { encodePacked, keccak256, zeroAddress } from "viem";
 import toast from "react-hot-toast";
 import { waitForTransactionReceipt } from "@wagmi/core";
 import useEAContract from "@/abi/EvilAddress";
@@ -42,7 +42,9 @@ const useEvilAddress = () => {
   }>(
     ["User Winnings in current lottery"],
     `/api/lottery-result?walletAddress=${EAContract.address}`,
-    {},
+    {
+      enabled: EAContract.address !== zeroAddress,
+    },
   );
 
   const lotteriesWon = useMemo(() => {
