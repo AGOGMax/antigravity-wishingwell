@@ -251,6 +251,128 @@ function MintFromEvilAddress({
   );
 }
 
+function Vaporize(
+  {
+    // data,
+    // evilMint,
+    // evilMintLoading,
+    // isMintActive,
+    // mintedOut,
+  }: {
+    // data: number;
+    // evilMint: () => void;
+    // evilMintLoading: boolean;
+    // isMintActive: boolean;
+    // mintedOut: boolean;
+  },
+) {
+  return (
+    <div
+      className={cn(
+        "border-[1px] border-agorange rounded-[6px] p-[8px] pb-[32px] bg-agwhite/30 backdrop-blur-lg w-full",
+      )}
+    >
+      <div
+        className={cn(
+          "flex justify-center items-center w-full gap-[8px] -translate-y-[calc(50%+8px)]",
+          // isFetched && !mintsAllowed && "blur-sm select-none",
+        )}
+      >
+        <motion.div
+          initial="initial"
+          whileHover="hover"
+          className={cn(
+            Gradients.darkBlue,
+            "relative flex justify-center items-center gap-[8px]",
+            "font-bold text-[14px] text-agwhite font-sans text-nowrap",
+            "px-[8px] py-[4px] rounded-[6px]",
+          )}
+        >
+          <HoverTextAnimation.Fading text="Vaporize" />{" "}
+          {/* if u want to add tooltip replace hello to that tooltip  */}
+          {/* <Tooltip
+            trigger={<PiInfoDuotone />}
+            positionClassName="absolute top-[calc(100%_+_8px)] right-0"
+          >
+            hello
+          </Tooltip> */}
+        </motion.div>
+      </div>
+      <form
+        className={cn(
+          "flex flex-col justify-center items-center gap-[8px] ",
+          "w-full md:w-[400px]",
+          // mintedOut && "blur-lg select-none",
+          "blur-lg select-none",
+        )}
+      >
+        <div
+          className={cn(
+            Gradients.tableBlue,
+            Shapes.dataCard,
+            "border-[1px] border-agyellow",
+            "grid grid-flow-col gap-[8px]",
+            "font-extrabold",
+            "w-full",
+            "flex justify-between items-center",
+          )}
+        >
+          <p className="text-agwhite text-[32px] leading-[32px] font-sans w-full">
+            {/* {data.toLocaleString("en-US")} */}
+          </p>
+          <Button
+            initial="initial"
+            whileHover="hover"
+            // onClick={(e) => {
+            //   e.preventDefault();
+            //   evilMint();
+            // }}
+            disabled
+            // disabled={evilMintLoading || !isMintActive}
+            // loading={evilMintLoading}
+            loadingText="Minting..."
+          >
+            <motion.div
+              variants={{
+                initial: { scale: 1 },
+                hover: {
+                  scale: 1.25,
+                  transition: { duration: 0.25 },
+                },
+              }}
+            >
+              {/* {evilMintLoading || !isMintActive ? (
+                <PiLockKeyDuotone />
+              ) : (
+                <PiCubeDuotone />
+              )} */}
+
+              <PiLockKeyDuotone />
+            </motion.div>
+            <HoverTextAnimation.RollingIn
+              // text={!isMintActive ? "Mint Inactive" : "Mint"}
+              text={"Vaporize"}
+            />
+          </Button>
+        </div>
+      </form>
+      {/* {mintedOut && ( */}
+      <div
+        className={cn(
+          "absolute top-1/2 left-1/2  -translate-x-1/2 -translate-y-1/2",
+          "flex flex-col justify-start items-start gap-[8px]",
+          "p-[8px] rounded-[6px]",
+          "bg-agblack/30 backdrop-blur-lg",
+          "font-extrabold z-10",
+        )}
+      >
+        <p className="text-agwhite text-[16px] font-sans">Coming Soon!</p>
+      </div>
+      {/* )} */}
+    </div>
+  );
+}
+
 export default function EvilAddressPage() {
   const {
     perPruneChunk,
@@ -315,6 +437,7 @@ export default function EvilAddressPage() {
             isMintActive={isMintActive}
             mintedOut={mintedOut}
           />
+          <Vaporize />
           <div
             className={cn(
               "flex flex-col justify-start items-start gap-[8px]",
