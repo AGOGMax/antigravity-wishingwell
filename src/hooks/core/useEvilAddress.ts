@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   useAccount,
   useConfig,
@@ -18,6 +18,7 @@ const PRUNE_BATCH_SIZE = 50;
 
 const useEvilAddress = () => {
   const [pruneLoading, setPruneLoading] = useState(false);
+  const [vaporizeLoading, setVaporizeLoading] = useState(false);
 
   const EAContract = useEAContract();
   const account = useAccount();
@@ -195,6 +196,298 @@ const useEvilAddress = () => {
   const { writeContractAsync: evilMintFn } = useWriteContract();
   const [evilMintLoading, setEvilMintLoading] = useState(false);
 
+  // Vaporize
+  const { writeContractAsync: vaporizeFn } = useWriteContract();
+
+  // Check if V2 is deployed by reading version()
+  const { data: contractVersion, isError: versionError } = useReadContract({
+    address: EAContract.address as `0x${string}`,
+    abi: EAContract.abi,
+    functionName: "version",
+  });
+
+  // Check if vaporize is disabled (only works on V2)
+  const { data: isVaporizeDisabled } = useReadContract({
+    address: EAContract.address as `0x${string}`,
+    abi: EAContract.abi,
+    functionName: "vaporizeDisabled",
+    query: {
+      enabled: !!contractVersion && !versionError,
+    },
+  });
+
+  // V2 is available if version() returns a value
+  const isV2Available = !!contractVersion && !versionError;
+
+  // Vaporizable tokens state
+  const [vaporizableTokens, setVaporizableTokens] = useState<
+    { tokenId: string; journeyId: number; canVaporize: boolean }[]
+  >([]);
+  const [loadingVaporizableTokens, setLoadingVaporizableTokens] = useState(false);
+  const [vaporizableScanProgress, setVaporizableScanProgress] = useState(0);
+  const scanAbortRef = useRef(false);
+
+  // Stop any running scan
+  const stopScan = () => {
+    scanAbortRef.current = true;
+    setLoadingVaporizableTokens(false);
+  };
+
+  // Clear scan results
+  const clearScanResults = () => {
+    stopScan();
+    setVaporizableTokens([]);
+    setVaporizableScanProgress(0);
+  };
+
+  // Journey ranges state
+  const [journeyRanges, setJourneyRanges] = useState<
+    { journeyId: number; start: number; end: number }[]
+  >([]);
+  const [currentJourneyId, setCurrentJourneyId] = useState<number>(9);
+  const [loadingJourneyRanges, setLoadingJourneyRanges] = useState(false);
+
+  // Contract addresses (PulseChain mainnet)
+  const FUELCELL_ADDRESS = "0x2187816076a1a129d03b4c14c88983AAf54052e3";
+  const JACKPOT_ADDRESS = "0x1b8E4f5300706651c3E6fE166487cCa03dE690B6";
+  const JPM_ADDRESS = "0xb2561655DAF1DE668F0240aCC6Cb9fb6f2b0450E";
+
+  // Fetch journey ranges from contract
+  const fetchJourneyRanges = async () => {
+    setLoadingJourneyRanges(true);
+    try {
+      // Get current journey
+      const currentJ = await readContract(config, {
+        address: JPM_ADDRESS as `0x${string}`,
+        abi: [
+          {
+            name: "currentJourney",
+            type: "function",
+            inputs: [],
+            outputs: [{ name: "", type: "uint256" }],
+            stateMutability: "view",
+          },
+        ],
+        functionName: "currentJourney",
+      });
+      setCurrentJourneyId(Number(currentJ));
+
+      // Fetch ranges for journeys 1 to current
+      const ranges: { journeyId: number; start: number; end: number }[] = [];
+      for (let j = 1; j <= Number(currentJ); j++) {
+        try {
+          const start = await readContract(config, {
+            address: JPM_ADDRESS as `0x${string}`,
+            abi: [
+              {
+                name: "startTokenIdInJourney",
+                type: "function",
+                inputs: [{ name: "journeyId", type: "uint256" }],
+                outputs: [{ name: "", type: "uint256" }],
+                stateMutability: "view",
+              },
+            ],
+            functionName: "startTokenIdInJourney",
+            args: [BigInt(j)],
+          });
+          const end = await readContract(config, {
+            address: JPM_ADDRESS as `0x${string}`,
+            abi: [
+              {
+                name: "lastTokenIdInJourney",
+                type: "function",
+                inputs: [{ name: "journeyId", type: "uint256" }],
+                outputs: [{ name: "", type: "uint256" }],
+                stateMutability: "view",
+              },
+            ],
+            functionName: "lastTokenIdInJourney",
+            args: [BigInt(j)],
+          });
+          if (Number(start) > 0) {
+            ranges.push({ journeyId: j, start: Number(start), end: Number(end) });
+          }
+        } catch {
+          // Skip if journey doesn't exist
+        }
+      }
+      setJourneyRanges(ranges);
+    } catch (err) {
+      console.error("Failed to fetch journey ranges:", err);
+    }
+    setLoadingJourneyRanges(false);
+  };
+
+  // Fetch journey ranges on mount
+  useEffect(() => {
+    fetchJourneyRanges();
+  }, []);
+
+  const scanVaporizableTokens = async (startTokenId: number, endTokenId: number) => {
+    if (!EAContract.address || EAContract.address === zeroAddress) return;
+
+    // Reset abort flag and start scan
+    scanAbortRef.current = false;
+    setLoadingVaporizableTokens(true);
+    setVaporizableTokens([]);
+    setVaporizableScanProgress(0);
+
+    const found: { tokenId: string; journeyId: number; canVaporize: boolean }[] = [];
+    const batchSize = 20;
+    const total = endTokenId - startTokenId;
+
+    for (let i = startTokenId; i <= endTokenId; i += batchSize) {
+      // Check if scan was aborted
+      if (scanAbortRef.current) {
+        console.log("Scan aborted");
+        return;
+      }
+
+      const batchEnd = Math.min(i + batchSize - 1, endTokenId);
+      const promises = [];
+
+      for (let tokenId = i; tokenId <= batchEnd; tokenId++) {
+        promises.push(
+          (async () => {
+            if (scanAbortRef.current) return; // Early exit if aborted
+            try {
+              // Check owner
+              const owner = await readContract(config, {
+                address: FUELCELL_ADDRESS as `0x${string}`,
+                abi: [
+                  {
+                    name: "ownerOf",
+                    type: "function",
+                    inputs: [{ name: "tokenId", type: "uint256" }],
+                    outputs: [{ name: "", type: "address" }],
+                    stateMutability: "view",
+                  },
+                ],
+                functionName: "ownerOf",
+                args: [BigInt(tokenId)],
+              });
+
+              if (scanAbortRef.current) return; // Check again after RPC call
+
+              if (owner?.toString().toLowerCase() === EAContract.address?.toLowerCase()) {
+                // Check if jackpot claimed
+                const isClaimed = await readContract(config, {
+                  address: JACKPOT_ADDRESS as `0x${string}`,
+                  abi: [
+                    {
+                      name: "isClaimed",
+                      type: "function",
+                      inputs: [{ name: "tokenId", type: "uint256" }],
+                      outputs: [{ name: "", type: "bool" }],
+                      stateMutability: "view",
+                    },
+                  ],
+                  functionName: "isClaimed",
+                  args: [BigInt(tokenId)],
+                });
+
+                // Get journey ID
+                let journeyId = 8; // Default for known range
+                try {
+                  const journey = await readContract(config, {
+                    address: EAContract.address as `0x${string}`,
+                    abi: EAContract.abi,
+                    functionName: "getJourneyForToken",
+                    args: [BigInt(tokenId)],
+                  });
+                  journeyId = Number(journey);
+                } catch {
+                  // Use default
+                }
+
+                if (!scanAbortRef.current) {
+                  found.push({
+                    tokenId: tokenId.toString(),
+                    journeyId,
+                    canVaporize: isClaimed as boolean,
+                  });
+                }
+              }
+            } catch {
+              // Token doesn't exist or error
+            }
+          })()
+        );
+      }
+
+      await Promise.all(promises);
+
+      if (scanAbortRef.current) return; // Final check before updating state
+
+      setVaporizableScanProgress(Math.min(100, Math.round(((i - startTokenId) / total) * 100)));
+      setVaporizableTokens([...found]);
+    }
+
+    if (!scanAbortRef.current) {
+      setLoadingVaporizableTokens(false);
+      setVaporizableScanProgress(100);
+    }
+  };
+
+  // Preview DARK release for vaporize
+  const previewVaporize = async (journeyId: number, tokenCount: number): Promise<bigint> => {
+    console.log("previewVaporize called:", { journeyId, tokenCount, address: EAContract.address });
+    if (!journeyId || journeyId <= 0 || !tokenCount || tokenCount <= 0) {
+      console.log("Invalid args, returning 0");
+      return BigInt(0);
+    }
+    try {
+      const darkAmount = await readContract(config, {
+        address: EAContract.address as `0x${string}`,
+        abi: EAContract.abi,
+        functionName: "previewVaporize",
+        args: [BigInt(journeyId), BigInt(tokenCount)],
+      });
+      console.log("previewVaporize result:", darkAmount);
+      return darkAmount as bigint;
+    } catch (err) {
+      console.error("Preview failed:", err);
+      return BigInt(0);
+    }
+  };
+
+  const vaporize = async (journeyId: number, tokenIds: bigint[]) => {
+    try {
+      setVaporizeLoading(true);
+
+      const tx = await vaporizeFn({
+        address: EAContract.address as `0x${string}`,
+        abi: EAContract.abi,
+        functionName: "vaporize",
+        args: [BigInt(journeyId), tokenIds],
+      });
+
+      const receipt = await waitForTransactionReceipt(config, {
+        hash: tx,
+        confirmations: 2,
+      });
+
+      console.log({ status: "Vaporize Passed", receipt });
+      toast.success(`Vaporize Successful! DARK sent to Treasury.`);
+      setVaporizeLoading(false);
+      return true;
+    } catch (err: any) {
+      console.log({ err });
+      console.log({ status: "Vaporize Failed" });
+      setVaporizeLoading(false);
+
+      // Handle specific errors
+      if (err?.message?.includes("VaporizeIsDisabled")) {
+        toast.error("Vaporize is currently disabled by owner.");
+      } else if (err?.message?.includes("UnclaimedJackpotWinnings")) {
+        toast.error("FuelCell has unclaimed jackpot winnings. Scrape first!");
+      } else {
+        toast.error("Failed to Vaporize! Please Try Again");
+      }
+      return false;
+    }
+  };
+
   const evilMint = async () => {
     try {
       setEvilMintLoading(true);
@@ -292,6 +585,24 @@ const useEvilAddress = () => {
     isMintActive,
     mintTimestamp,
     mintedOut: (isFetched && mintedOut) as boolean,
+    // V2 Vaporize
+    vaporize,
+    vaporizeLoading,
+    isVaporizeDisabled: isVaporizeDisabled as boolean,
+    isV2Available,
+    previewVaporize,
+    evilAddressContract: EAContract,
+    // Vaporizable tokens scanner
+    scanVaporizableTokens,
+    stopScan,
+    clearScanResults,
+    vaporizableTokens,
+    loadingVaporizableTokens,
+    vaporizableScanProgress,
+    // Journey ranges (from contract)
+    journeyRanges,
+    currentJourneyId,
+    loadingJourneyRanges,
   };
 };
 
