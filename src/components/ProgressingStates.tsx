@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { CSSProperties } from "styled-components";
+import { useEffect, useState, CSSProperties } from "react";
 import { twMerge } from "tailwind-merge";
 import { AnimatePresence, motion } from "framer-motion";
 import { states } from "./Minting/types";

@@ -527,8 +527,8 @@ function Vaporize({
                   key={t.tokenId}
                   onClick={() => {
                     if (t.canVaporize) {
-                      setTokenIdsInput((prev) =>
-                        prev ? `${prev}, ${t.tokenId}` : t.tokenId
+                      setTokenIdsInput(
+                        tokenIdsInput ? `${tokenIdsInput}, ${t.tokenId}` : String(t.tokenId)
                       );
                       setJourneyId(t.journeyId.toString());
                     }
