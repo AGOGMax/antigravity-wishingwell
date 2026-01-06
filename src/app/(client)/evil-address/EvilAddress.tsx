@@ -291,8 +291,8 @@ function Vaporize({
 }) {
   const sectionDisabled = isVaporizeDisabled;
 
-  // All tokens can now be vaporized
-  const allTokens = vaporizableTokens;
+  const readyTokens = vaporizableTokens.filter((t) => t.canVaporize);
+  const pendingTokens = vaporizableTokens.filter((t) => !t.canVaporize);
 
   // Scanner inputs - initialized when journey ranges load
   const [scanStart, setScanStart] = useState("");
@@ -361,9 +361,9 @@ function Vaporize({
 
   const MAX_VAPORIZE = 300;
 
-  const selectAllTokens = () => {
+  const selectAllReady = () => {
     // Limit to first 300 tokens
-    const selected = allTokens.slice(0, MAX_VAPORIZE);
+    const selected = readyTokens.slice(0, MAX_VAPORIZE);
     const ids = selected.map((t) => t.tokenId).join(", ");
     setTokenIdsInput(ids);
     if (selected.length > 0) {
@@ -509,15 +509,15 @@ function Vaporize({
           <div className="w-full bg-agblack/50 rounded-[6px] p-[8px] border border-agyellow max-h-[200px] overflow-y-auto">
             <div className="flex justify-between items-center mb-2">
               <p className="text-agwhite text-[12px]">
-                Found: {allTokens.length} tokens
+                Found: {readyTokens.length} ready, {pendingTokens.length} pending scrape
               </p>
-              {allTokens.length > 0 && (
+              {readyTokens.length > 0 && (
                 <button
                   type="button"
-                  onClick={selectAllTokens}
+                  onClick={selectAllReady}
                   className="text-agyellow text-[12px] underline"
                 >
-                  Select {allTokens.length > MAX_VAPORIZE ? `first ${MAX_VAPORIZE}` : "all"}
+                  Select {readyTokens.length > MAX_VAPORIZE ? `first ${MAX_VAPORIZE}` : "all"} ready
                 </button>
               )}
             </div>
@@ -526,13 +526,20 @@ function Vaporize({
                 <span
                   key={t.tokenId}
                   onClick={() => {
-                    setTokenIdsInput(
-                      tokenIdsInput ? `${tokenIdsInput}, ${t.tokenId}` : String(t.tokenId)
-                    );
-                    setJourneyId(t.journeyId.toString());
+                    if (t.canVaporize) {
+                      setTokenIdsInput(
+                        tokenIdsInput ? `${tokenIdsInput}, ${t.tokenId}` : String(t.tokenId)
+                      );
+                      setJourneyId(t.journeyId.toString());
+                    }
                   }}
-                  className="text-[10px] px-2 py-1 rounded cursor-pointer bg-green-600/50 text-agwhite hover:bg-green-500/50"
-                  title="Click to select"
+                  className={cn(
+                    "text-[10px] px-2 py-1 rounded cursor-pointer",
+                    t.canVaporize
+                      ? "bg-green-600/50 text-agwhite hover:bg-green-500/50"
+                      : "bg-red-600/30 text-agwhite/50 cursor-not-allowed"
+                  )}
+                  title={t.canVaporize ? "Ready to vaporize" : "Won jackpot - scrape first"}
                 >
                   {t.tokenId}
                 </span>
