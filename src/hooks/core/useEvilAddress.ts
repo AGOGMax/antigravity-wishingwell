@@ -220,8 +220,9 @@ const useEvilAddress = () => {
   const isV2Available = !!contractVersion && !versionError;
 
   // Vaporizable tokens state
+  // status: 'no-win' = didn't win, 'won-scraped' = won and scraped, 'won-pending' = won but needs scrape
   const [vaporizableTokens, setVaporizableTokens] = useState<
-    { tokenId: string; journeyId: number; canVaporize: boolean }[]
+    { tokenId: string; journeyId: number; canVaporize: boolean; status: 'no-win' | 'won-scraped' | 'won-pending' }[]
   >([]);
   const [loadingVaporizableTokens, setLoadingVaporizableTokens] = useState(false);
   const [vaporizableScanProgress, setVaporizableScanProgress] = useState(0);
@@ -332,7 +333,29 @@ const useEvilAddress = () => {
     setVaporizableTokens([]);
     setVaporizableScanProgress(0);
 
-    const found: { tokenId: string; journeyId: number; canVaporize: boolean }[] = [];
+    // Build map of winning tokens from userWinnings data
+    // tokenId -> isPruned (true = scraped, false = needs scrape)
+    const winningTokensMap = new Map<number, boolean>();
+    console.log("Scanner userWinnings:", {
+      userWinnings,
+      userWinningsFetched,
+      lotteryResultCount: userWinnings?.lotteryResult?.length,
+      EAAddress: EAContract.address
+    });
+    userWinnings?.lotteryResult?.forEach((win) => {
+      winningTokensMap.set(win.tokenId, win.isPruned);
+    });
+
+    // Log winning token IDs for debugging
+    const winningTokenIds = Array.from(winningTokensMap.keys()).sort((a, b) => a - b);
+    console.log("🎯 Winning token IDs:", winningTokenIds);
+    console.log("🔍 Scanning range:", startTokenId, "to", endTokenId);
+
+    // Check if any winning tokens are in scan range
+    const winningInRange = winningTokenIds.filter(id => id >= startTokenId && id <= endTokenId);
+    console.log("🎲 Winning tokens IN scan range:", winningInRange.length, winningInRange.slice(0, 10));
+
+    const found: { tokenId: string; journeyId: number; canVaporize: boolean; status: 'no-win' | 'won-scraped' | 'won-pending' }[] = [];
     const batchSize = 20;
     const total = endTokenId - startTokenId;
 
@@ -384,12 +407,32 @@ const useEvilAddress = () => {
                   // Use default
                 }
 
-                // All tokens shown as vaporizable - contract will reject ones with unclaimed winnings
+                // Check if token can be vaporized using userWinnings data:
+                // - If token WON and NOT scraped (isPruned=false) -> cannot vaporize
+                // - If token WON and scraped (isPruned=true) -> can vaporize
+                // - If token did NOT win (not in map) -> can vaporize
+                let canVaporize = true;
+                let status: 'no-win' | 'won-scraped' | 'won-pending' = 'no-win';
+
+                const isWinner = winningTokensMap.has(tokenId);
+                if (isWinner) {
+                  const isPruned = winningTokensMap.get(tokenId);
+                  console.log(`🏆 Token ${tokenId} is a WINNER! isPruned=${isPruned}`);
+                  if (isPruned) {
+                    status = 'won-scraped';
+                    canVaporize = true;
+                  } else {
+                    status = 'won-pending';
+                    canVaporize = false;
+                  }
+                }
+
                 if (!scanAbortRef.current) {
                   found.push({
                     tokenId: tokenId.toString(),
                     journeyId,
-                    canVaporize: true,
+                    canVaporize,
+                    status,
                   });
                 }
               }
@@ -411,6 +454,18 @@ const useEvilAddress = () => {
     if (!scanAbortRef.current) {
       setLoadingVaporizableTokens(false);
       setVaporizableScanProgress(100);
+
+      // Summary log
+      const noWin = found.filter(t => t.status === 'no-win').length;
+      const wonScraped = found.filter(t => t.status === 'won-scraped').length;
+      const wonPending = found.filter(t => t.status === 'won-pending').length;
+      console.log("📊 Scan complete:", {
+        total: found.length,
+        noWin,
+        wonScraped,
+        wonPending,
+        tokenIdsSample: found.slice(0, 5).map(t => t.tokenId)
+      });
     }
   };
 

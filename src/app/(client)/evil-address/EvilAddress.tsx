@@ -25,13 +25,15 @@ function ScrapeAndRollOver({
   data,
   evilPrune,
   evilPruneLoading,
+  disabled = false,
 }: {
   data: number;
   evilPrune: () => void;
   evilPruneLoading: boolean;
+  disabled?: boolean;
 }) {
   // make this false to remove the blur
-  const sectionBluredAndCommingSoon = !EVIL_ADDRESS_PRUNE_AVAILABLE;
+  const sectionBluredAndCommingSoon = !EVIL_ADDRESS_PRUNE_AVAILABLE || disabled;
   return (
     <div
       className={cn(
@@ -130,7 +132,7 @@ function ScrapeAndRollOver({
             "font-extrabold z-10",
           )}
         >
-          <p className="text-agwhite text-[16px] font-sans">Coming Soon</p>
+          <p className="text-agwhite text-[16px] font-sans">{disabled ? "Disabled" : "Coming Soon"}</p>
         </div>
       )}
     </div>
@@ -281,7 +283,7 @@ function Vaporize({
   scanVaporizableTokens: (start: number, end: number) => Promise<void>;
   stopScan: () => void;
   clearScanResults: () => void;
-  vaporizableTokens: { tokenId: string; journeyId: number; canVaporize: boolean }[];
+  vaporizableTokens: { tokenId: string; journeyId: number; canVaporize: boolean; status: 'no-win' | 'won-scraped' | 'won-pending' }[];
   loadingVaporizableTokens: boolean;
   vaporizableScanProgress: number;
   journeyRanges: { journeyId: number; start: number; end: number }[];
@@ -291,8 +293,11 @@ function Vaporize({
 }) {
   const sectionDisabled = isVaporizeDisabled;
 
+  // Filter tokens by status
+  const noWinTokens = vaporizableTokens.filter((t) => t.status === 'no-win');
+  const wonScrapedTokens = vaporizableTokens.filter((t) => t.status === 'won-scraped');
+  const wonPendingTokens = vaporizableTokens.filter((t) => t.status === 'won-pending');
   const readyTokens = vaporizableTokens.filter((t) => t.canVaporize);
-  const pendingTokens = vaporizableTokens.filter((t) => !t.canVaporize);
 
   // Scanner inputs - initialized when journey ranges load
   const [scanStart, setScanStart] = useState("");
@@ -506,20 +511,36 @@ function Vaporize({
 
         {/* Token List */}
         {vaporizableTokens.length > 0 && (
-          <div className="w-full bg-agblack/50 rounded-[6px] p-[8px] border border-agyellow max-h-[200px] overflow-y-auto">
-            <div className="flex justify-between items-center mb-2">
-              <p className="text-agwhite text-[12px]">
-                Found: {readyTokens.length} ready, {pendingTokens.length} pending scrape
-              </p>
-              {readyTokens.length > 0 && (
-                <button
-                  type="button"
-                  onClick={selectAllReady}
-                  className="text-agyellow text-[12px] underline"
-                >
-                  Select {readyTokens.length > MAX_VAPORIZE ? `first ${MAX_VAPORIZE}` : "all"} ready
-                </button>
-              )}
+          <div className="w-full bg-agblack/50 rounded-[6px] p-[8px] border border-agyellow max-h-[250px] overflow-y-auto">
+            <div className="flex flex-col gap-1 mb-2">
+              <div className="flex justify-between items-center">
+                <p className="text-agwhite text-[12px]">
+                  Found: {vaporizableTokens.length} total ({readyTokens.length} can vaporize)
+                </p>
+                {readyTokens.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={selectAllReady}
+                    className="text-agyellow text-[12px] underline"
+                  >
+                    Select {readyTokens.length > MAX_VAPORIZE ? `first ${MAX_VAPORIZE}` : "all"} ready
+                  </button>
+                )}
+              </div>
+              <div className="flex gap-3 text-[10px]">
+                <span className="flex items-center gap-1">
+                  <span className="w-3 h-3 rounded bg-green-600/50"></span>
+                  <span className="text-agwhite">No win ({noWinTokens.length})</span>
+                </span>
+                <span className="flex items-center gap-1">
+                  <span className="w-3 h-3 rounded bg-agyellow/50"></span>
+                  <span className="text-agwhite">Won + scraped ({wonScrapedTokens.length})</span>
+                </span>
+                <span className="flex items-center gap-1">
+                  <span className="w-3 h-3 rounded bg-red-600/50"></span>
+                  <span className="text-agwhite">Won - needs scrape ({wonPendingTokens.length})</span>
+                </span>
+              </div>
             </div>
             <div className="flex flex-wrap gap-1">
               {vaporizableTokens.map((t) => (
@@ -535,11 +556,15 @@ function Vaporize({
                   }}
                   className={cn(
                     "text-[10px] px-2 py-1 rounded cursor-pointer",
-                    t.canVaporize
-                      ? "bg-green-600/50 text-agwhite hover:bg-green-500/50"
-                      : "bg-red-600/30 text-agwhite/50 cursor-not-allowed"
+                    t.status === 'no-win' && "bg-green-600/50 text-agwhite hover:bg-green-500/50",
+                    t.status === 'won-scraped' && "bg-agyellow/50 text-agwhite hover:bg-agyellow/70",
+                    t.status === 'won-pending' && "bg-red-600/50 text-agwhite/70 cursor-not-allowed"
                   )}
-                  title={t.canVaporize ? "Ready to vaporize" : "Won jackpot - scrape first"}
+                  title={
+                    t.status === 'no-win' ? "Didn't win - can vaporize" :
+                    t.status === 'won-scraped' ? "Won + scraped - can vaporize" :
+                    "Won - needs scrape first"
+                  }
                 >
                   {t.tokenId}
                 </span>
@@ -717,6 +742,7 @@ export default function EvilAddressPage() {
           <ScrapeAndRollOver
             data={perPruneChunk}
             {...{ evilPrune, evilPruneLoading }}
+            disabled={true}
           />
           <MintFromEvilAddress
             data={Number(mintsAllowed) ?? 500}
