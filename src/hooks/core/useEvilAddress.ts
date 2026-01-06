@@ -332,21 +332,6 @@ const useEvilAddress = () => {
     setVaporizableTokens([]);
     setVaporizableScanProgress(0);
 
-    // Fetch lottery winners from backend to check which tokens won and need scraping
-    let winningTokens: Map<number, boolean> = new Map(); // tokenId -> isPruned
-    try {
-      const response = await fetch(`/api/lottery-result?walletAddress=${EAContract.address}`);
-      if (response.ok) {
-        const data = await response.json();
-        // Build a map of tokenId -> isPruned for quick lookup
-        data.lotteryResult?.forEach((win: { tokenId: number; isPruned: boolean }) => {
-          winningTokens.set(win.tokenId, win.isPruned);
-        });
-      }
-    } catch (err) {
-      console.log("Failed to fetch lottery results:", err);
-    }
-
     const found: { tokenId: string; journeyId: number; canVaporize: boolean }[] = [];
     const batchSize = 20;
     const total = endTokenId - startTokenId;
@@ -399,21 +384,12 @@ const useEvilAddress = () => {
                   // Use default
                 }
 
-                // Check if token can be vaporized:
-                // - If token WON lottery and NOT pruned (isPruned=false) -> cannot vaporize
-                // - If token WON lottery and IS pruned (isPruned=true) -> can vaporize
-                // - If token did NOT win lottery -> can vaporize
-                let canVaporize = true;
-                if (winningTokens.has(tokenId)) {
-                  const isPruned = winningTokens.get(tokenId);
-                  canVaporize = isPruned === true; // Can only vaporize if already pruned/scraped
-                }
-
+                // All tokens shown as vaporizable - contract will reject ones with unclaimed winnings
                 if (!scanAbortRef.current) {
                   found.push({
                     tokenId: tokenId.toString(),
                     journeyId,
-                    canVaporize,
+                    canVaporize: true,
                   });
                 }
               }
