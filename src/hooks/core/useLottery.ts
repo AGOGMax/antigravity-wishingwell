@@ -406,8 +406,8 @@ const useLottery = (): {
   return {
     nextLotteryTimestamp,
     lotteryPayout: totalWinnings,
-    currentPhase: Number(JPMReadData?.[1].result) ?? 1,
-    currentJourney: Number(JPMReadData?.[0].result) ?? 1,
+    currentPhase: Number(JPMReadData?.[1].result) || 1,
+    currentJourney: Number(JPMReadData?.[0].result) || 1,
     fuelCellsWon: userWinnings?.lotteryResult?.length ?? 0,
     pruneLoading,
     pruneBatch,

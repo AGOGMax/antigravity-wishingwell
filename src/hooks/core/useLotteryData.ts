@@ -2,7 +2,7 @@
 
 import useJPMContract from "@/abi/JourneyPhaseManager";
 import { useMemo } from "react";
-import { useReadContract } from "wagmi";
+import { useReadContract, useReadContracts } from "wagmi";
 import { useGQLFetch } from "../useGraphQLClient";
 import { gql } from "graphql-request";
 import { useRestFetch } from "../useRestClient";
@@ -20,6 +20,25 @@ const tableDataTemplate = [
 const useLotteryData = () => {
   // fetch jackpot dark balance
   const JPMContract = useJPMContract();
+
+  // Get currentJourney directly from contract instead of GraphQL
+  const { data: contractData } = useReadContracts({
+    contracts: [
+      {
+        address: JPMContract?.address,
+        abi: JPMContract?.abi,
+        functionName: "currentJourney",
+        chainId: TEST_NETWORK ? TESTCHAINS[0].id : pulsechain.id,
+      },
+    ],
+    query: {
+      enabled: JPMContract.address !== zeroAddress,
+    },
+  });
+
+  const currentJourney = useMemo(() => {
+    return Number(contractData?.[0]?.result) || 1;
+  }, [contractData]);
 
   const { data: latestPayout } = useGQLFetch<{
     lotteryResults: {
@@ -44,42 +63,24 @@ const useLotteryData = () => {
     {},
   );
 
-  const { data: journeyData, isFetched: journeyDataFetched } = useGQLFetch<{
-    journeyPhaseManager: {
-      currentJourneyId: string;
-    };
-  }>(
-    ["current journey"],
-    gql`query {
-        journeyPhaseManager(id: "${JPMContract.address}") {
-            currentJourneyId
-        }
-    }
-  `,
-    TEST_NETWORK ? TESTCHAINS[0].id : pulsechain.id,
-    {},
-    { enabled: JPMContract.address !== zeroAddress },
-  );
-
   const { data: evilBonusMapping } = useRestFetch<{
     big: number;
     bigger: number;
     biggest: number;
   }>(
     ["Evil bonus in current journey"],
-    `/api/evil-bonus/${
-      journeyData?.journeyPhaseManager?.currentJourneyId ?? 1
-    }`,
-    { enabled: journeyDataFetched },
+    `/api/evil-bonus/${currentJourney}`,
+    { enabled: currentJourney > 0 },
   );
 
   const { data: activeNFTs, isFetched: fetchedActiveNFTs } = useReadContract({
     address: JPMContract?.address,
     abi: JPMContract.abi,
     functionName: "getActiveNftsInJourney",
-    args: [BigInt(journeyData?.journeyPhaseManager?.currentJourneyId ?? 1)],
+    args: [BigInt(currentJourney)],
+    chainId: TEST_NETWORK ? TESTCHAINS[0].id : pulsechain.id,
     query: {
-      enabled: !!journeyData?.journeyPhaseManager?.currentJourneyId,
+      enabled: JPMContract.address !== zeroAddress && currentJourney > 0,
     },
   });
 
@@ -116,7 +117,7 @@ const useLotteryData = () => {
         };
 
         let paid: boolean =
-          journeyId === journeyData?.journeyPhaseManager.currentJourneyId &&
+          Number(journeyId) === currentJourney &&
           Number(currentLotteryId) >=
             mappingLotteryToNumber[lotteryId as "big"];
 
@@ -137,7 +138,7 @@ const useLotteryData = () => {
     return tableDataTemplate.map((row) => {
       return [`${row[0]} ${row[1]}x`, 0, 0, 0];
     });
-  }, [jackpotMintedInJourney, latestPayout, journeyData, evilBonusMapping]);
+  }, [jackpotMintedInJourney, latestPayout, currentJourney, evilBonusMapping]);
 
   return {
     totalFuelCellsInJourney: totalFuelCells,
