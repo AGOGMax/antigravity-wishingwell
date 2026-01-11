@@ -78,7 +78,7 @@ const Header = () => {
     }
   };
 
-  const { mutation: storeJourneyData, journey } = useJourneyData();
+  const { mutation: storeJourneyData } = useJourneyData();
 
   const { mutateAsync: fetchEra3 } = useRestPost(
     ["era-3-timestamps-multipliers"],
@@ -88,20 +88,21 @@ const Header = () => {
     userDark: darkBalance,
     treasuryDark: treasuryBalance,
     DarkContract,
+    journey,
   } = useHeaderStats();
 
   const DarkContractAdd = DarkContract.address;
 
   useEffect(() => {
     fetchEra3({ walletAddress: account.address }).then((data: any) => {
+      const currentJourney = Number(data.currentJourney);
       storeJourneyData({
-        // journey: Number(data.currentJourney),
-        phase: Number(data.currentPhase),
-        multiplier: Number(data.multiplier) ?? 0,
-        rewardMultiplier: Number(data.rewardMultiplier) ?? 0,
+        phase: Number(data.currentPhase) || 1,
+        multiplier: Number(data.multiplier) || 0,
+        rewardMultiplier: Number(data.rewardMultiplier) || 0,
       });
-      if (data.currentJourney !== journey) {
-        storeJourneyData({ journey: data.currentJourney });
+      if (!isNaN(currentJourney) && currentJourney > 0 && currentJourney !== journey) {
+        storeJourneyData({ journey: currentJourney });
       }
     });
   }, [account.address, journey]);
@@ -161,7 +162,7 @@ const Header = () => {
             <p className="flex justify-center items-center gap-[8px]">
               <PiRocketLaunchDuotone className="text-[24px] leading-[24px] text-agwhite" />
               <span>Journey:</span>
-              <LoaderSpan data={journey} />
+              <LoaderSpan data={journey > 0 ? journey : undefined} />
             </p>
             {account.isConnected && checkCorrectNetwork(account.chainId) ? (
               <Fragment>
