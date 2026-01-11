@@ -1,8 +1,11 @@
 // Tools Website
 
 import { useEffect, useState } from "react";
+import { useReadContracts } from "wagmi";
+import { pulsechain, pulsechainV4 } from "viem/chains";
+import { TEST_NETWORK } from "@/constants";
+import useJPMContract from "@/abi/JourneyPhaseManager";
 import useCountdownTimer from "./useCountdownTimer";
-
 // Define the Timer type to represent the state returned by the useTimer hook
 type Timer = {
   countdown: ReturnType<typeof useCountdownTimer>[0];
@@ -32,34 +35,37 @@ export default function useTimer(
     currentPhase: 0,
   });
 
+  // 1. We ask the Blockchain (JPM Contract) for the current status
+  const JPMContract = useJPMContract();
+  const { data: JPMReadData } = useReadContracts({
+    contracts: [
+      { ...JPMContract, functionName: "currentJourney" },
+      { ...JPMContract, functionName: "currentPhase" },
+      { ...JPMContract, functionName: "getNextPhaseTimestamp" },
+    ].map((call) => ({
+      ...call,
+      chainId: TEST_NETWORK ? pulsechainV4.id : pulsechain.id,
+    })),
+  });
+
+  // 2. We take that data and format it so the timer understands it
   useEffect(() => {
-    // Fetch timestamps data if not already cached
-    if (cachedTimestamps === null) {
-      fetch(
-        "https://ag-api-test.simplrhq.com/api/era-3-timestamps-multipliers",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        },
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          // Cache the fetched data
-          cachedTimestamps = data;
-          // Update countdown timer and details state with fetched data
-          setInitialCountdown(data[timestamp]);
-          setDetails({
-            currentJourney: data.currentJourney,
-            currentPhase: data.currentPhase,
-          });
-        })
-        .catch((error) => {
-          console.error("Error fetching timestamps data:", error);
-        });
+    if (JPMReadData && JPMReadData[0]?.result !== undefined) {
+      const journey = Number(JPMReadData[0].result);
+      const phase = Number(JPMReadData[1].result);
+      const timestamp = Number(JPMReadData[2].result);
+
+      // We update the timer's "details" (Journey and Phase numbers)
+      setDetails({
+        currentJourney: journey,
+        currentPhase: phase,
+      });
+
+      // We tell the countdown to start ticking toward the new timestamp
+      // (* 1000 converts Blockchain Seconds to Website Milliseconds)
+      setInitialCountdown(timestamp * 1000);
     }
-  }, [countdown]);
+  }, [JPMReadData, setInitialCountdown]);
 
   return {
     countdown,
