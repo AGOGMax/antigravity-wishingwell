@@ -78,11 +78,13 @@ export default function useTimer(
   }, [JPMReadData, setInitialCountdown]);
 
   // FINAL CLEAN RETURN
+ // FINAL CLEAN RETURN
   return {
     ...countdown,
-    // Ensure naming matches the interface (mins/secs)
-    mins: countdown.mins ?? 0,
-    secs: countdown.secs ?? 0,
+    // Map 'minutes' from the hook to 'mins' for the interface
+    // Map 'seconds' from the hook to 'secs' for the interface
+    mins: (countdown as any).minutes ?? (countdown as any).mins ?? 0,
+    secs: (countdown as any).seconds ?? (countdown as any).secs ?? 0,
     phase: details.phase,
     era: details.era,
     journey: details.journey,
