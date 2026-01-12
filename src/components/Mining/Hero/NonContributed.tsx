@@ -38,18 +38,22 @@ export default function NonContributed({
   const account = useAccount();
   const { openChainModal } = useChainModal();
 
-  // 1. Updated getEra to handle Journeys
-  const getEra = (era: string) => {
+  // 1. BULLETPROOF getEra - ensures 1, 2, or 3 is ALWAYS returned
+  const getEra = (era: string): 1 | 2 | 3 => {
+    let eraNumber = 1; 
     if (era?.startsWith("journey")) {
-      const journeyNum = parseInt(era.replace("journey", ""));
-      return journeyNum || 1;
+      const parsed = parseInt(era.replace("journey", ""));
+      eraNumber = parsed || 1;
+    } else {
+      switch (era) {
+        case "wishwell": eraNumber = 1; break;
+        case "mining":   eraNumber = 2; break;
+        case "minting":  eraNumber = 3; break;
+        default:         eraNumber = 1; break;
+      }
     }
-    switch (era) {
-      case "wishwell": return 1;
-      case "mining": return 2;
-      case "minting": return 3;
-      default: return 1;
-    }
+    // Clamps the value between 1 and 3
+    return Math.min(Math.max(eraNumber, 1), 3) as 1 | 2 | 3;
   };
 
   const { data: s3Data } = useRestFetch(["s3"], `/s3`, { proxy: true });
@@ -142,7 +146,6 @@ export default function NonContributed({
         setValue={setValue}
         conversionRateToUSD={0.245}
         era={getEra(timerState.era)}
-        // 2. Safer phase casting for Vercel build
         phase={(timerState.phase || 1) as 1 | 2 | 3}
         multiplyer={multiplyer}
         inputOptions={tokens?.map((token) => ({ ...token, USDvalue: usdValue })) || []}
@@ -151,17 +154,31 @@ export default function NonContributed({
       />
 
       {!account.isConnected ? (
-        <Button innerText="Connect Wallet" iconSrc={IMAGEKIT_ICONS.WALLET_WHITE} onClick={openConnectModal} />
+        <Button 
+            innerText="Connect Wallet" 
+            iconSrc={IMAGEKIT_ICONS.WALLET_WHITE} 
+            onClick={openConnectModal} 
+        />
       ) : checkCorrectNetwork(account.chainId) ? (
         <Button
           loading={transactionLoading}
-          innerText={value > Number(tokenBalances?.[selectedToken]) ? (isApprovalNeeded ? "Approve & Mine" : "Mine Now") : "Insufficient Funds"}
+          innerText={
+            value > Number(tokenBalances?.[selectedToken]) 
+              ? (transactionLoading 
+                  ? (isApprovalNeeded ? (!approveReceipt ? "Approving..." : "Mining...") : "Mining...") 
+                  : (isApprovalNeeded ? "Approve & Mine" : "Mine Now")) 
+              : "Insufficient Funds"
+          }
           disabled={value === 0 || value > Number(tokenBalances?.[selectedToken]) || transactionLoading || timerState.era !== "mining"}
           iconSrc={IMAGEKIT_ICONS.HAMMER}
           onClick={handleMine}
         />
       ) : (
-        <Button innerText="Switch Network" iconSrc={IMAGEKIT_ICONS.ERROR} onClick={openChainModal} />
+        <Button 
+            innerText="Switch Network" 
+            iconSrc={IMAGEKIT_ICONS.ERROR} 
+            onClick={openChainModal} 
+        />
       )}
 
       <div className="p-[8px] rounded-[6px] bg-[#030404A8]">
