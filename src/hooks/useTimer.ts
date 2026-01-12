@@ -1,21 +1,20 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useReadContracts } from "wagmi";
 import { pulsechain, pulsechainV4 } from "viem/chains";
 import { TEST_NETWORK } from "@/constants";
 import useJPMContract from "@/abi/JourneyPhaseManager";
-import useCountdownTimer from "../useCountdownTimer";
+import useCountdownTimer from "./useCountdownTimer";
 
-// Matches the imports in the rest of your app
 export type CountdownType = ReturnType<typeof useCountdownTimer>[0];
 
-export type Timer = {
+export interface Timer {
   countdown: CountdownType;
   currentJourney: number;
-  phase: number;           // Changed from currentPhase to phase
+  phase: number;
   claimStarted: boolean;
-  isMintingActive: boolean; // Added this property
-  era: "wishwell" | "mining" | "minting"; 
-};
+  isMintingActive: boolean;
+  era: "wishwell" | "mining" | "minting";
+}
 
 export default function useTimer(
   timestamp?: "mintEndTimestamp" | "nextJourneyTimestamp",
@@ -45,18 +44,18 @@ export default function useTimer(
   useEffect(() => {
     if (JPMReadData && JPMReadData[0]?.result !== undefined) {
       const journey = Number(JPMReadData[0].result);
-      const phase = Number(JPMReadData[1].result);
+      const phaseNum = Number(JPMReadData[1].result);
       const nextTimestamp = Number(JPMReadData[2].result);
 
       let currentEra: "wishwell" | "mining" | "minting" = "wishwell";
-      if (phase === 1) currentEra = "mining";
-      if (phase >= 2) currentEra = "minting";
+      if (phaseNum === 1) currentEra = "mining";
+      if (phaseNum >= 2) currentEra = "minting";
 
       setDetails({
         currentJourney: journey,
-        phase: phase,
-        claimStarted: phase > 0,
-        isMintingActive: phase >= 2, // Logic for the minting boolean
+        phase: phaseNum,
+        claimStarted: phaseNum > 0,
+        isMintingActive: phaseNum >= 2,
         era: currentEra,
       });
 
@@ -73,9 +72,3 @@ export default function useTimer(
     era: details.era,
   };
 }
-
-export const calculateTimeDifference = (target: number) => {
-  const now = Date.now();
-  const diff = target - now;
-  return diff > 0 ? diff : 0;
-};
