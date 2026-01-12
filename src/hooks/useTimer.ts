@@ -5,14 +5,14 @@ import { TEST_NETWORK } from "@/constants";
 import useJPMContract from "@/abi/JourneyPhaseManager";
 import useCountdownTimer from "../useCountdownTimer";
 
-// Define the Timer type
+// Define the Timer type - Added claimStarted to satisfy the Leaderboard
 type Timer = {
   countdown: ReturnType<typeof useCountdownTimer>[0];
   currentJourney: number;
   currentPhase: number;
+  claimStarted: boolean; 
 };
 
-// We make the argument optional (?) to prevent the template.tsx error
 export default function useTimer(
   timestamp?: "mintEndTimestamp" | "nextJourneyTimestamp",
 ): Timer {
@@ -20,6 +20,7 @@ export default function useTimer(
   const [details, setDetails] = useState({
     currentJourney: 0,
     currentPhase: 0,
+    claimStarted: false,
   });
 
   const JPMContract = useJPMContract();
@@ -44,6 +45,8 @@ export default function useTimer(
       setDetails({
         currentJourney: journey,
         currentPhase: phase,
+        // If phase is greater than 0, we consider claiming/journey started
+        claimStarted: phase > 0, 
       });
 
       setInitialCountdown(nextTimestamp * 1000);
@@ -55,10 +58,10 @@ export default function useTimer(
     countdown,
     currentJourney: details.currentJourney,
     currentPhase: details.currentPhase,
+    claimStarted: details.claimStarted,
   };
 }
 
-// FIX: Adding the missing export that Spinner.tsx and MintingHero.tsx are looking for
 export const calculateTimeDifference = (target: number) => {
   const now = Date.now();
   const diff = target - now;
