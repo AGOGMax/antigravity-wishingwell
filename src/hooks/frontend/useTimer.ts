@@ -5,14 +5,13 @@ import { TEST_NETWORK } from "@/constants";
 import useJPMContract from "@/abi/JourneyPhaseManager";
 import useCountdownTimer from "../useCountdownTimer";
 
-// This interface now perfectly matches what CountdownTimer.tsx expects
 export interface CountdownType {
   days: number;
   hours: number;
   mins: number;
   secs: number;
   phase: number;
-  era: "wishwell" | "mining" | "minting" | "journey1" | "journey2" | "journey3"; // Added journey variants for safety
+  era: "wishwell" | "mining" | "minting" | "journey1" | "journey2" | "journey3";
   journey: number;
   claimStarted: boolean;
   isMintingActive: boolean;
@@ -20,7 +19,6 @@ export interface CountdownType {
   mintingTransition?: boolean;
   isJourneyPaused?: boolean;
   phaseNumber?: number;
-  // --- ADD THESE THREE LINES ---
   nextJourneyTimeStamp?: number;
   currentMintEndTimestamp?: number;
   nextPhaseStartTimestamp?: number;
@@ -29,18 +27,15 @@ export interface CountdownType {
 export default function useTimer(
   timestamp?: "mintEndTimestamp" | "nextJourneyTimestamp",
 ): CountdownType {
-  // 1. Get the time breakdown from the base hook
   const [countdown, setInitialCountdown] = useCountdownTimer(0);
   
-  // Inside useTimer function
-const [details, setDetails] = useState({
-  journey: 0,
-  phase: 0,
-  claimStarted: false,
-  isMintingActive: false,
-  // Change the cast here to match the interface
-  era: "wishwell" as CountdownType["era"], 
-});
+  const [details, setDetails] = useState({
+    journey: 0,
+    phase: 0,
+    claimStarted: false,
+    isMintingActive: false,
+    era: "wishwell" as CountdownType["era"], 
+  });
 
   const JPMContract = useJPMContract();
   
@@ -56,38 +51,38 @@ const [details, setDetails] = useState({
   });
 
   useEffect(() => {
-  if (JPMReadData && JPMReadData[0]?.result !== undefined) {
-    const journey = Number(JPMReadData[0].result);
-    const phaseNum = Number(JPMReadData[1].result);
-    const nextTimestamp = Number(JPMReadData[2].result);
+    if (JPMReadData && JPMReadData[0]?.result !== undefined) {
+      const journey = Number(JPMReadData[0].result);
+      const phaseNum = Number(JPMReadData[1].result);
+      const nextTimestamp = Number(JPMReadData[2].result);
 
-    // Dynamic Era Assignment
-    let currentEra: CountdownType["era"] = "wishwell";
-    
-    if (journey > 0) {
-      // If we are in a journey, use the journey keys (journey1, journey2, etc.)
-      currentEra = `journey${journey}` as CountdownType["era"];
-    } else {
-      // Logic for Era 1 (Initial launch)
-      if (phaseNum === 1) currentEra = "mining";
-      if (phaseNum >= 2) currentEra = "minting";
+      let currentEra: CountdownType["era"] = "wishwell";
+      
+      if (journey > 0) {
+        currentEra = `journey${journey}` as CountdownType["era"];
+      } else {
+        if (phaseNum === 1) currentEra = "mining";
+        if (phaseNum >= 2) currentEra = "minting";
+      }
+
+      setDetails({
+        journey: journey,
+        phase: phaseNum,
+        claimStarted: phaseNum > 0,
+        isMintingActive: journey > 0 || phaseNum >= 2,
+        era: currentEra,
+      });
+
+      setInitialCountdown(nextTimestamp * 1000);
     }
+  }, [JPMReadData, setInitialCountdown]);
 
-    setDetails({
-      journey: journey,
-      phase: phaseNum,
-      claimStarted: phaseNum > 0,
-      isMintingActive: journey > 0 || phaseNum >= 2,
-      era: currentEra,
-    });
-
-    setInitialCountdown(nextTimestamp * 1000);
-  }
-}, [JPMReadData, setInitialCountdown]);
-  // 2. Flatten everything into one object for the component
-  // 2. Flatten everything into one object for the component
+  // FINAL CLEAN RETURN
   return {
     ...countdown,
+    // Ensure naming matches the interface (mins/secs)
+    mins: countdown.mins ?? 0,
+    secs: countdown.secs ?? 0,
     phase: details.phase,
     era: details.era,
     journey: details.journey,
@@ -97,12 +92,13 @@ const [details, setDetails] = useState({
     mintingTransition: false,
     isJourneyPaused: false,
     phaseNumber: details.phase,
-    // --- ADD THESE THREE LINES ---
     nextJourneyTimeStamp: 0,
     currentMintEndTimestamp: 0,
     nextPhaseStartTimestamp: 0,
   };
-}export const calculateTimeDifference = (targetTimestamp: number) => {
+}
+
+export const calculateTimeDifference = (targetTimestamp: number) => {
   const diff = targetTimestamp - Date.now();
   if (diff <= 0) return { days: 0, hours: 0, mins: 0, secs: 0 };
 
