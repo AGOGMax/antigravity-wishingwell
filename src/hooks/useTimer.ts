@@ -65,7 +65,7 @@ export default function useTimer(
       // (* 1000 converts Blockchain Seconds to Website Milliseconds)
       setInitialCountdown(timestamp * 1000);
 
-      console.log("Timer Synced with Blockchain:", { journey, phase, targetTime });
+      console.log("Timer Synced with Blockchain:", { journey, phase, timestamp });
     }
   }, [JPMReadData, setInitialCountdown]);
 
