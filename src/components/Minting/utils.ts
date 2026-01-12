@@ -1,5 +1,6 @@
 import { Dispatch } from "react";
-import { MAX_INPUT, MINTING_STATES } from "./MintingHero";
+export { MAX_INPUT }; // Add this line
+import { MINTING_STATES } from "./MintingHero";
 import { MintError, STEPPERS } from "./types";
 import { IMAGEKIT_ICONS } from "@/assets/imageKit";
 
