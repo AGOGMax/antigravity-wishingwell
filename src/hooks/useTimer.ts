@@ -84,7 +84,8 @@ export default function useTimer(
     mintingTransition: false,
     isJourneyPaused: false,
     phaseNumber: details.phase
-  };export const calculateTimeDifference = (targetTimestamp: number) => {
+  };
+  export const calculateTimeDifference = (targetTimestamp: number) => {
   const diff = targetTimestamp - Date.now();
   if (diff <= 0) return { days: 0, hours: 0, mins: 0, secs: 0 };
 
