@@ -121,8 +121,8 @@ export default function MintingHero() {
   };
 
   useEffect(() => {
-    setCurrentMintState(currentState, setMintState, txLoading);
-  }, [currentState, txLoading, txError]);
+  setCurrentMintState(currentState, setMintState, txLoading);
+}, [currentState, txLoading, txError]); // This looks good now!
 
   useEffect(() => {
     if (currentState === MINTING_STATES.SUCCESS) {
@@ -143,7 +143,7 @@ export default function MintingHero() {
       txError,
       handleNFTNotificationReveal,
     );
-  }, [currentState, txLoading, txError, darkInput, darkBalance]);
+  }, [currentState, txLoading, txError, darkInput, darkBalance, handleNFTNotificationReveal]);
 
   const buymoreHighlight = useMemo(() => {
     if (darkBalance < 0) return false;
@@ -151,7 +151,7 @@ export default function MintingHero() {
       return true;
     }
     return false;
-  }, [buttonConfigs]);
+  }, [buttonConfigs, darkBalance]);
 
   const { mutateAsync: fetchEra3 } = useRestPost(
     ["era-3-timestamps-multipliers"],
@@ -169,30 +169,37 @@ export default function MintingHero() {
   });
 
   useEffect(() => {
-    fetchEra3({}).then((data) => {
-      console.log({ data });
-      setJourneyData(data as any);
-    });
-  }, []);
+  fetchEra3({}).then((data) => {
+    setJourneyData(data as any);
+  });
+}, [fetchEra3]); // Added fetchEra3
 
-  useEffect(() => {
-    const timestamp = new Date(
-      Number(journeyData.mintEndTimestamp)
-        ? Number(journeyData.mintEndTimestamp) * 1000
-        : Number(journeyData.nextJourneyTimestamp) * 1000,
-    );
+ useEffect(() => {
+  // 1. Determine which timestamp to target
+  // We use the mint end if it exists, otherwise the next journey start
+  const targetTimestamp = Number(journeyData.mintEndTimestamp)
+    ? Number(journeyData.mintEndTimestamp) * 1000
+    : Number(journeyData.nextJourneyTimestamp) * 1000;
 
-    const i = setInterval(() => {
-      if (timestamp.getTime() < new Date().getTime()) {
-        fetchEra3({}).then((data) => setJourneyData(data as any));
-      }
-    }, 1500);
+  const targetDate = new Date(targetTimestamp);
 
-    return () => {
-      clearInterval(i);
-    };
-  }, [journeyData]);
+  // 2. Set up a polling interval to check if the time has passed
+  const i = setInterval(() => {
+    const now = new Date().getTime();
+    
+    // If the clock has run out, re-fetch the data to get the new Phase/Journey
+    if (targetTimestamp > 0 && targetDate.getTime() < now) {
+      fetchEra3({}).then((data) => {
+        setJourneyData(data as any);
+      });
+    }
+  }, 1500);
 
+  // 3. Clean up the interval on unmount or when journeyData changes
+  return () => {
+    clearInterval(i);
+  };
+}, [journeyData, fetchEra3]); // Correct dependencies
   // implementing adding fuel cell to wallet here
   const [addingNFTs, setAddingNFTs] = useState(false); // loading state for adding NFTs
   const fuelCellContract = useFuelCellContract();
