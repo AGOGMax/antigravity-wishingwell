@@ -5,8 +5,8 @@ import { TEST_NETWORK } from "@/constants";
 import useJPMContract from "@/abi/JourneyPhaseManager";
 import useCountdownTimer from "../useCountdownTimer";
 
-// Define the Timer type - Added claimStarted to satisfy the Leaderboard
-type Timer = {
+// We EXPORT this type so the Leaderboard can see it clearly
+export type Timer = {
   countdown: ReturnType<typeof useCountdownTimer>[0];
   currentJourney: number;
   currentPhase: number;
@@ -45,12 +45,10 @@ export default function useTimer(
       setDetails({
         currentJourney: journey,
         currentPhase: phase,
-        // If phase is greater than 0, we consider claiming/journey started
         claimStarted: phase > 0, 
       });
 
       setInitialCountdown(nextTimestamp * 1000);
-      console.log("Timer Synced with Blockchain:", { journey, phase, nextTimestamp });
     }
   }, [JPMReadData, setInitialCountdown]);
 
