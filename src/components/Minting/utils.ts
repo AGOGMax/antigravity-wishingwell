@@ -216,13 +216,19 @@ export const getButtonCofigs = (
 };
 
 export const getCurrentBuyAnimation = (highlight: boolean) => {
+  const transition = {
+    duration: 0.3,
+    ease: "easeInOut",
+  };
+
   return {
     darkness: {
       filter: highlight ? "brightness(1.2) contrast(1.1)" : "brightness(1) contrast(1)",
-      transition: {
-        duration: 0.3,
-        ease: "easeInOut",
-      },
+      transition,
+    },
+    light: {
+      filter: highlight ? "brightness(1.1)" : "brightness(1)",
+      transition,
     },
   };
 };
