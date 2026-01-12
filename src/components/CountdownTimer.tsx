@@ -9,6 +9,9 @@ const eraToNumber = {
   wishwell: 1,
   mining: 2,
   minting: 3,
+  journey1: 1,
+  journey2: 2,
+  journey3: 3
 };
 
 const COUNTDOWN_TITLE: { [key: string]: string[] } = {
@@ -51,16 +54,21 @@ export default function CountdownTimer({
 
   useEffect(() => {
     if (!state) return;
+
+    // Use a typed key for the lookup
+    const eraKey = state.era as keyof typeof eraToNumber;
+
     if (state.phase === 3) {
       setPhase(1);
       if (state.isMintingActive) {
         setEra(1);
       } else {
-        setEra(eraToNumber[state.era] + 1);
+        // Increment era if phase 3 of wishwell/mining is done
+        setEra((eraToNumber[eraKey] || 0) + 1);
       }
     } else {
-      setEra(eraToNumber[state.era]);
-      setPhase(state.phase + 1);
+      setEra(eraToNumber[eraKey] || 1);
+      setPhase((state.phase || 0) + 1);
     }
   }, [state]);
 
@@ -97,7 +105,7 @@ export default function CountdownTimer({
                               ? `journey${state.journey}`
                               : state.era
                           ]?.[
-                            state.isMintingActive
+                          state.isMintingActive
                           ? Number(state.phaseNumber ?? 0) - 1
                           : Number(state.phase ?? 0) - 1
                       ]
@@ -115,136 +123,57 @@ export default function CountdownTimer({
           counterClassName,
         )}
       >
+        {/* Days */}
         <div className="flex items-center justify-center flex-col w-fit mx-auto">
-          <h1
-            style={{ fontSize: fontDesktopSize }}
-            className="hidden md:flex font-extrabold"
-          >
-            <DynamicNumberCounter
-              count={state.days}
-              setCount={() => {}}
-              modulo={10000}
-              boxPixelSize={fontDesktopSize}
-            />
+          <h1 style={{ fontSize: fontDesktopSize }} className="hidden md:flex font-extrabold">
+            <DynamicNumberCounter count={state.days} setCount={() => {}} modulo={10000} boxPixelSize={fontDesktopSize} />
           </h1>
-          <h1
-            style={{ fontSize: fontMobileSize }}
-            className="md:hidden font-extrabold"
-          >
-            <DynamicNumberCounter
-              count={state.days}
-              setCount={() => {}}
-              modulo={10000}
-              boxPixelSize={fontMobileSize}
-            />
+          <h1 style={{ fontSize: fontMobileSize }} className="md:hidden font-extrabold">
+            <DynamicNumberCounter count={state.days} setCount={() => {}} modulo={10000} boxPixelSize={fontMobileSize} />
           </h1>
-          <p
-            className={twMerge(
-              "text-lg md:text-xl uppercase font-extrabold tracking-widest",
-              counterSubtitleClassName,
-            )}
-          >
-            Days
-          </p>
+          <p className={twMerge("text-lg md:text-xl uppercase font-extrabold tracking-widest", counterSubtitleClassName)}>Days</p>
         </div>
-        <div className="bg-[currentColor] h-[clac(60px_1.5rem)] lg:full w-[1px] mx-auto"></div>
+
+        {/* Separator - Fixed calc typo */}
+        <div className="bg-[currentColor] h-[calc(60px+1.5rem)] lg:full w-[1px] mx-auto"></div>
+
+        {/* Hours */}
         <div className="flex items-center justify-center flex-col w-fit mx-auto">
-          <h1
-            style={{ fontSize: fontDesktopSize }}
-            className="hidden md:flex font-extrabold"
-          >
-            <DynamicNumberCounter
-              count={state.hours}
-              setCount={() => {}}
-              modulo={24}
-              boxPixelSize={fontDesktopSize}
-            />
+          <h1 style={{ fontSize: fontDesktopSize }} className="hidden md:flex font-extrabold">
+            <DynamicNumberCounter count={state.hours} setCount={() => {}} modulo={24} boxPixelSize={fontDesktopSize} />
           </h1>
-          <h1
-            style={{ fontSize: fontMobileSize }}
-            className="md:hidden font-extrabold"
-          >
-            <DynamicNumberCounter
-              count={state.hours}
-              setCount={() => {}}
-              modulo={24}
-              boxPixelSize={fontMobileSize}
-            />
+          <h1 style={{ fontSize: fontMobileSize }} className="md:hidden font-extrabold">
+            <DynamicNumberCounter count={state.hours} setCount={() => {}} modulo={24} boxPixelSize={fontMobileSize} />
           </h1>
-          <p
-            className={twMerge(
-              "text-lg md:text-xl uppercase font-extrabold tracking-widest",
-              counterSubtitleClassName,
-            )}
-          >
-            Hours
-          </p>
+          <p className={twMerge("text-lg md:text-xl uppercase font-extrabold tracking-widest", counterSubtitleClassName)}>Hours</p>
         </div>
-        <div className="bg-[currentColor] h-[clac(60px_1.5rem)] lg:full w-[1px] mx-auto"></div>
+
+        {/* Separator - Fixed calc typo */}
+        <div className="bg-[currentColor] h-[calc(60px+1.5rem)] lg:full w-[1px] mx-auto"></div>
+
+        {/* Mins */}
         <div className="flex items-center justify-center flex-col w-fit mx-auto">
-          <h1
-            style={{ fontSize: fontDesktopSize }}
-            className="hidden md:flex font-extrabold"
-          >
-            <DynamicNumberCounter
-              count={state.mins}
-              setCount={() => {}}
-              modulo={60}
-              boxPixelSize={fontDesktopSize}
-            />
+          <h1 style={{ fontSize: fontDesktopSize }} className="hidden md:flex font-extrabold">
+            <DynamicNumberCounter count={state.mins} setCount={() => {}} modulo={60} boxPixelSize={fontDesktopSize} />
           </h1>
-          <h1
-            style={{ fontSize: fontMobileSize }}
-            className="md:hidden font-extrabold"
-          >
-            <DynamicNumberCounter
-              count={state.mins}
-              setCount={() => {}}
-              modulo={60}
-              boxPixelSize={fontMobileSize}
-            />
+          <h1 style={{ fontSize: fontMobileSize }} className="md:hidden font-extrabold">
+            <DynamicNumberCounter count={state.mins} setCount={() => {}} modulo={60} boxPixelSize={fontMobileSize} />
           </h1>
-          <p
-            className={twMerge(
-              "text-lg md:text-xl uppercase font-extrabold tracking-widest",
-              counterSubtitleClassName,
-            )}
-          >
-            Mins
-          </p>
+          <p className={twMerge("text-lg md:text-xl uppercase font-extrabold tracking-widest", counterSubtitleClassName)}>Mins</p>
         </div>
-        <div className="bg-[currentColor] h-[clac(60px_1.5rem)] lg:full w-[1px] mx-auto"></div>
+
+        {/* Separator - Fixed calc typo */}
+        <div className="bg-[currentColor] h-[calc(60px+1.5rem)] lg:full w-[1px] mx-auto"></div>
+
+        {/* Secs */}
         <div className="flex items-center justify-center flex-col w-fit mx-auto">
-          <h1
-            style={{ fontSize: fontDesktopSize }}
-            className="hidden md:flex font-extrabold"
-          >
-            <DynamicNumberCounter
-              count={state.secs}
-              setCount={() => {}}
-              modulo={60}
-              boxPixelSize={fontDesktopSize}
-            />
+          <h1 style={{ fontSize: fontDesktopSize }} className="hidden md:flex font-extrabold">
+            <DynamicNumberCounter count={state.secs} setCount={() => {}} modulo={60} boxPixelSize={fontDesktopSize} />
           </h1>
-          <h1
-            style={{ fontSize: fontMobileSize }}
-            className="md:hidden font-extrabold"
-          >
-            <DynamicNumberCounter
-              count={state.secs}
-              setCount={() => {}}
-              modulo={60}
-              boxPixelSize={fontMobileSize}
-            />
+          <h1 style={{ fontSize: fontMobileSize }} className="md:hidden font-extrabold">
+            <DynamicNumberCounter count={state.secs} setCount={() => {}} modulo={60} boxPixelSize={fontMobileSize} />
           </h1>
-          <p
-            className={twMerge(
-              "text-lg md:text-xl uppercase font-extrabold tracking-widest",
-              counterSubtitleClassName,
-            )}
-          >
-            Secs
-          </p>
+          <p className={twMerge("text-lg md:text-xl uppercase font-extrabold tracking-widest", counterSubtitleClassName)}>Secs</p>
         </div>
       </div>
     </>
