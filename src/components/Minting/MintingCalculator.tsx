@@ -2,7 +2,7 @@
 
 import { MAX_INPUT, getCurrentBuyAnimation } from "./utils"; 
 // Note: If your file is actually named 'utils.ts' with an 's', use "./utils" instead.
-import { MAX_INPUT } from "./MintingHero";
+
 import { twMerge } from "tailwind-merge";
 import {
   Dispatch,
