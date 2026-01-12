@@ -11,8 +11,12 @@ import { useEffect, useState } from "react";
 
 type stateType = CountdownType & {
   era: "wishwell" | "mining" | "minting" | "journey1" | "journey2" | "journey3";
-  journey: 1 | 2 | 3;
-  phaseNumber: 1 | 2 | 3;
+  journey: number; // Changed from literal to number for flexibility
+  phaseNumber: number;
+  // Added these to match the 'state' object you created below
+  nextJourneyTimeStamp?: number;
+  currentMintEndTimestamp?: number;
+  nextPhaseStartTimestamp?: number;
 };
 
 function checkPhaseCompletedOrActive(
