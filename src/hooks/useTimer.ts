@@ -5,14 +5,15 @@ import { TEST_NETWORK } from "@/constants";
 import useJPMContract from "@/abi/JourneyPhaseManager";
 import useCountdownTimer from "../useCountdownTimer";
 
-// This satisfies the import in CountdownTimer.tsx
+// Matches the imports in the rest of your app
 export type CountdownType = ReturnType<typeof useCountdownTimer>[0];
 
 export type Timer = {
   countdown: CountdownType;
   currentJourney: number;
-  currentPhase: number;
+  phase: number;           // Changed from currentPhase to phase
   claimStarted: boolean;
+  isMintingActive: boolean; // Added this property
   era: "wishwell" | "mining" | "minting"; 
 };
 
@@ -22,8 +23,9 @@ export default function useTimer(
   const [countdown, setInitialCountdown] = useCountdownTimer(0);
   const [details, setDetails] = useState({
     currentJourney: 0,
-    currentPhase: 0,
+    phase: 0,
     claimStarted: false,
+    isMintingActive: false,
     era: "wishwell" as "wishwell" | "mining" | "minting",
   });
 
@@ -52,8 +54,9 @@ export default function useTimer(
 
       setDetails({
         currentJourney: journey,
-        currentPhase: phase,
+        phase: phase,
         claimStarted: phase > 0,
+        isMintingActive: phase >= 2, // Logic for the minting boolean
         era: currentEra,
       });
 
@@ -64,8 +67,9 @@ export default function useTimer(
   return {
     countdown,
     currentJourney: details.currentJourney,
-    currentPhase: details.currentPhase,
+    phase: details.phase,
     claimStarted: details.claimStarted,
+    isMintingActive: details.isMintingActive,
     era: details.era,
   };
 }
