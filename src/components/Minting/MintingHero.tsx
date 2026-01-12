@@ -41,33 +41,15 @@ export const MINTING_STATES = {
   SUCCESS: "SUCCESS",
 } as const;
 
-export const getCurrentBuyAnimation = (buymoreHighlight: boolean) => {
-  return {
-    lighter: {
-      filter: buymoreHighlight
-        ? "saturate(1) brightness(0.8) contrast(2)"
-        : "saturate(1) brightness(1) contrast(1)",
-      transition: {
-        duration: 6,
-      },
-    },
-    light: {
-      filter: buymoreHighlight
-        ? "saturate(0) brightness(0.3) contrast(1)"
-        : "saturate(1) brightness(1) contrast(1)",
-      transition: {
-        duration: 6,
-      },
-    },
-    darkness: {
-      filter: buymoreHighlight
-        ? "saturate(0) brightness(0.4) contrast(2)"
-        : "saturate(1) brightness(1) contrast(1)",
-      transition: {
-        duration: 6,
-      },
-    },
-  };
+const backgroundVariants = {
+  highlighted: {
+    filter: "saturate(0) brightness(0.4) contrast(2)",
+    transition: { duration: 6 }
+  },
+  standard: {
+    filter: "saturate(1) brightness(1) contrast(1)",
+    transition: { duration: 6 }
+  }
 };
 
 export const MAX_INPUT = 750;
@@ -283,12 +265,8 @@ export default function MintingHero() {
         style={{
           backgroundImage: `url(${IMAGEKIT_IMAGES.MINING_PAGE_ERA_3})`,
         }}
-        animate={{
-          filter: getCurrentBuyAnimation(buymoreHighlight).darkness.filter,
-        }}
-        transition={
-          getCurrentBuyAnimation(buymoreHighlight).darkness.transition
-        }
+        variants={backgroundVariants}
+animate={buymoreHighlight ? "highlighted" : "standard"}
         className="absolute top-0 left-0 h-full w-full bg-auto bg-[40%_50%] md:bg-cover"
       ></motion.div>
       <div className="h-fit z-0 ">
@@ -527,15 +505,8 @@ export default function MintingHero() {
                 condition={!!journeyData.mintEndTimestamp}
                 then={
                   <motion.div
-                    animate={{
-                      filter:
-                        getCurrentBuyAnimation(!!buymoreHighlight).darkness
-                          .filter,
-                    }}
-                    transition={
-                      getCurrentBuyAnimation(!!buymoreHighlight).darkness
-                        .transition
-                    }
+                    variants={backgroundVariants}
+animate={buymoreHighlight ? "highlighted" : "standard"}
                     className="p-[8px] rounded-[6px] bg-[#030404A8] w-full max-w-[350px] md:max-w-[400px] mt-[16px]"
                   >
                     <ProgressingStates states={mintState} />
@@ -543,13 +514,8 @@ export default function MintingHero() {
                 }
               />
               <motion.div
-                animate={{
-                  filter:
-                    getCurrentBuyAnimation(!!buymoreHighlight).darkness.filter,
-                }}
-                transition={
-                  getCurrentBuyAnimation(!!buymoreHighlight).darkness.transition
-                }
+                variants={backgroundVariants}
+animate={buymoreHighlight ? "highlighted" : "standard"}
                 className="p-[8px] rounded-[6px] bg-[#030404A8] w-full max-w-[350px] md:max-w-[400px]"
               >
                 <CountdownTimer
@@ -557,11 +523,7 @@ export default function MintingHero() {
                     claimStarted: false,
                     claimTransition: false,
                     ...calculateTimeDifference(
-                      new Date(
-                        Number(journeyData.mintEndTimestamp)
-                          ? Number(journeyData.mintEndTimestamp) * 1000
-                          : Number(journeyData.nextJourneyTimestamp) * 1000,
-                      ).toString(),
+                      (Number(journeyData?.mintEndTimestamp) || Number(journeyData?.nextJourneyTimestamp) || 0) * 1000
                     ),
                     era: "minting",
                     phase: parseInt(journeyData.mintEndTimestamp) ? 1 : 2,
