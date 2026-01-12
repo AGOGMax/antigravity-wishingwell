@@ -545,7 +545,7 @@ animate={buymoreHighlight ? "highlighted" : "standard"}
                     ),
                     journey: 3,
                     phaseNumber: 1,
-                    nextPhaseStartTimestamp: null,
+                    nextPhaseStartTimestamp: undefined,
                   }}
                   fontDesktopSize={40}
                   fontMobileSize={48}
