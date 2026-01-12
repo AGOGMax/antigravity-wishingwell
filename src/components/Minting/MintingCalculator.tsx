@@ -1,5 +1,6 @@
 "use client";
 
+import { MAX_INPUT } from "./MintingHero";
 import { twMerge } from "tailwind-merge";
 import {
   Dispatch,
