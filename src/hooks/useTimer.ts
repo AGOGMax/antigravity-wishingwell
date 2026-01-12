@@ -5,9 +5,11 @@ import { TEST_NETWORK } from "@/constants";
 import useJPMContract from "@/abi/JourneyPhaseManager";
 import useCountdownTimer from "../useCountdownTimer";
 
-// Added "minting" to the era type to satisfy the compiler
+// This satisfies the import in CountdownTimer.tsx
+export type CountdownType = ReturnType<typeof useCountdownTimer>[0];
+
 export type Timer = {
-  countdown: ReturnType<typeof useCountdownTimer>[0];
+  countdown: CountdownType;
   currentJourney: number;
   currentPhase: number;
   claimStarted: boolean;
@@ -44,8 +46,6 @@ export default function useTimer(
       const phase = Number(JPMReadData[1].result);
       const nextTimestamp = Number(JPMReadData[2].result);
 
-      // Determine era based on contract phase
-      // Phase 0: Wishwell | Phase 1: Mining | Phase 2+: Minting
       let currentEra: "wishwell" | "mining" | "minting" = "wishwell";
       if (phase === 1) currentEra = "mining";
       if (phase >= 2) currentEra = "minting";
