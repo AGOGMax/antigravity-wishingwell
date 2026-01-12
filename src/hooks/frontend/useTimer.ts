@@ -3,26 +3,34 @@ import { useReadContracts } from "wagmi";
 import { pulsechain, pulsechainV4 } from "viem/chains";
 import { TEST_NETWORK } from "@/constants";
 import useJPMContract from "@/abi/JourneyPhaseManager";
-import useCountdownTimer from "../useCountdownTimer";
+import useCountdownTimer from "./useCountdownTimer";
 
-// Matches the imports in the rest of your app
-export type CountdownType = ReturnType<typeof useCountdownTimer>[0];
-
-export type Timer = {
-  countdown: CountdownType;
-  currentJourney: number;
-  phase: number;           // Changed from currentPhase to phase
+// This interface now perfectly matches what CountdownTimer.tsx expects
+export interface CountdownType {
+  days: number;
+  hours: number;
+  mins: number;
+  secs: number;
+  phase: number;
+  era: "wishwell" | "mining" | "minting";
+  journey: number;
   claimStarted: boolean;
-  isMintingActive: boolean; // Added this property
-  era: "wishwell" | "mining" | "minting"; 
-};
+  isMintingActive: boolean;
+  // Optional safety properties to prevent crashes on line 88-92
+  claimTransition?: boolean;
+  mintingTransition?: boolean;
+  isJourneyPaused?: boolean;
+  phaseNumber?: number;
+}
 
 export default function useTimer(
   timestamp?: "mintEndTimestamp" | "nextJourneyTimestamp",
-): Timer {
+): CountdownType {
+  // 1. Get the time breakdown from the base hook
   const [countdown, setInitialCountdown] = useCountdownTimer(0);
+  
   const [details, setDetails] = useState({
-    currentJourney: 0,
+    journey: 0,
     phase: 0,
     claimStarted: false,
     isMintingActive: false,
@@ -45,18 +53,18 @@ export default function useTimer(
   useEffect(() => {
     if (JPMReadData && JPMReadData[0]?.result !== undefined) {
       const journey = Number(JPMReadData[0].result);
-      const phase = Number(JPMReadData[1].result);
+      const phaseNum = Number(JPMReadData[1].result);
       const nextTimestamp = Number(JPMReadData[2].result);
 
       let currentEra: "wishwell" | "mining" | "minting" = "wishwell";
-      if (phase === 1) currentEra = "mining";
-      if (phase >= 2) currentEra = "minting";
+      if (phaseNum === 1) currentEra = "mining";
+      if (phaseNum >= 2) currentEra = "minting";
 
       setDetails({
-        currentJourney: journey,
-        phase: phase,
-        claimStarted: phase > 0,
-        isMintingActive: phase >= 2, // Logic for the minting boolean
+        journey: journey,
+        phase: phaseNum,
+        claimStarted: phaseNum > 0,
+        isMintingActive: phaseNum >= 2,
         era: currentEra,
       });
 
@@ -64,18 +72,17 @@ export default function useTimer(
     }
   }, [JPMReadData, setInitialCountdown]);
 
+  // 2. Flatten everything into one object for the component
   return {
-    countdown,
-    currentJourney: details.currentJourney,
+    ...countdown,         // Spreads days, hours, mins, secs
     phase: details.phase,
+    era: details.era,
+    journey: details.journey,
     claimStarted: details.claimStarted,
     isMintingActive: details.isMintingActive,
-    era: details.era,
+    claimTransition: false, // Defaulting to false to satisfy the UI logic
+    mintingTransition: false,
+    isJourneyPaused: false,
+    phaseNumber: details.phase
   };
 }
-
-export const calculateTimeDifference = (target: number) => {
-  const now = Date.now();
-  const diff = target - now;
-  return diff > 0 ? diff : 0;
-};
