@@ -3,7 +3,7 @@ import { useReadContracts } from "wagmi";
 import { pulsechain, pulsechainV4 } from "viem/chains";
 import { TEST_NETWORK } from "@/constants";
 import useJPMContract from "@/abi/JourneyPhaseManager";
-import useCountdownTimer from "./useCountdownTimer";
+import useCountdownTimer from "../useCountdownTimer";
 
 // Define the Timer type
 type Timer = {
