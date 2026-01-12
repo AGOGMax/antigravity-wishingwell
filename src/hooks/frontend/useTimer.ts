@@ -32,13 +32,15 @@ export default function useTimer(
   // 1. Get the time breakdown from the base hook
   const [countdown, setInitialCountdown] = useCountdownTimer(0);
   
-  const [details, setDetails] = useState({
-    journey: 0,
-    phase: 0,
-    claimStarted: false,
-    isMintingActive: false,
-    era: "wishwell" as "wishwell" | "mining" | "minting",
-  });
+  // Inside useTimer function
+const [details, setDetails] = useState({
+  journey: 0,
+  phase: 0,
+  claimStarted: false,
+  isMintingActive: false,
+  // Change the cast here to match the interface
+  era: "wishwell" as CountdownType["era"], 
+});
 
   const JPMContract = useJPMContract();
   
@@ -54,27 +56,34 @@ export default function useTimer(
   });
 
   useEffect(() => {
-    if (JPMReadData && JPMReadData[0]?.result !== undefined) {
-      const journey = Number(JPMReadData[0].result);
-      const phaseNum = Number(JPMReadData[1].result);
-      const nextTimestamp = Number(JPMReadData[2].result);
+  if (JPMReadData && JPMReadData[0]?.result !== undefined) {
+    const journey = Number(JPMReadData[0].result);
+    const phaseNum = Number(JPMReadData[1].result);
+    const nextTimestamp = Number(JPMReadData[2].result);
 
-      let currentEra: "wishwell" | "mining" | "minting" = "wishwell";
+    // Dynamic Era Assignment
+    let currentEra: CountdownType["era"] = "wishwell";
+    
+    if (journey > 0) {
+      // If we are in a journey, use the journey keys (journey1, journey2, etc.)
+      currentEra = `journey${journey}` as CountdownType["era"];
+    } else {
+      // Logic for Era 1 (Initial launch)
       if (phaseNum === 1) currentEra = "mining";
       if (phaseNum >= 2) currentEra = "minting";
-
-      setDetails({
-        journey: journey,
-        phase: phaseNum,
-        claimStarted: phaseNum > 0,
-        isMintingActive: phaseNum >= 2,
-        era: currentEra,
-      });
-
-      setInitialCountdown(nextTimestamp * 1000);
     }
-  }, [JPMReadData, setInitialCountdown]);
 
+    setDetails({
+      journey: journey,
+      phase: phaseNum,
+      claimStarted: phaseNum > 0,
+      isMintingActive: journey > 0 || phaseNum >= 2,
+      era: currentEra,
+    });
+
+    setInitialCountdown(nextTimestamp * 1000);
+  }
+}, [JPMReadData, setInitialCountdown]);
   // 2. Flatten everything into one object for the component
   // 2. Flatten everything into one object for the component
   return {
