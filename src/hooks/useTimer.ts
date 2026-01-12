@@ -3,7 +3,7 @@ import { useReadContracts } from "wagmi";
 import { pulsechain, pulsechainV4 } from "viem/chains";
 import { TEST_NETWORK } from "@/constants";
 import useJPMContract from "@/abi/JourneyPhaseManager";
-import useCountdownTimer from "./useCountdownTimer";
+import useCountdownTimer from "../useCountdownTimer";
 
 // Define the Timer type
 type Timer = {
@@ -12,19 +12,16 @@ type Timer = {
   currentPhase: number;
 };
 
+// We make the argument optional (?) to prevent the template.tsx error
 export default function useTimer(
-  timestamp: "mintEndTimestamp" | "nextJourneyTimestamp",
+  timestamp?: "mintEndTimestamp" | "nextJourneyTimestamp",
 ): Timer {
-  // Initialize countdown timer
   const [countdown, setInitialCountdown] = useCountdownTimer(0);
-
-  // State for journey and phase
   const [details, setDetails] = useState({
     currentJourney: 0,
     currentPhase: 0,
   });
 
-  // 1. Connect to the Smart Contract
   const JPMContract = useJPMContract();
   
   const { data: JPMReadData } = useReadContracts({
@@ -38,7 +35,6 @@ export default function useTimer(
     })),
   });
 
-  // 2. Update the Timer when Blockchain data arrives
   useEffect(() => {
     if (JPMReadData && JPMReadData[0]?.result !== undefined) {
       const journey = Number(JPMReadData[0].result);
@@ -50,9 +46,7 @@ export default function useTimer(
         currentPhase: phase,
       });
 
-      // Convert Blockchain seconds to Website milliseconds
       setInitialCountdown(nextTimestamp * 1000);
-      
       console.log("Timer Synced with Blockchain:", { journey, phase, nextTimestamp });
     }
   }, [JPMReadData, setInitialCountdown]);
@@ -62,4 +56,11 @@ export default function useTimer(
     currentJourney: details.currentJourney,
     currentPhase: details.currentPhase,
   };
-}//fixed time logic
+}
+
+// FIX: Adding the missing export that Spinner.tsx and MintingHero.tsx are looking for
+export const calculateTimeDifference = (target: number) => {
+  const now = Date.now();
+  const diff = target - now;
+  return diff > 0 ? diff : 0;
+};
