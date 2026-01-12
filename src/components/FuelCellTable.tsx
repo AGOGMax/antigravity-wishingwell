@@ -39,12 +39,12 @@ export default function FuelCellTable({ tableData, price }: tableData) {
 
     const totals = {
       totalUserFuelCells: 0,
-      totalDarkAmount: 0,
-      totalUsdValue: 0,
+      // totalDarkAmount: 0,
+      // totalUsdValue: 0,
       totalUserDarkAmount: 0,
       totalUserDarkUsdValue: 0,
-      totalProjectedDark: 0,
-      totalProjectedDarkUsdValue: 0,
+      // totalProjectedDark: 0,
+      // totalProjectedDarkUsdValue: 0,
       totalUserProjectedDark: 0,
       totalUserProjectedUsdValue: 0,
     };
@@ -66,43 +66,43 @@ export default function FuelCellTable({ tableData, price }: tableData) {
       const projectedUsdValue = projected * priceNum;
       const userProjectedDark = projected * userFuelCells;
       const userProjectedUsd = projectedUsdValue * userFuelCells;
+      console.log("user usd value", priceNum);
 
       totals.totalUserFuelCells += userFuelCells;
-      totals.totalDarkAmount += dark;
-      totals.totalUsdValue += usdValue;
+      // totals.totalDarkAmount += dark;
+      // totals.totalUsdValue += usdValue;
       totals.totalUserDarkAmount += yourTotalDark;
       totals.totalUserDarkUsdValue += userUsdValue;
-      totals.totalProjectedDark += projected;
-      totals.totalProjectedDarkUsdValue += projectedUsdValue;
+      // totals.totalProjectedDark += projected;
+      // totals.totalProjectedDarkUsdValue += projectedUsdValue;
       totals.totalUserProjectedDark += userProjectedDark;
       totals.totalUserProjectedUsdValue += userProjectedUsd;
 
       return {
         cells: [
-          journeyId,
+          `${journeyId} (${Number(dark.toFixed(3)).toLocaleString()})`,
           userFuelCells.toLocaleString(),
-          Number(dark.toFixed(3)).toLocaleString(),
-          `$${Number(usdValue.toFixed(3)).toLocaleString()}`,
+          // `$${Number(usdValue.toFixed(3)).toLocaleString()}`,
           `${Number(yourTotalDark.toFixed(3)).toLocaleString()}`,
           `$${Number(userUsdValue.toFixed(3)).toLocaleString()}`,
-          Number(projected.toFixed(3)).toLocaleString(),
-          `$${Number(projectedUsdValue.toFixed(3)).toLocaleString()}`,
+          // Number(projected.toFixed(3)).toLocaleString(),
+          // `$${Number(projectedUsdValue.toFixed(3)).toLocaleString()}`,
           Number(userProjectedDark.toFixed(3)).toLocaleString(),
           `$${Number(userProjectedUsd.toFixed(3)).toLocaleString()}`,
-          "?",
-          "?",
+          // "?",
+          // "?",
         ],
       };
     });
 
     const {
       totalUserFuelCells,
-      totalDarkAmount,
-      totalUsdValue,
+      // totalDarkAmount,
+      // totalUsdValue,
       totalUserDarkAmount,
       totalUserDarkUsdValue,
-      totalProjectedDark,
-      totalProjectedDarkUsdValue,
+      // totalProjectedDark,
+      // totalProjectedDarkUsdValue,
       totalUserProjectedDark,
       totalUserProjectedUsdValue,
     } = totals;
@@ -111,16 +111,16 @@ export default function FuelCellTable({ tableData, price }: tableData) {
       cells: [
         "Total",
         totalUserFuelCells.toLocaleString(),
-        Number(totalDarkAmount.toFixed(3)).toLocaleString(),
-        `$${Number(totalUsdValue.toFixed(3)).toLocaleString()}`,
+        // Number(totalDarkAmount.toFixed(3)).toLocaleString(),
+        // `$${Number(totalUsdValue.toFixed(3)).toLocaleString()}`,
         `${Number(totalUserDarkAmount.toFixed(3)).toLocaleString()}`,
         `$${Number(totalUserDarkUsdValue.toFixed(3)).toLocaleString()}`,
-        Number(totalProjectedDark.toFixed(3)).toLocaleString(),
-        `$${Number(totalProjectedDarkUsdValue.toFixed(3)).toLocaleString()}`,
+        // Number(totalProjectedDark.toFixed(3)).toLocaleString(),
+        // `$${Number(totalProjectedDarkUsdValue.toFixed(3)).toLocaleString()}`,
         Number(totalUserProjectedDark.toFixed(3)).toLocaleString(),
         `$${Number(totalUserProjectedUsdValue.toFixed(3)).toLocaleString()}`,
-        "?",
-        "?",
+        // "?",
+        // "?",
       ],
       blackBackground: true,
     };
@@ -133,18 +133,18 @@ export default function FuelCellTable({ tableData, price }: tableData) {
   return (
     <GenericTable
       header={[
-        "Journey",
+        "Journey (And Dark Matter)",
         "Fuel Cells",
-        "Dark Value",
-        "USD Value",
+        // "Dark Value",
+        // "USD Value",
         "Your Total Dark",
         "Total USD Value",
-        `Projected Dark After J${currentJourneyId}`,
-        `Projected USD After J${currentJourneyId}`,
-        `Total Projected Dark`,
-        `Total Projected  USD`,
-        `Projected Dark After J${currentJourneyId + 1}`,
-        `Projected USD After J${currentJourneyId + 1}`,
+        // `Projected Dark After J${currentJourneyId}`,
+        // `Projected USD After J${currentJourneyId}`,
+        `Total Projected Dark After J${currentJourneyId}`,
+        `Total Projected  USD After J${currentJourneyId}`,
+        // `Projected Dark After J${currentJourneyId + 1}`,
+        // `Projected USD After J${currentJourneyId + 1}`,
       ]}
       body={[...body, totalRow]}
       className="my-4"
