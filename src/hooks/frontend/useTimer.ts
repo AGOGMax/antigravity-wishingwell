@@ -12,15 +12,18 @@ export interface CountdownType {
   mins: number;
   secs: number;
   phase: number;
-  era: "wishwell" | "mining" | "minting";
+  era: "wishwell" | "mining" | "minting" | "journey1" | "journey2" | "journey3"; // Added journey variants for safety
   journey: number;
   claimStarted: boolean;
   isMintingActive: boolean;
-  // Optional safety properties to prevent crashes on line 88-92
   claimTransition?: boolean;
   mintingTransition?: boolean;
   isJourneyPaused?: boolean;
   phaseNumber?: number;
+  // --- ADD THESE THREE LINES ---
+  nextJourneyTimeStamp?: number;
+  currentMintEndTimestamp?: number;
+  nextPhaseStartTimestamp?: number;
 }
 
 export default function useTimer(
@@ -73,17 +76,22 @@ export default function useTimer(
   }, [JPMReadData, setInitialCountdown]);
 
   // 2. Flatten everything into one object for the component
+  // 2. Flatten everything into one object for the component
   return {
-    ...countdown,         // Spreads days, hours, mins, secs
+    ...countdown,
     phase: details.phase,
     era: details.era,
     journey: details.journey,
     claimStarted: details.claimStarted,
     isMintingActive: details.isMintingActive,
-    claimTransition: false, // Defaulting to false to satisfy the UI logic
+    claimTransition: false,
     mintingTransition: false,
     isJourneyPaused: false,
-    phaseNumber: details.phase
+    phaseNumber: details.phase,
+    // --- ADD THESE THREE LINES ---
+    nextJourneyTimeStamp: 0,
+    currentMintEndTimestamp: 0,
+    nextPhaseStartTimestamp: 0,
   };
 }export const calculateTimeDifference = (targetTimestamp: number) => {
   const diff = targetTimestamp - Date.now();
