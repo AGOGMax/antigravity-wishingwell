@@ -5,12 +5,13 @@ import { TEST_NETWORK } from "@/constants";
 import useJPMContract from "@/abi/JourneyPhaseManager";
 import useCountdownTimer from "../useCountdownTimer";
 
-// We EXPORT this type so the Leaderboard can see it clearly
+// Added 'era' to satisfy PointsAndMultiplierInfo.tsx
 export type Timer = {
   countdown: ReturnType<typeof useCountdownTimer>[0];
   currentJourney: number;
   currentPhase: number;
-  claimStarted: boolean; 
+  claimStarted: boolean;
+  era: "wishwell" | "mining"; 
 };
 
 export default function useTimer(
@@ -21,6 +22,7 @@ export default function useTimer(
     currentJourney: 0,
     currentPhase: 0,
     claimStarted: false,
+    era: "wishwell" as "wishwell" | "mining",
   });
 
   const JPMContract = useJPMContract();
@@ -45,7 +47,9 @@ export default function useTimer(
       setDetails({
         currentJourney: journey,
         currentPhase: phase,
-        claimStarted: phase > 0, 
+        claimStarted: phase > 0,
+        // Phase 0 is typically Wishwell, Phase 1+ is Mining
+        era: phase === 0 ? "wishwell" : "mining",
       });
 
       setInitialCountdown(nextTimestamp * 1000);
@@ -57,6 +61,7 @@ export default function useTimer(
     currentJourney: details.currentJourney,
     currentPhase: details.currentPhase,
     claimStarted: details.claimStarted,
+    era: details.era,
   };
 }
 
