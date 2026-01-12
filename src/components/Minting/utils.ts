@@ -1,10 +1,13 @@
 import { Dispatch } from "react";
-export { MAX_INPUT }; // Add this line
-import { MINTING_STATES } from "./MintingHero";
+import { MAX_INPUT, MINTING_STATES } from "./MintingHero";
 import { MintError, STEPPERS } from "./types";
 import { IMAGEKIT_ICONS } from "@/assets/imageKit";
 
+// This is the "Re-export" that fixes the build
+export { MAX_INPUT }; 
+
 export const setCurrentMintState = (
+// ... rest of your code
   currentState: keyof typeof MINTING_STATES,
   setMintState: Dispatch<React.SetStateAction<STEPPERS>>,
   txLoading: boolean
