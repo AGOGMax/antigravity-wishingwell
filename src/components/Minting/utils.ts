@@ -230,5 +230,9 @@ export const getCurrentBuyAnimation = (highlight: boolean) => {
       filter: highlight ? "brightness(1.1)" : "brightness(1)",
       transition,
     },
+    lighter: { // Added this to satisfy line 305
+      filter: highlight ? "brightness(1.3)" : "brightness(1)",
+      transition,
+    },
   };
 };
