@@ -6,7 +6,7 @@ import { IMAGEKIT_ICONS } from "@/assets/imageKit";
 export const setCurrentMintState = (
   currentState: keyof typeof MINTING_STATES,
   setMintState: Dispatch<React.SetStateAction<STEPPERS>>,
-  txLoading: boolean,
+  txLoading: boolean
 ) => {
   switch (currentState) {
     case MINTING_STATES.INITIAL:
@@ -15,7 +15,6 @@ export const setCurrentMintState = (
         Mint: "pending",
         Success: "pending",
       });
-
       return;
 
     case MINTING_STATES.APPROVAL:
@@ -24,7 +23,6 @@ export const setCurrentMintState = (
         Mint: "pending",
         Success: "pending",
       });
-
       return;
 
     case MINTING_STATES.MINT:
@@ -33,7 +31,6 @@ export const setCurrentMintState = (
         Mint: txLoading ? "progress" : "pending",
         Success: "pending",
       });
-
       return;
 
     case MINTING_STATES.RECEIPT:
@@ -42,7 +39,6 @@ export const setCurrentMintState = (
         Mint: "success",
         Success: "progress",
       });
-
       return;
 
     case MINTING_STATES.SUCCESS:
@@ -51,7 +47,6 @@ export const setCurrentMintState = (
         Mint: "success",
         Success: "success",
       });
-
       return;
   }
 };
@@ -62,7 +57,7 @@ export const getButtonCofigs = (
   currentState: keyof typeof MINTING_STATES,
   txLoading: boolean,
   txError: MintError,
-  handleNFTNotificationReveal: () => void,
+  handleNFTNotificationReveal: () => void
 ) => {
   if (txError.is) {
     return {
@@ -82,7 +77,7 @@ export const getButtonCofigs = (
   }
   if (darkInput > MAX_INPUT) {
     return {
-      text: "Minting  Limit Exceeded",
+      text: "Minting Limit Exceeded",
       loading: false,
       disabled: true,
       icon: IMAGEKIT_ICONS.ERROR,
@@ -214,4 +209,16 @@ export const getButtonCofigs = (
         },
       };
   }
+};
+
+export const getCurrentBuyAnimation = (highlight: boolean) => {
+  return {
+    darkness: {
+      filter: highlight ? "brightness(1.2) contrast(1.1)" : "brightness(1) contrast(1)",
+      transition: {
+        duration: 0.3,
+        ease: "easeInOut",
+      },
+    },
+  };
 };
