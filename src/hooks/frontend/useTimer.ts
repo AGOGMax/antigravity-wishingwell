@@ -85,4 +85,14 @@ export default function useTimer(
     isJourneyPaused: false,
     phaseNumber: details.phase
   };
-}
+}export const calculateTimeDifference = (targetTimestamp: number) => {
+  const diff = targetTimestamp - Date.now();
+  if (diff <= 0) return { days: 0, hours: 0, mins: 0, secs: 0 };
+
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const mins = Math.floor((diff / 1000 / 60) % 60);
+  const secs = Math.floor((diff / 1000) % 60);
+
+  return { days, hours, mins, secs };
+};
