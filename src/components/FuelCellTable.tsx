@@ -66,7 +66,6 @@ export default function FuelCellTable({ tableData, price }: tableData) {
       const projectedUsdValue = projected * priceNum;
       const userProjectedDark = projected * userFuelCells;
       const userProjectedUsd = projectedUsdValue * userFuelCells;
-      console.log("user usd value", priceNum);
 
       totals.totalUserFuelCells += userFuelCells;
       // totals.totalDarkAmount += dark;
