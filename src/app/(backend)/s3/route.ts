@@ -1,94 +1,26 @@
-import { TEST_NETWORK } from "@/constants";
-import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
+import tokensData from "../../../../public/static/mining_tokenlist.json";
+import era1Data from "../../../../public/static/ERA1/output.prod.json";
+import era2Data from "../../../../public/static/ERA2/output.prod.json";
 
+// AWS S3 decommissioned 2026-05-03. Data archived locally in public/static/.
 export async function GET(request: NextRequest) {
-  const baseURL =
-    "https://antigravity-s3-production.s3.us-east-1.amazonaws.com/static";
-  let URL = [""];
-
   const file = request.nextUrl.searchParams.get("file");
 
-  console.log({ file });
   switch (file) {
-    case "tokens": {
-      URL = [`${baseURL}/mining_tokenlist.json`];
-      break;
-    }
-    case "era1": {
-      // TODO: change ERA1 prod route
-      URL = [
-        TEST_NETWORK
-          ? `${baseURL}/ERA1/output.prod.json`
-          : `${baseURL}/ERA1/output.prod.json`,
-      ];
-      break;
-    }
-    case "era2": {
-      // TODO: change ERA2 prod route
-      URL = [
-        TEST_NETWORK
-          ? `${baseURL}/ERA2/output.prod.json`
-          : `${baseURL}/ERA2/output.prod.json`,
-      ];
-      break;
-    }
-    default: {
-      URL = [
-        `${baseURL}/mining_tokenlist.json`,
-        TEST_NETWORK
-          ? `${baseURL}/ERA1/output.prod.json`
-          : `${baseURL}/ERA1/output.prod.json`,
-        TEST_NETWORK
-          ? `${baseURL}/ERA2/output.prod.json`
-          : `${baseURL}/ERA2/output.prod.json`,
-      ];
-    }
-  }
-
-  try {
-    const requests = URL.map((url) => axios.get(url));
-    const responses = await axios.all(requests);
-
-    const datas = responses.map((response) => {
-      return { data: response.data };
-    });
-
-    let response = {
-      tokens: null,
-      era1: null,
-      era2: null,
-    };
-
-    switch (file) {
-      case "tokens": {
-        response = { ...response, tokens: datas[0]?.data?.tokens || null };
-        break;
-      }
-      case "era1": {
-        response = { ...response, era1: datas[0]?.data || null };
-        break;
-      }
-      case "era2": {
-        response = { ...response, era2: datas[0]?.data || null };
-        break;
-      }
-      default: {
-        response = {
-          tokens: datas[0]?.data?.tokens || null,
-          era1: datas[1]?.data || null,
-          era2: datas[2]?.data || null,
-        };
-      }
-    }
-
-    return NextResponse.json({
-      data: response,
-    });
-  } catch (error) {
-    console.error(error);
-    return NextResponse.json({
-      error: "Not Found",
-    });
+    case "tokens":
+      return NextResponse.json({ data: { tokens: (tokensData as any).tokens ?? null, era1: null, era2: null } });
+    case "era1":
+      return NextResponse.json({ data: { tokens: null, era1: era1Data ?? null, era2: null } });
+    case "era2":
+      return NextResponse.json({ data: { tokens: null, era1: null, era2: era2Data ?? null } });
+    default:
+      return NextResponse.json({
+        data: {
+          tokens: (tokensData as any).tokens ?? null,
+          era1: era1Data ?? null,
+          era2: era2Data ?? null,
+        },
+      });
   }
 }

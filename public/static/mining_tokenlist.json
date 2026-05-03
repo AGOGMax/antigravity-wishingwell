@@ -1,0 +1,505 @@
+{
+  "name": "Antigravity Token List",
+  "tokens": [
+      {
+          "chainId": 369,
+          "address": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+          "pool": "0xE56043671df55dE5CDf8459710433C10324DE0aE",
+          "buyLink": "https://pulsex.mypinata.cloud/ipfs/bafybeiesh56oijasgr7creubue6xt5anivxifrwd5a5argiz4orbed57qi/#/?outputCurrency=0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+          "name": "Pulse",
+          "symbol": "PLS",
+          "decimals": 18,
+          "logoURI": "https://assets.coingecko.com/coins/images/25666/standard/PLS-LogoTransparent_1.png?1712339803"
+      },
+      {
+          "chainId": 369,
+          "address": "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
+          "pool": "0x46E27Ea3A035FfC9e6d6D56702CE3D208FF1e58c",
+          "buyLink": "https://pulsex.mypinata.cloud/ipfs/bafybeiesh56oijasgr7creubue6xt5anivxifrwd5a5argiz4orbed57qi/#/?outputCurrency=0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
+          "name": "Wrapped BTC",
+          "symbol": "WBTC",
+          "decimals": 8,
+          "logoURI": "https://coin-images.coingecko.com/coins/images/37477/small/pWBTC-200.png?1714468771"
+      },
+      {
+          "chainId": 369,
+          "address": "0x2b591e99afE9f32eAA6214f7B7629768c40Eeb39",
+          "pool": "0xf1F4ee610b2bAbB05C635F726eF8B0C568c8dc65",
+          "buyLink": "https://pulsex.mypinata.cloud/ipfs/bafybeiesh56oijasgr7creubue6xt5anivxifrwd5a5argiz4orbed57qi/#/?outputCurrency=0x2b591e99afE9f32eAA6214f7B7629768c40Eeb39",
+          "name": "HEX",
+          "symbol": "HEX",
+          "decimals": 8,
+          "logoURI": "https://coin-images.coingecko.com/coins/images/30646/small/0x2b591e99afE9f32eAA6214f7B7629768c40Eeb39.png?1696529517"
+      },
+      {
+          "chainId": 369,
+          "address": "0xA1077a294dDE1B09bB078844df40758a5D0f9a27",
+          "pool": "0xE56043671df55dE5CDf8459710433C10324DE0aE",
+          "buyLink": "https://pulsex.mypinata.cloud/ipfs/bafybeiesh56oijasgr7creubue6xt5anivxifrwd5a5argiz4orbed57qi/#/?outputCurrency=0xA1077a294dDE1B09bB078844df40758a5D0f9a27",
+          "name": "Wrapped Pulse",
+          "symbol": "WPLS",
+          "decimals": 18,
+          "logoURI": "https://coin-images.coingecko.com/coins/images/30432/small/pulse.jpeg?1696529320"
+      },
+      {
+          "chainId": 369,
+          "address": "0xefD766cCb38EaF1dfd701853BFCe31359239F305",
+          "pool": "0x31AcF819060AE711f63BD6b682640598E250C689",
+          "buyLink": "https://pulsex.mypinata.cloud/ipfs/bafybeiesh56oijasgr7creubue6xt5anivxifrwd5a5argiz4orbed57qi/#/?outputCurrency=0xefD766cCb38EaF1dfd701853BFCe31359239F305",
+          "name": "Dai Stablecoin from Ethereum",
+          "symbol": "DAI",
+          "decimals": 18,
+          "logoURI": "https://coin-images.coingecko.com/coins/images/30513/small/0xefD766cCb38EaF1dfd701853BFCe31359239F305.png?1712451557"
+      },
+      {
+          "chainId": 369,
+          "address": "0x02dcdd04e3f455d838cd1249292c58f3b79e3c3c",
+          "pool": "0x42abdfdb63f3282033c766e72cc4810738571609",
+          "buyLink": "https://pulsex.mypinata.cloud/ipfs/bafybeiesh56oijasgr7creubue6xt5anivxifrwd5a5argiz4orbed57qi/#/?outputCurrency=0x02DcdD04e3F455D838cd1249292C58f3B79e3C3C",
+          "name": "Wrapped Ether from Ethereum",
+          "symbol": "WETH",
+          "decimals": 18,
+          "logoURI": "https://coin-images.coingecko.com/coins/images/2518/small/weth.png?1696503332"
+      },
+      {
+          "chainId": 369,
+          "address": "0x15D38573d2feeb82e7ad5187aB8c1D52810B1f07",
+          "pool": "0x52CA8c5C6A5c7C56cF5E01bdE9473B3B7F7c0b1e",
+          "buyLink": "https://pulsex.mypinata.cloud/ipfs/bafybeiesh56oijasgr7creubue6xt5anivxifrwd5a5argiz4orbed57qi/#/?outputCurrency=0x15D38573d2feeb82e7ad5187aB8c1D52810B1f07",
+          "name": "USD Coin from Ethereum",
+          "symbol": "USDC",
+          "decimals": 6,
+          "logoURI": "https://coin-images.coingecko.com/coins/images/30514/small/usdc.png?1696529399"
+      },
+      {
+          "chainId": 369,
+          "address": "0x0Cb6F5a34ad42ec934882A05265A7d5F59b51A2f",
+          "pool": "0xc8Bbdb5a0652877Eb1f774cBA684eb8FbdD7BBb7",
+          "buyLink": "https://pulsex.mypinata.cloud/ipfs/bafybeiesh56oijasgr7creubue6xt5anivxifrwd5a5argiz4orbed57qi/#/?outputCurrency=0x0Cb6F5a34ad42ec934882A05265A7d5F59b51A2f",
+          "name": "Tether USD from Ethereum",
+          "symbol": "USDT",
+          "decimals": 6,
+          "logoURI": "https://coin-images.coingecko.com/coins/images/30515/small/usdt.png?1696529400"
+      },
+      {
+          "chainId": 369,
+          "address": "0x0dEEd1486bc52aA0d3E6f8849cEC5adD6598A162",
+          "pool": "0x27557d148293d1C8e8f8c5DEEAb93545B1Eb8410",
+          "buyLink": "https://pulsex.mypinata.cloud/ipfs/bafybeiesh56oijasgr7creubue6xt5anivxifrwd5a5argiz4orbed57qi/#/?outputCurrency=0x0dEEd1486bc52aA0d3E6f8849cEC5adD6598A162",
+          "name": "USDL Stablecoin",
+          "symbol": "USDL",
+          "decimals": 18,
+          "logoURI": "https://coin-images.coingecko.com/coins/images/34292/small/IMG_20240103_222001_463.jpg?1704601016"
+      },
+      {
+          "chainId": 369,
+          "address": "0x5f98805A4E8be255a32880FDeC7F6728C6568bA0",
+          "pool": "0x76b026f5E0d1DEC2Abd4f5C352D6ce43ef49Fc94",
+          "buyLink": "https://pulsex.mypinata.cloud/ipfs/bafybeiesh56oijasgr7creubue6xt5anivxifrwd5a5argiz4orbed57qi/#/?outputCurrency=0x5f98805A4E8be255a32880FDeC7F6728C6568bA0",
+          "name": "LUSD Stablecoin",
+          "symbol": "LUSD",
+          "decimals": 18,
+          "logoURI": "https://assets.coingecko.com/coins/images/14666/standard/Group_3.png?1696514341"
+      },
+      {
+          "chainId": 369,
+          "address": "0x3ca80d83277e721171284667829c686527B8b3c5",
+          "pool": "0x1164daB36Cd7036668dDCBB430f7e0B15416EF0b",
+          "buyLink": "https://pulsex.mypinata.cloud/ipfs/bafybeiesh56oijasgr7creubue6xt5anivxifrwd5a5argiz4orbed57qi/#/?outputCurrency=0x3ca80d83277e721171284667829c686527B8b3c5",
+          "name": "9INCH",
+          "symbol": "9INCH",
+          "decimals": 18,
+          "logoURI": "https://coin-images.coingecko.com/coins/images/32662/small/9INCH-logo.png?1698901092"
+      },
+      {
+          "chainId": 369,
+          "address": "0x8Da17Db850315A34532108f0f5458fc0401525f6",
+          "pool": "0xa1186671046c7e19f1083b93b8e72c297e5Ba7f7",
+          "buyLink": "https://pulsex.mypinata.cloud/ipfs/bafybeiesh56oijasgr7creubue6xt5anivxifrwd5a5argiz4orbed57qi/#/?outputCurrency=0x8Da17Db850315A34532108f0f5458fc0401525f6",
+          "name": "Solid X",
+          "symbol": "SOLIDX",
+          "decimals": 18,
+          "logoURI": "https://coin-images.coingecko.com/coins/images/38421/small/5B0uXaBg_400x400.jpg?1717484018"
+      },
+      {
+          "chainId": 369,
+          "address": "0x95B303987A60C71504D99Aa1b13B4DA07b0790ab",
+          "pool": "0x1b45b9148791d3a104184Cd5DFE5CE57193a3ee9",
+          "buyLink": "https://pulsex.mypinata.cloud/ipfs/bafybeiesh56oijasgr7creubue6xt5anivxifrwd5a5argiz4orbed57qi/#/?outputCurrency=0x95B303987A60C71504D99Aa1b13B4DA07b0790ab",
+          "name": "PulseX",
+          "symbol": "PLSX",
+          "decimals": 18,
+          "logoURI": "https://coin-images.coingecko.com/coins/images/30444/small/pulsex.jpeg?1696529332"
+      },
+      {
+          "chainId": 369,
+          "address": "0x8b4cfb020aF9AcAd95AD80020cE8f67FBB2C700E",
+          "pool": "0xb543812ddEbC017976f867Da710ddb30cCA22929",
+          "buyLink": "https://pulsex.mypinata.cloud/ipfs/bafybeiesh56oijasgr7creubue6xt5anivxifrwd5a5argiz4orbed57qi/#/?outputCurrency=0x8b4cfb020aF9AcAd95AD80020cE8f67FBB2C700E",
+          "name": "Big Bonus Coin",
+          "symbol": "BBC",
+          "decimals": 18,
+          "logoURI": "https://coin-images.coingecko.com/coins/images/32659/small/BBC-PLS-logo.png?1698900510"
+      },
+      {
+          "chainId": 369,
+          "address": "0x6e86e2b8be6228d1c12aA9d82f5Ec3F27A88Ecce",
+          "pool": "0xFA78fA581a52c22A0E68e370d5e0C2CAb419B940",
+          "buyLink": "https://pulsex.mypinata.cloud/ipfs/bafybeiesh56oijasgr7creubue6xt5anivxifrwd5a5argiz4orbed57qi/#/?outputCurrency=0x6e86e2b8be6228d1c12aA9d82f5Ec3F27A88Ecce",
+          "name": "GIFFORDwear",
+          "symbol": "GIFF",
+          "decimals": 18,
+          "logoURI": "https://coin-images.coingecko.com/coins/images/37731/small/giff.png?1715336261"
+      },
+      {
+          "chainId": 369,
+          "address": "0xCc78A0acDF847A2C1714D2A925bB4477df5d48a6",
+          "pool": "0xF892d93199B4DE0aB1CDf35799Ccf9D5A425581B",
+          "buyLink": "https://pulsex.mypinata.cloud/ipfs/bafybeiesh56oijasgr7creubue6xt5anivxifrwd5a5argiz4orbed57qi/#/?outputCurrency=0xCc78A0acDF847A2C1714D2A925bB4477df5d48a6",
+          "name": "Atropa",
+          "symbol": "ATROPA",
+          "decimals": 18,
+          "logoURI": "https://ui-avatars.com/api/?rounded=true&name=Atropa"
+      },
+      {
+          "chainId": 369,
+          "address": "0x401464296A7e0cd14D85AB6baF0Dc91B5ad5Ad1b",
+          "pool": "0x5Ce2E1B0d987E17ceec95363bD2097855B1940c1",
+          "buyLink": "https://pulsex.mypinata.cloud/ipfs/bafybeiesh56oijasgr7creubue6xt5anivxifrwd5a5argiz4orbed57qi/#/?outputCurrency=0x401464296A7e0cd14D85AB6baF0Dc91B5ad5Ad1b",
+          "name": "BROmance",
+          "symbol": "BRO",
+          "decimals": 18,
+          "logoURI": "https://ui-avatars.com/api/?rounded=true&name=BROmance"
+      },
+      {
+          "chainId": 369,
+          "address": "0x57fde0a71132198BBeC939B98976993d8D89D225",
+          "pool": "0x922723FC4de3122F7DC837E2CD2b82Dce9dA81d2",
+          "buyLink": "https://pulsex.mypinata.cloud/ipfs/bafybeiesh56oijasgr7creubue6xt5anivxifrwd5a5argiz4orbed57qi/#/?outputCurrency=0x57fde0a71132198BBeC939B98976993d8D89D225",
+          "name": "HEX from Ethereum",
+          "symbol": "HEX",
+          "decimals": 8,
+          "logoURI": "https://assets.coingecko.com/coins/images/10103/standard/HEX-logo.png?1696510130"
+      },
+      {
+          "chainId": 369,
+          "address": "0xd6c31bA0754C4383A41c0e9DF042C62b5e918f6d",
+          "pool": "0x31eF9a41500E6BD18524404aC9c5B88D04AA924E",
+          "buyLink": "https://pulsex.mypinata.cloud/ipfs/bafybeiesh56oijasgr7creubue6xt5anivxifrwd5a5argiz4orbed57qi/#/?outputCurrency=0xd6c31bA0754C4383A41c0e9DF042C62b5e918f6d",
+          "name": "BEAR",
+          "symbol": "TEDDY BEAR ㉾",
+          "decimals": 18,
+          "logoURI": "https://coin-images.coingecko.com/coins/images/32028/small/TEDDYBEAR-COINMARKETCAP-LOGO-200X200.png?1705513787"
+      },
+      {
+          "chainId": 369,
+          "address": "0x2fa878Ab3F87CC1C9737Fc071108F904c0B0C95d",
+          "pool": "0xf808Bb6265e9Ca27002c0A04562Bf50d4FE37EAA",
+          "buyLink": "https://pulsex.mypinata.cloud/ipfs/bafybeiesh56oijasgr7creubue6xt5anivxifrwd5a5argiz4orbed57qi/#/?outputCurrency=0x2fa878Ab3F87CC1C9737Fc071108F904c0B0C95d",
+          "name": "Incentive",
+          "symbol": "INC",
+          "decimals": 18,
+          "logoURI": "https://coin-images.coingecko.com/coins/images/34426/small/0x2fa878Ab3F87CC1C9737Fc071108F904c0B0C95d.png?1712869662"
+      },
+      {
+          "chainId": 369,
+          "address": "0x456548A9B56eFBbD89Ca0309edd17a9E20b04018",
+          "pool": "0xbeA0e55b82Eb975280041F3b49C4D0bD937b72d5",
+          "buyLink": "https://pulsex.mypinata.cloud/ipfs/bafybeiesh56oijasgr7creubue6xt5anivxifrwd5a5argiz4orbed57qi/#/?outputCurrency=0x456548A9B56eFBbD89Ca0309edd17a9E20b04018",
+          "name": "UFO",
+          "symbol": "UFO",
+          "decimals": 18,
+          "logoURI": "https://ui-avatars.com/api/?rounded=true&name=UFO"
+      },
+      {
+          "chainId": 369,
+          "address": "0x6a44bE19d96f087494Bafa66EE5DF1bf7AAF220f",
+          "pool": "0xA755A5dd5AaC63f9e8869a0F25905ae6B635A92C",
+          "buyLink": "https://pulsex.mypinata.cloud/ipfs/bafybeiesh56oijasgr7creubue6xt5anivxifrwd5a5argiz4orbed57qi/#/?outputCurrency=0x6a44bE19d96f087494Bafa66EE5DF1bf7AAF220f",
+          "name": "Blastar",
+          "symbol": "BLAST",
+          "decimals": 9,
+          "logoURI": "https://coin-images.coingecko.com/coins/images/34516/small/IMG_20240112_145524_746.jpg?1705294403"
+      },
+      {
+          "chainId": 369,
+          "address": "0x94534EeEe131840b1c0F61847c572228bdfDDE93",
+          "pool": "0xceDe64E9d70b57ac0D71241d4eF2FC98CA671877",
+          "buyLink": "https://pulsex.mypinata.cloud/ipfs/bafybeiesh56oijasgr7creubue6xt5anivxifrwd5a5argiz4orbed57qi/#/?outputCurrency=0x94534EeEe131840b1c0F61847c572228bdfDDE93",
+          "name": "The Grays Currency",
+          "symbol": "pTGC",
+          "decimals": 18,
+          "logoURI": "https://coin-images.coingecko.com/coins/images/32933/small/pTGC.jpeg?1699870420"
+      },
+      {
+          "chainId": 369,
+          "address": "0xeD22494279e0F3F1Ab491F823c6eC4055afeB21F",
+          "pool": "0x097d19b2061C5f31B68852349187C664920b4BA4",
+          "buyLink": "https://pulsex.mypinata.cloud/ipfs/bafybeiesh56oijasgr7creubue6xt5anivxifrwd5a5argiz4orbed57qi/#/?outputCurrency=0xeD22494279e0F3F1Ab491F823c6eC4055afeB21F",
+          "name": "9INCH from Ethereum",
+          "symbol": "9INCH",
+          "decimals": 18,
+          "logoURI": "https://assets.coingecko.com/coins/images/32662/standard/9INCH-logo.png?1698901092"
+      },
+      {
+          "chainId": 369,
+          "address": "0x2A06a971fE6ffa002fd242d437E3db2b5cC5B433",
+          "pool": "0xe98250BB335f5662edcA64C76C37c95a3334f358",
+          "buyLink": "https://pulsex.mypinata.cloud/ipfs/bafybeiesh56oijasgr7creubue6xt5anivxifrwd5a5argiz4orbed57qi/#/?outputCurrency=0x2A06a971fE6ffa002fd242d437E3db2b5cC5B433",
+          "name": "Piteas Token",
+          "symbol": "PTS",
+          "decimals": 18,
+          "logoURI": "https://coin-images.coingecko.com/coins/images/31582/small/piteas-256.png?1696530399"
+      },
+      {
+          "chainId": 369,
+          "address": "0xF3Ba0351Ade6e5dD23ff7d29b170d726e0DE109F",
+          "pool": "0x6382FF190C7Ed17a75a2F156F25446E2E4384310",
+          "buyLink": "https://pulsex.mypinata.cloud/ipfs/bafybeiesh56oijasgr7creubue6xt5anivxifrwd5a5argiz4orbed57qi/#/?outputCurrency=0xF3Ba0351Ade6e5dD23ff7d29b170d726e0DE109F&inputCurrency=0xefD766cCb38EaF1dfd701853BFCe31359239F305",
+          "name": "Texan from ETH",
+          "symbol": "TEXAN",
+          "decimals": 18,
+          "logoURI": "https://assets.coingecko.com/coins/images/28731/standard/texan_logo_200x200.png?1696527711"
+      },
+      {
+          "chainId": 369,
+          "address": "0x8D36123903f504eB81eEB832727af517c0db26bD",
+          "pool": "0x633055AA25f33bbAe94091bbB753DD3b1849De0e",
+          "buyLink": "https://app.9inch.io/?chain=pulsechain&outputCurrency=0x8D36123903f504eB81eEB832727af517c0db26bD&inputCurrency=PLS",
+          "name": "Nope",
+          "symbol": "NOPE",
+          "decimals": 18,
+          "logoURI": "https://ik.imagekit.io/AGAdmin/Antigravity/icons/nope.jpg?updatedAt=1722698939519"
+      },
+      {
+          "chainId": 8453,
+          "address": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+          "pool": "0x7f670f78b17dec44d5ef68a48740b6f8849cc2e6",
+          "buyLink": "https://app.uniswap.org/swap?chain=base&outputCurrency=0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+          "name": "Ether",
+          "symbol": "ETH",
+          "decimals": 18,
+          "logoURI": "https://assets.coingecko.com/coins/images/279/standard/ethereum.png?1696501628"
+      },
+      {
+          "chainId": 8453,
+          "address": "0x4200000000000000000000000000000000000006",
+          "pool": "0x7f670f78b17dec44d5ef68a48740b6f8849cc2e6",
+          "buyLink": "https://app.uniswap.org/swap?chain=base&outputCurrency=0x4200000000000000000000000000000000000006",
+          "name": "Wrapped Ether",
+          "symbol": "WETH",
+          "decimals": 18,
+          "logoURI": "https://coin-images.coingecko.com/coins/images/2518/small/weth.png?1696503332"
+      },
+      {
+          "chainId": 8453,
+          "address": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+          "pool": "0x6cdcb1c4a4d1c3c6d054b27ac5b77e89eafb971d",
+          "buyLink": "https://app.uniswap.org/swap?chain=base&outputCurrency=0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+          "name": "USD Coin",
+          "symbol": "USDC",
+          "decimals": 6,
+          "logoURI": "https://coin-images.coingecko.com/coins/images/6319/small/usdc.png?1696506694"
+      },
+      {
+          "chainId": 8453,
+          "address": "0x940181a94a35a4569e4529a3cdfb74e38fd98631",
+          "pool": "0x6cdcb1c4a4d1c3c6d054b27ac5b77e89eafb971d",
+          "buyLink": "https://app.uniswap.org/swap?chain=base&outputCurrency=0x940181a94a35a4569e4529a3cdfb74e38fd98631",
+          "name": "Aerodrome",
+          "symbol": "AERO",
+          "decimals": 18,
+          "logoURI": "https://coin-images.coingecko.com/coins/images/31745/small/token.png?1696530564"
+      },
+      {
+          "chainId": 8453,
+          "address": "0x4ed4e862860bed51a9570b96d89af5e1b0efefed",
+          "pool": "0x2c4909355b0c036840819484c3a882a95659abf3",
+          "buyLink": "https://app.uniswap.org/swap?chain=base&outputCurrency=0x4ed4e862860bed51a9570b96d89af5e1b0efefed",
+          "name": "Degen",
+          "symbol": "DEGEN",
+          "decimals": 18,
+          "logoURI": "https://coin-images.coingecko.com/coins/images/34515/small/android-chrome-512x512.png?1706198225"
+      },
+      {
+          "chainId": 8453,
+          "address": "0x532f27101965dd16442e59d40670faf5ebb142e4",
+          "pool": "0x43bbb129b56a998732767725a183b7a566843dba",
+          "buyLink": "https://app.uniswap.org/swap?chain=base&outputCurrency=0x532f27101965dd16442e59d40670faf5ebb142e4",
+          "name": "Brett",
+          "symbol": "BRETT",
+          "decimals": 18,
+          "logoURI": "https://coin-images.coingecko.com/coins/images/35529/small/1000050750.png?1709031995"
+      },
+      {
+          "chainId": 8453,
+          "address": "0x0d97f261b1e88845184f678e2d1e7a98d9fd38de",
+          "pool": "0x20000fbfedfd172821821c9c59284129b04ffb2e",
+          "buyLink": "https://app.uniswap.org/swap?chain=base&outputCurrency=0x0d97f261b1e88845184f678e2d1e7a98d9fd38de",
+          "name": "Base God",
+          "symbol": "TYBG",
+          "decimals": 18,
+          "logoURI": "https://coin-images.coingecko.com/coins/images/34563/small/tybg.png?1705400778"
+      },
+      {
+          "chainId": 8453,
+          "address": "0xBC45647eA894030a4E9801Ec03479739FA2485F0",
+          "pool": "0x16905890A1D02b6F824387419319Bf4188B961b0",
+          "buyLink": "https://app.uniswap.org/swap?chain=base&outputCurrency=0xBC45647eA894030a4E9801Ec03479739FA2485F0",
+          "name": "Basenji",
+          "symbol": "BENJI",
+          "decimals": 18,
+          "logoURI": "https://coin-images.coingecko.com/coins/images/36416/small/ben200x200.jpg?1711420807"
+      },
+      {
+          "chainId": 8453,
+          "address": "0xFF0C532FDB8Cd566Ae169C1CB157ff2Bdc83E105",
+          "pool": "0xDE66c35e01ED8e619Bf092352338ef94f2327337",
+          "buyLink": "https://app.uniswap.org/swap?chain=base&outputCurrency=0xFF0C532FDB8Cd566Ae169C1CB157ff2Bdc83E105",
+          "name": "Fren Pet",
+          "symbol": "Fren Pet",
+          "decimals": 18,
+          "logoURI": "https://coin-images.coingecko.com/coins/images/33022/small/token.png?1700274697"
+      },
+      {
+          "chainId": 8453,
+          "address": "0x3AfEae00a594fbf2E4049f924E3c6AC93296B6e8",
+          "pool": "0x774D0266696c5d54d70bD7DDC5253ec0ECe91892",
+          "buyLink": "https://app.uniswap.org/swap?chain=base&outputCurrency=0x3AfEae00a594fbf2E4049f924E3c6AC93296B6e8",
+          "name": "Mamba",
+          "symbol": "MAMBA",
+          "decimals": 18,
+          "logoURI": "https://coin-images.coingecko.com/coins/images/38364/small/Mamba.png?1717247012"
+      },
+      {
+          "chainId": 8453,
+          "address": "0x1C22374032e7e5a1bbDe3D943F5DEB310db060DD",
+          "pool": "0xa4e028d28930F1ef1Ae8AcDDB1a53b231A518965",
+          "buyLink": "https://app.uniswap.org/swap?chain=base&outputCurrency=0x1C22374032e7e5a1bbDe3D943F5DEB310db060DD",
+          "name": "onchain",
+          "symbol": "onchain",
+          "decimals": 18,
+          "logoURI": "https://assets.geckoterminal.com/a21ibbgg11dig9jg3qj1rl7vuczq"
+      },
+      {
+          "chainId": 8453,
+          "address": "0x698DC45e4F10966f6D1D98e3bFd7071d8144C233",
+          "pool": "0x76Fc8DbF2022EE75612cb74ec80caF6b3ccFfb23",
+          "buyLink": "https://app.uniswap.org/swap?chain=base&outputCurrency=0x698DC45e4F10966f6D1D98e3bFd7071d8144C233",
+          "name": "Pepe",
+          "symbol": "PEPE",
+          "decimals": 9,
+          "logoURI": "https://coin-images.coingecko.com/coins/images/37400/small/lOGO.jpg?1714352456"
+      },
+      {
+          "chainId": 8453,
+          "address": "0x6921b130d297cc43754afba22e5eac0fbf8db75b",
+          "pool": "0x139e9f235588a9720e7eab045da29dc781c4b658",
+          "buyLink": "https://app.uniswap.org/swap?chain=base&outputCurrency=0x6921b130d297cc43754afba22e5eac0fbf8db75b",
+          "name": "doginme",
+          "symbol": "doginme",
+          "decimals": 18,
+          "logoURI": "https://coin-images.coingecko.com/coins/images/35123/small/doginme-logo1-transparent200.png?1710856784"
+      },
+      {
+          "chainId": 11155111,
+          "address": "0x94800E0B9CfB066d51a2973A3f8c326Bd4374cc1",
+          "pool": "0xB45a74e8e4B64B496d764d78440598f97ceE094A",
+          "buyLink": "https://sepolia.etherscan.io/address/0x94800E0B9CfB066d51a2973A3f8c326Bd4374cc1#writeContract#F4",
+          "name": "USD Coin",
+          "symbol": "USDC",
+          "decimals": 6,
+          "logoURI": "https://assets.coingecko.com/coins/images/6319/standard/usdc.png?1696506694"
+      },
+      {
+          "chainId": 11155111,
+          "address": "0x80E3fC34f1D88357c755775230FdDC10a9675a55",
+          "pool": "0x57239DD84F3bCf03c35BC5f9907C3300C6f0859F",
+          "buyLink": "https://sepolia.etherscan.io/address/0x80E3fC34f1D88357c755775230FdDC10a9675a55#writeContract#F4",
+          "name": "Meme 1",
+          "symbol": "MEME1",
+          "decimals": 18,
+          "logoURI": "https://assets.coingecko.com/coins/images/34515/standard/android-chrome-512x512.png?1706198225"
+      },
+      {
+          "chainId": 11155111,
+          "address": "0x48c6d9B309034F84CC36E6BBAD96Ad4165BED9F9",
+          "pool": "0xa3bca2D2d88845c4bA07bB1111ff44abD592463e",
+          "buyLink": "https://sepolia.etherscan.io/address/0x48c6d9B309034F84CC36E6BBAD96Ad4165BED9F9#writeContract#F4",
+          "name": "Meme 2",
+          "symbol": "MEME2",
+          "decimals": 18,
+          "logoURI": "https://assets.coingecko.com/coins/images/37238/standard/nogs.jpeg?1713851209"
+      },
+      {
+          "chainId": 11155111,
+          "address": "0xfff9976782d46cc05630d1f6ebab18b2324d6b14",
+          "pool": "0xB45a74e8e4B64B496d764d78440598f97ceE094A",
+          "buyLink": "https://sepolia-faucet.pk910.de/",
+          "name": "Wrapped ETH",
+          "symbol": "WETH",
+          "decimals": 18,
+          "logoURI": "https://assets.coingecko.com/coins/images/2518/standard/weth.png?1696503332"
+      },
+      {
+          "chainId": 11155111,
+          "address": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+          "pool": "0xB45a74e8e4B64B496d764d78440598f97ceE094A",
+          "buyLink": "https://sepolia-faucet.pk910.de/",
+          "name": "Pulse",
+          "symbol": "PLS",
+          "decimals": 18,
+          "logoURI": "https://assets.coingecko.com/coins/images/25666/standard/PLS-LogoTransparent_1.png?1712339803"
+      },
+      {
+          "chainId": 84532,
+          "address": "0x56EC039dDfC8eDD3D6E7c95805858C965C20156F",
+          "pool": "0x622aB95969a338fE2a37b136eb89c0a275ae8F93",
+          "buyLink": "https://sepolia.basescan.io/address/0x56EC039dDfC8eDD3D6E7c95805858C965C20156F#writeContract#F4",
+          "name": "USD Coin",
+          "symbol": "USDC",
+          "decimals": 6,
+          "logoURI": "https://assets.coingecko.com/coins/images/6319/standard/usdc.png?1696506694"
+      },
+      {
+          "chainId": 84532,
+          "address": "0x93bA65065E2AaA299c2974606A4E792D4f7259A7",
+          "pool": "0x909EDB8B0BE045Bd6B82722F763a876f295cC076",
+          "buyLink": "https://sepolia.basescan.io/address/0x93bA65065E2AaA299c2974606A4E792D4f7259A7#writeContract#F4",
+          "name": "Meme 3",
+          "symbol": "MEME3",
+          "decimals": 18,
+          "logoURI": "https://assets.coingecko.com/coins/images/34515/standard/android-chrome-512x512.png?1706198225"
+      },
+      {
+          "chainId": 84532,
+          "address": "0x8e976f4edCe49A2400f8b8eF512f7F5795D9eE07",
+          "pool": "0x4d8B0953080ae6Cae8453dFBF27c3aA65221064f",
+          "buyLink": "https://sepolia.basescan.io/address/0x8e976f4edCe49A2400f8b8eF512f7F5795D9eE07#writeContract#F4",
+          "name": "Meme 4",
+          "symbol": "MEME4",
+          "decimals": 18,
+          "logoURI": "https://assets.coingecko.com/coins/images/35529/standard/1000050750.png?1709031995"
+      },
+      {
+          "chainId": 84532,
+          "address": "0x4200000000000000000000000000000000000006",
+          "pool": "0x622aB95969a338fE2a37b136eb89c0a275ae8F93",
+          "buyLink": "https://sepolia-faucet.pk910.de/",
+          "name": "Wrapped Ether",
+          "symbol": "WETH",
+          "decimals": 18,
+          "logoURI": "https://assets.coingecko.com/coins/images/2518/standard/weth.png?1696503332"
+      },
+      {
+          "chainId": 84532,
+          "address": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+          "pool": "0x622aB95969a338fE2a37b136eb89c0a275ae8F93",
+          "buyLink": "https://sepolia-faucet.pk910.de/",
+          "name": "Ethereum",
+          "symbol": "ETH",
+          "decimals": 18,
+          "logoURI": "https://assets.coingecko.com/coins/images/279/standard/ethereum.png?1696501628"
+      }
+  ]
+}
